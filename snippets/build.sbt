@@ -11,11 +11,11 @@ resolvers          += "Oracle Repository" at "http://download.oracle.com/maven" 
 
 // ---- main dependencies ----
 
-lazy val melliteVersion = "2.16.0"
+lazy val melliteVersion = "2.17.0"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "mellite" % melliteVersion
 )
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Xfuture", "-encoding", "utf8", "-Xlint")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Xfuture", "-encoding", "utf8", "-Xlint", "-Yrangepos")
 
