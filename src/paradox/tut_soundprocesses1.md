@@ -1,4 +1,4 @@
-# Intro to SoundProcesses
+# SP1 - Intro to SoundProcesses
 
 If you have gone through the video tutorials of Mellite, you may wonder if there is more to it than the limited GUI interaction.
 In fact, Mellite is, properly speaking, only the graphical user interface layer on top of a system of computer music abstractions
@@ -34,14 +34,14 @@ problem or suggestion, by filing a ticket in the [issue tracker](https://github.
 
 I assume that you have [SuperCollider](http://supercollider.github.io/), [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html), 
 and [git](https://git-scm.com/) already installed on your system, and proceed from there. You can either copy and paste the code
-snippets from this page, or clone the Mellite [repository](https://github.com/Sciss/Mellite/). Let's do the latter. In the following, a dollar sign `$` indicates the
+snippets from this page, or clone the Mellite [website repository](https://github.com/Sciss/Mellite/). Let's do the latter. In the following, a dollar sign `$` indicates the
 terminal or shell prompt.
 
     $ cd ~/Documents  # or any place where you would like to download the repository to
-    $ git clone https://github.com/Sciss/Mellite.git
+    $ git clone https://github.com/Sciss/Mellite-website.git
   
-This will take a while, then you will find the snippets project in `Mellite/site/snippets`. You can see that directory
-[online](https://github.com/Sciss/Mellite/tree/master/site/snippets). This project uses [sbt](http://www.scala-sbt.org/) as a
+This will take a while, then you will find the snippets project in `Mellite-website/snippets`. You can see that directory
+[online](https://github.com/Sciss/Mellite-website/tree/master/snippets). This project uses [sbt](http://www.scala-sbt.org/) as a
 build tool, however we'll just build and run from IntelliJ IDEA, so you don't actually have to install sbt at this point.
 
 You can download IntelliJ IDEA [here](https://www.jetbrains.com/idea/download/). It is a development environment made by JetBrains,
@@ -340,7 +340,7 @@ and second, consult the API docs. The API docs for Scala's standard library are 
 
 The API docs are the products of an automatic process called scala-doc, and these pages list the packages on the
 right-hand side, and at the top of the screen you have a search field. Say we want to know about `SynthGraph`, let's type that into the
-[search box](http://sciss.github.io/Mellite/latest/api/de/sciss/index.html?search=SynthGraph):
+[search box](latest/api/de/sciss/index.html?search=SynthGraph):
 
 ![API Search for SynthGraph](.../tut_sp_api_docs_synthgraph.png)
 
@@ -479,7 +479,7 @@ Let's look at the code that uses the aural system:
 
 The value `cursor` holds our instance of `InMemory`. Most systems are at the same time "cursors" which means they provide a means to issue a transaction through the `step` method. When we write
 `cursor.step { implicit tx => ... }` we encapsulate everything that is inside the curly braces in a transaction. When that method returns, the transaction has been closed and committed.
-The basic definition of [Cursor](http://sciss.github.io/Mellite/latest/api/de/sciss/lucre/stm/Cursor.html) is
+The basic definition of [Cursor](latest/api/de/sciss/lucre/stm/Cursor.html) is
 
 ```scala
 trait Cursor[S <: Sys[S]] {
@@ -498,7 +498,7 @@ def step[A](fun: InMemory#Tx => A): A
 ```
 
 The strange looking type `InMemory#Tx` is called a type-projection in Scala, and you can simply think of it here as a type member provided by `InMemory`. All transactions share a common
-interface [Txn](http://sciss.github.io/Mellite/latest/api/de/sciss/lucre/stm/Txn.html) which is capable, among other things, of creating primitive transactional variables. The argument to `step` is
+interface [Txn](latest/api/de/sciss/lucre/stm/Txn.html) which is capable, among other things, of creating primitive transactional variables. The argument to `step` is
 a _function_ of arity 1, that is a function that takes a single argument of type `InMemory#Tx` and returns a value of type `A`. In Scala, `A => B` is shorthand for `Function1[A, B]`.
 Often we provide functions as [lambdas](https://en.wikipedia.org/wiki/Anonymous_function), also called anonymous functions or function literals. Let's take a simpler example, using a
 collection, say `List(1, 2, 3, 4)`. A list, formally `List[A]` where `A` is the type of the elements in the list, has a method `filter` defined as follows:
@@ -581,7 +581,7 @@ server having booted, though, so we define the behaviour of `auralStarted`:
 The method is invoked with the `Server` as first argument, and again there is a second implicit argument list that gives us a transaction. That transaction is necessary to
 be able to use `Synth.play`, as this call requires an implicit transaction. You may be tempted to think that `Server` is ScalaCollider's
 `de.sciss.synth.Server` and that `Synth` is `de.sciss.synth.Synth`, but if you look at the imports, they are actually in a different package:
-[`de.sciss.lucre.synth.Server`](http://sciss.github.io/Mellite/latest/api/de/sciss/lucre/synth/Server.html) and [`de.sciss.lucre.synth.Synth`](http://sciss.github.io/Mellite/latest/api/de/sciss/lucre/synth/Synth.html). There are, in other words, classes mirroring the familiar ScalaCollider classes, but now, inside SoundProcesses, they are changed to transactional semantics.
+[`de.sciss.lucre.synth.Server`](latest/api/de/sciss/lucre/synth/Server.html) and [`de.sciss.lucre.synth.Synth`](latest/api/de/sciss/lucre/synth/Synth.html). There are, in other words, classes mirroring the familiar ScalaCollider classes, but now, inside SoundProcesses, they are changed to transactional semantics.
 If we call `Synth.play`, that `/s_new` OSC message is not fired straight away, but only after the transaction is successfully completed will such a message be sent
 to the server. Moreover, the methods are enhanced, because SoundProcesses does a lot more work to manage synthesis instances, including the automatic registration
 of a synth-def, preparing buffers, and so on. SoundProcesses takes care to correctly package the OSC bundles when there are asynchronous preparations, such as
@@ -600,7 +600,7 @@ So it is quite different from ScalaCollider:
 - instead of the name of a `SynthDef` that we had to take care to have sent to the server, here we directly give a `SynthGraph` along with
   an optional name-hint.
 - there is a new argument `dependencies` that is used when the system must ensure that those dependencies are met before the synth can be
-  actually started. The most common `Resource` type is [`Buffer`](http://sciss.github.io/Mellite/latest/api/de/sciss/lucre/synth/Buffer.html).
+  actually started. The most common `Resource` type is [`Buffer`](latest/api/de/sciss/lucre/synth/Buffer.html).
 - again an implicit transaction `Txn` is needed
 
 Similar to ScalaCollider, we can pass the server `s` for the `target` argument, because it will be implicitly converted to `s.defaultGroup`
