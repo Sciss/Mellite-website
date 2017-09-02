@@ -1,16 +1,16 @@
-lazy val melliteVersion        = "2.16.0"
+lazy val melliteVersion        = "2.17.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 
-lazy val soundProcessesVersion = "3.13.0"
-lazy val nuagesVersion         = "2.17.0"
+lazy val soundProcessesVersion = "3.14.0"
+lazy val nuagesVersion         = "2.18.0"
 lazy val oscVersion            = "1.1.5"
 lazy val audioFileVersion      = "1.4.6"
 lazy val scalaColliderVersion  = "1.22.4"
-lazy val ugensVersion          = "1.16.4"
-lazy val fscapeVersion         = "2.8.0"
+lazy val ugensVersion          = "1.16.5"
+lazy val fscapeVersion         = "2.9.0"
 lazy val lucreVersion          = "3.4.1"
-lazy val spanVersion           = "1.3.2"
+lazy val spanVersion           = "1.3.3"
 
 scalaVersion in ThisBuild := "2.12.3"
 
@@ -92,7 +92,7 @@ val root = (project in file("."))
   )
   // XXX TODO --- don't know how to exclude bdb5/6 from lucre
   .aggregate(
-    /* currently uses Scala 2.11 and incompatible site plugin: lSpan, */
+    lSpan,
     lScalaOSC, 
     lScalaAudioFile, 
     lScalaColliderUGens, 
