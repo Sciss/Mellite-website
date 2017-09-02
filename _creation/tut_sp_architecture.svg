@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="448"
+   height="260"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="tut_sp_architecture.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="223.71324"
+     inkscape:cy="140.36041"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1438"
+     inkscape:window-height="833"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-792.36218)">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5124-9"
+       width="249"
+       height="29"
+       x="140.5"
+       y="984.86218" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="264.36426"
+       y="1003.2152"
+       id="text3757"><tspan
+         sodipodi:role="line"
+         id="tspan3759"
+         x="264.36426"
+         y="1003.2152"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle">System Facade</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5112"
+       width="119"
+       height="29"
+       x="140.5"
+       y="942.86218" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="199.67871"
+       y="961.22156"
+       id="text5114"><tspan
+         sodipodi:role="line"
+         id="tspan5116"
+         x="199.67871"
+         y="961.22156"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle">Events</tspan></text>
+    <rect
+       y="900.86218"
+       x="140.5"
+       height="29"
+       width="119"
+       id="rect5118"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       id="text5120"
+       y="919.22156"
+       x="199.67871"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         y="919.22156"
+         x="199.67871"
+         id="tspan5122"
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle">Expressions</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5124"
+       width="249"
+       height="29"
+       x="10.5"
+       y="858.86218" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="134.93506"
+       y="877.22156"
+       id="text5126"><tspan
+         sodipodi:role="line"
+         id="tspan5128"
+         x="134.93506"
+         y="877.22156"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle">SoundProcesses</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5130"
+       width="119"
+       height="29"
+       x="10.5"
+       y="900.86218" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="69.805176"
+       y="919.22156"
+       id="text5132"><tspan
+         sodipodi:role="line"
+         id="tspan5134"
+         x="69.805176"
+         y="919.22156"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle">ScalaCollider</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="275.14359"
+       y="887.48541"
+       id="text3039"><tspan
+         sodipodi:role="line"
+         id="tspan3041"
+         x="275.14359"
+         y="887.48541"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'">abstracts transaction time</tspan><tspan
+         sodipodi:role="line"
+         x="275.14359"
+         y="904.98541"
+         id="tspan3045"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'">semantics (ephemeral vs.</tspan><tspan
+         sodipodi:role="line"
+         x="275.14359"
+         y="922.48541"
+         id="tspan3049"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'">persistent) and durability</tspan><tspan
+         sodipodi:role="line"
+         x="275.14359"
+         y="939.98541"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         id="tspan3120">(in-memory vs. hard-disk)</tspan></text>
+    <text
+       id="text3051"
+       y="975.79077"
+       x="4.285738"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         id="tspan3057"
+         y="975.79077"
+         x="4.285738"
+         sodipodi:role="line">provides an aural</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         y="993.29077"
+         x="4.285738"
+         sodipodi:role="line"
+         id="tspan3064">presentation</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         y="1010.7908"
+         x="4.285738"
+         sodipodi:role="line"
+         id="tspan3072">(‘audible view’ in</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         y="1028.2908"
+         x="4.285738"
+         sodipodi:role="line"
+         id="tspan3078">MVC pattern); uses</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         y="1045.7908"
+         x="4.285738"
+         sodipodi:role="line"
+         id="tspan3082">SuperCollider server</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:1.99999997, 0.99999999;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 60,962.6689 c 0.06072,-1.75374 0.38023,-3.44316 0.704833,-5.25709 0.36353,-2.03147 0.663827,-3.99993 2.012364,-5.89718 1.588225,-2.23447 1.999325,-4.69718 3.303456,-7.09831 1.652467,-3.04247 1.369966,-6.40862 1.836471,-9.62558"
+       id="path3103"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csssc" />
+    <path
+       sodipodi:nodetypes="csssc"
+       inkscape:connector-curvature="0"
+       id="path3177"
+       d="m 321.42857,977.64789 c 0.0607,-2.07599 0.38023,-4.07583 0.70483,-6.22307 0.36353,-2.40475 0.66383,-4.7349 2.01237,-6.98077 1.58822,-2.64505 1.99932,-5.56028 3.30345,-8.40261 1.65247,-3.60151 1.36997,-7.58618 1.83648,-11.39427"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:1.99999999, 1.00000001;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 7.0043313,845.03725 H 432.41202"
+       id="path3070"
+       inkscape:connector-curvature="0" />
+    <text
+       id="text3086"
+       y="1032.5095"
+       x="170.18491"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans'"
+         y="1032.5095"
+         x="170.18491"
+         sodipodi:role="line"
+         id="tspan3090">• transactions, cursors, ...</tspan></text>
+    <rect
+       y="802.86218"
+       x="10.5"
+       height="29"
+       width="119"
+       id="rect3128"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       id="text3130"
+       y="821.22156"
+       x="69.805176"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle"
+         y="821.22156"
+         x="69.805176"
+         id="tspan3132"
+         sodipodi:role="line">Mellite</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="137.62587"
+       y="810.66888"
+       id="text3134"><tspan
+         id="tspan3144"
+         sodipodi:role="line"
+         x="137.62587"
+         y="810.66888"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'">hybrid GUI/text</tspan><tspan
+         sodipodi:role="line"
+         x="137.62587"
+         y="828.16888"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Italic'"
+         id="tspan3168">based application</tspan></text>
+    <text
+       id="text3982"
+       y="837.66309"
+       x="445.36151"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3990"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Bold';text-align:end;text-anchor:end"
+         y="837.66309"
+         x="445.36151"
+         sodipodi:role="line">&quot;environment&quot;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Gulim;-inkscape-font-specification:Gulim;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="445.36151"
+       y="861.66309"
+       id="text4005"><tspan
+         sodipodi:role="line"
+         x="445.36151"
+         y="861.66309"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:1.25;font-family:'Bitstream Charter';-inkscape-font-specification:'Bitstream Charter Bold';text-align:end;text-anchor:end"
+         id="tspan4007">&quot;framework&quot;</tspan></text>
+  </g>
+</svg>
