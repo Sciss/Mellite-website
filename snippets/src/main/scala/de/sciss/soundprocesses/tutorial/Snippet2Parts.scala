@@ -6,7 +6,7 @@ import de.sciss.synth._
 import de.sciss.synth.proc.{AuralSystem, Proc, Transport, WorkspaceHandle}
 import de.sciss.synth.ugen._
 
-object Snippet2Parts extends App {
+trait Snippet2Parts {
   // #snippet2implicits
   type S = InMemory
   implicit val cursor: stm.Cursor[S] = InMemory()
