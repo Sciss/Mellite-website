@@ -1,8 +1,8 @@
-# SP3 - Linking and Interacting
+# SP3 - Arranging and Linking
 
 So far we have only looked at a singular sound producing `Proc`. This tutorial will address the question of how multiple processes
-can be connected together, and how temporal developments and interactions may happen beyond the rather low-level scheduler shown
-in the previous tutorial. We start off with (determined) temporal arrangments that do not contain interactions.
+can be connected together, and how temporal developments may happen beyond the rather low-level scheduler shown
+in the previous tutorial. We start off with temporal arrangments, and then proceed to the exchange between processes.
 
 ## Graphemes
 
@@ -215,7 +215,37 @@ using the method `getOrElse(defaultValue)`. If the value is `Some(x)` then `x` i
 the given `defaultValue` is returned. In SuperCollider, this behaviour would be represented by a value being either `nil`
 or not-`nil`, and the equivalent of `x.getOrElse(defaultValue)` would be `x ?? { defaultValue }`.
 
+## Linking Processes
 
+The last example has shown that multiple processes on a timeline may overlap, but so far they did not directly interact
+with each other. You may remember that `Proc` had a method `output`, and that I mentioned that this gives us a way to
+patch processes together. We are going to look at that in this section.
+
+A common case would be the filtering of one process by another, or the routing of processes to some output buses.
+`Snippet8` shows this, decomposing one of SuperCollider's and ScalaCollider's standard example, the aptly named
+["what was I thinking?"](https://github.com/Sciss/ScalaCollider/blob/master/ExampleCmd.sc). In that example, a pulse
+oscillator is fed through a resonant low-pass filter, and finally augmented by reverberation. If want to take these
+three things apart, we can create three individual `Proc`s, and in order to link them, we use the special graph
+elements `scan.In` and `scan.Out`. Additionally, we need to create output objects for the first two procs and place
+these in the attribute map of the subsequent procs:
+
+@@snip [Snippet8]($sp_tut$/Snippet8.scala) { #snippet8 }
+
+This is what we need to do:
+
+- replace `Out.ar(bus, x)` UGens by `ScanOut(x)`. This means the signal `x` is sent to an internal bus associated
+  with the standard output of the proc.
+- outputs are in a dictionary `outputs` of a proc. The are organised by string keys, with the default key being `"out"`.
+  If we wanted a different key or several outputs, we could specify the key as `ScanOut("key", x)`.
+- we have to create a corresponding entry in the `outputs` dictionary using, `p.outputs.add("key")`. This method
+  returns an object of type [`Output`](latest/api/de/sciss/synth/proc/Output.html).
+- to use this output object as the input to another (sink) proc, it must be placed in the sink's attribute map.
+  the sink proc's graph function may grab the signal through a `ScanIn()` graph element. The default key in the
+  attribute map is `"in"`. If we want to use another key, we would write `ScanIn("key")`.
+
+Of course, this example is a bit silly, because if we just play these three procs together, there isn't really
+a need to spread the sound producing function across three graphs. It makes more sense if several processes
+are combined onto one bus, or if the bus signals change over time.
 
 @@@ warning
 
