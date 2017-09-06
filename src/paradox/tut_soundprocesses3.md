@@ -127,11 +127,95 @@ Currently, SoundProcesses does not incorporate any mechanism for automatic laten
 Messages are sent out when a transaction completes. Normally, on reasonably fast computers, this is not a big issue, but
 it leaves room for improvement in future versions. In my own work, I very rarely have the need for extremely precise timing
 of client-server communication, and when I need very precise timing, I make sure that temporal signals are produced through
-UGens on the server. But this need not extend to other people's expectations, so hopefully we can improve client-server
+UGens on the server. But this needs not extend to other people's expectations, so hopefully we can improve client-server
 timing precision in the future (although this endeavour is quite complicated, since latency and precision are mutual
 compromises, and SuperCollider itself has no provision for sample-accurate scheduling).
 
 ## Timelines
+
+A timeline allows to place multiple objects to coexist or follow each other in time, similar to regions in a multi-track
+editor. The synthetic piano example may not be the best suited here, as each note's duration is
+determined by a recursive decay, but for the sake of simplicity, we will just reuse that synth graph, except that we
+eliminate the `strike` trigger and just excite once per synth. Here is `Snippet7` which places various piano strikes as
+individual procs on a timeline:
+
+@@snip [Snippet7]($sp_tut$/Snippet7.scala) { #snippet7 }
+
+If you play that, you will here a ritardando, and the piano starts from single pitches and goes into chords, the pitches
+being random but with a slight upward tendency. So the timeline is created using `Timeline[S]`, and we add elements to
+it using the `add` method that takes a `SpanLikeObj` for time region and the object to place. How are the pitches
+generated and how does the number of voices increases over time? Here is the relevant code:
+
+@@snip [Snippet7 Pitches]($sp_tut$/Snippet7Parts.scala) { #snippet7vec }
+
+The import adds as extension method `linlin` on numbers, something we know from SuperCollider but normally not supported
+by numbers in Scala. For those who are curious, you can easily extend classes with new methods in Scala, using so-called
+implicit classes (the import above brings such an implicit class into scope):
+
+```scala
+implicit class MyIntOps(n: Int) {
+  def isPrime: Boolean = n > 1 && !((2 until n-1).exists(n % _ == 0))
+}
+```
+
+This would "extend" the `Int` type with the method `isPrime`, so we can write `1.isPrime`, `2.isPrime`, `(0 to 10).filter(_.isPrime)`
+and so on. Note that Scala does not share SuperCollider's brilliant concept of automatically allowing the two styles
+`isPrime(x)` and `x.isPrime`. The former would be an ordinary method defined on some utility object and is not looked for
+in the type of `x`.
+
+So what does `Vector.fill` do? `Vector`, like `List` is an immutable collection type in Scala, one that has efficient
+random access and a fast `size` method, among other things. We use it here, because there is an `Obj` type in SoundProcesses
+that we can use, `DoubleVector` which is roughly an `Expr[S, Vector[Double]]`. We can create a `Vector` passing directly
+all its elements, like `Vector(2, 3, 5, 8)`, but we can also use a generator function with `Vector.fill(n)(f)` or
+`Vector.tabulate(n)(f)`. The `fill` constructor takes the number of elements in the first argument list, and a parameterless
+function in the second argument list, which is invoked for each of the elements.
+For example, `Vector.fill(4)(3)` would create the sequence `Vector(3, 3, 3, 3)`.
+Since we use a random number generator, and it is evaluated over and over again,
+we create vectors of random pitches. In contrast, `Vector.tabulate` passes the element index counter into the function.
+For example, `Vector.tabulate(4)(i => i * 3)` would create the sequence `Vector(0, 3, 6, 9)`. In SuperCollider, the closest
+equivalent to `fill` and `tabulate` would be `Array.fill(n, f)`.
+
+Now we can explain why the number of voices increases over time. It's the size of the vectors we create, so `(i/5 + 1)` where
+`i` runs from 0 (inclusive) until 30 (exclusive). In Scala, `for (i <- range) do-something` is a for-loop that iterates
+over a range of numbers with `i` become the iteration variable. A range literal can be `start until stop` for an exclusive end,
+or `start to stop` for an inclusive end. If you evaluate the number of voices, it goes from `(0/5 + 1) == 1` to `(29/5 + 1) == 6`.
+If we now look at the relevant part of the synth graph:
+
+@@snip [Snippet7 Pitch Control]($sp_tut$/Snippet7Parts.scala) { #snippet7graph }
+
+We see that we didn't specify a default value for the `pitch` control. Because SoundProcesses expands the UGen graph _late_,
+it can look up, in each case, what number of channels the control would have, so in our example, we actually get different
+synth-defs in the end, because the pitch control changes from monophonic (a vector of size 1) up to 6 channels.
+The late expansion is also the reason why we cannot query directly the number of channels of a graph element or UGen inside
+the synth-graph definition. Here the `NumChannels` graph element (or pseudo-UGen) comes to the rescue. It simply expands to
+a constant denoting the number of channels of its input argument. We use it here to scale down the amplitude by a factor
+determined by the square-root of the number of channels, thereby compensating for the increased volume due to the increased
+number of voices. Also note that we use a `Mix` inside the final `Out` UGen to sum the different voices together before
+sending them to the audio interface.
+
+Next, let's see the temporal positions of the thirty procs:
+
+@@snip [Snippet7 Spans]($sp_tut$/Snippet7Parts.scala) { #snippet7span }
+
+We create an exponential series from 7 to 21 seconds, and convert it to sample frames. `linexp` was also imported through
+`numbers.Implicits` and does exactly what its SuperCollider counterpart does. We give a liberal span length or duration
+of eight seconds; by that time, the `Decay` of the sound envelope should have faded to an extremely small number.
+Because the first proc does not start at the beginning of the timeline, but after seven seconds, we use a `seek` command
+on the transport before we invoke `play`:
+
+@@snip [Snippet7 Seek]($sp_tut$/Snippet7Parts.scala) { #snippet7seek }
+
+We could also have written `t.seek((7 * TimeRef.SampleRate).toLong)`, but since we're smarty-pants, we queried the
+position of the first element on the timeline instead. `firstEvent` returns a type `Option[Long]`. Scala uses the type
+`Option` for values that may either be defined/present or undefined/absent. If the timeline was empty or only contained
+elements with unbounded intervals, the result of `firstEvent` would be `None`. The defined case of an `Option` is
+`Some`. In our case, the result would be `Some(98784000L)` (in Scala, 64-bit long integer literals are written with
+a trailing `l` or `L` character). We can turn an optional value into a defined value by
+using the method `getOrElse(defaultValue)`. If the value is `Some(x)` then `x` is returned, if it is `None`, then
+the given `defaultValue` is returned. In SuperCollider, this behaviour would be represented by a value being either `nil`
+or not-`nil`, and the equivalent of `x.getOrElse(defaultValue)` would be `x ?? { defaultValue }`.
+
+
 
 @@@ warning
 
