@@ -1,21 +1,22 @@
 package de.sciss.soundprocesses.tutorial
 
-// #snippet6
 import de.sciss.lucre.expr.IntObj
 import de.sciss.synth.SynthGraph
 import de.sciss.synth.proc.{Grapheme, Proc, TimeRef, Transport}
 
-object Snippet6 extends InMemorySoundApp {
+trait Snippet6Parts extends InMemorySoundApp {
   def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
     val piano = SynthGraph {
       import de.sciss.synth._
       import de.sciss.synth.proc.graph.Ops._
       import de.sciss.synth.ugen._
 
+      // #snippet6graph
       val pitch     = "pitch".ar
       val strike    = (HPZ1.ar(pitch).signum.abs + Impulse.ar(0)) * 0.05
       pitch.poll(strike, "note")
       val hammerEnv = Decay2.ar(strike, 0.008, 0.04)    // excitation envelope
+      // #snippet6graph
       val sig       = Pan2.ar(
         // array of 3 strings
         Mix.tabulate(3) { i =>
@@ -37,6 +38,7 @@ object Snippet6 extends InMemorySoundApp {
 
     val p = Proc[S]
     p.graph() = piano
+    // #snippet6attr
     val pitches = Seq(
       ( 0,78), ( 1,81), ( 2,79), ( 3,78), ( 4,73), ( 5,71), ( 6,73), ( 7,74), ( 8,69),
       (11,66), (14,66), (17,66), (20,66),
@@ -52,9 +54,16 @@ object Snippet6 extends InMemorySoundApp {
       g.add(time, IntObj.newConst(pch))
     }
     p.attr.put("pitch", g)
+    // #snippet6attr
+
+    // #snippet6nopatmat
+    pitches.foreach { tup =>
+      val time = (tup._1 * 0.5 * TimeRef.SampleRate).toLong
+      g.add(time, IntObj.newConst(tup._2))
+    }
+    // #snippet6nopatmat
 
     t.addObject(p)
     t.play()
   }
 }
-// #snippet6
