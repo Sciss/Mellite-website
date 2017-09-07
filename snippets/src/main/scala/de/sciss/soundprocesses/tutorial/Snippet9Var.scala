@@ -1,6 +1,5 @@
 package de.sciss.soundprocesses.tutorial
 
-// #snippet9
 import de.sciss.lucre.expr.IntObj
 import de.sciss.span.Span
 import de.sciss.synth._
@@ -9,7 +8,7 @@ import de.sciss.synth.proc.graph.Ops._
 import de.sciss.synth.proc.graph._
 import de.sciss.synth.ugen._
 
-object Snippet9 extends InMemorySoundApp {
+object Snippet9Var extends InMemorySoundApp {
   def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
     implicit class Seconds(d: Double) {
       def seconds: Long = (d * TimeRef.SampleRate).toLong
@@ -54,10 +53,11 @@ object Snippet9 extends InMemorySoundApp {
     pVerb.attr.put("in", fOut)
     pVerb.graph() = gVerb
 
+    // #snippet9var
+    tlProc.add(Span.All, pVerb)
     t.addObject(tlProc)
-    t.addObject(pVerb)
     t.seek(tlProc.firstEvent.getOrElse(0L))
     t.play()
+    // #snippet9var
   }
 }
-// #snippet9

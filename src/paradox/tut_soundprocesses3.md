@@ -245,12 +245,43 @@ This is what we need to do:
 
 Of course, this example is a bit silly, because if we just play these three procs together, there isn't really
 a need to spread the sound producing function across three graphs. It makes more sense if several processes
-are combined onto one bus, or if the bus signals change over time.
+are combined onto one bus, or if the bus signals change over time. This is done in the following `Snippet9`:
 
-@@@ warning
+@@snip [Snippet9]($sp_tut$/Snippet9.scala) { #snippet9 }
 
-This tutorial is in the making and incomplete
+The synth-graph is the same as before, combining again pulse oscillator and resonator within the same function.
+I added a `"pitch"` input control, and the signal is faded out using a `FadeOut.ar` element. This is a special
+graph element from SoundProcesses that takes into account the proc's span on a timeline, fading out according
+to an entry at key `"fade-out"` in the attribute map. That entry is of type `FadeSpec.Obj` where a `FadeSpec`
+gives fade duration and curvature. Also, we are sending out a stereo signal now, using a `Pan2` with randomly
+changing position.
 
-@@@
+The for-loop in the middle is interesting which assembles procs on a timeline. Each proc is placed further
+along the timeline, with a random variation, and the fundamental pitch increases over time.
+Note that to
+avoid the annoying multiplications with the sampling rate, we add an extension method `.seconds` like this:
 
+@@snip [Snippet9 Seconds]($sp_tut$/Snippet9Parts.scala) { #snippet9sec }
 
+So `2.seconds` produces the corresponding sample frame `28224000L`. There are two ways in which we can connect
+the different oscillator procs to the reverberation: Either we add their outputs to a single collection,
+`Folder[S]`, or we add them indeed to another `Timeline[S]`. Here we go for the former, which is slightly
+less efficient but otherwise simpler to understand. So, we add the procs themselves with the desired spans
+to the timeline, and we add the outputs to a separate object of type `Folder` which is then placed at the
+`"in"` key of the attribute map of the reverberation process:
+
+@@snip [Snippet9 Timeline and Folder]($sp_tut$/Snippet9Parts.scala) { #snippet9tl }
+@@snip [Snippet9 Adding Procs]($sp_tut$/Snippet9Parts.scala) { #snippet9add }
+@@snip [Snippet9 Attr In]($sp_tut$/Snippet9Parts.scala) { #snippet9in }
+
+The `Folder` type has methods `addHead` and `addLast` to add an element either at the beginning or the 
+end of the sequence. In our case, the order of the outputs inside the folder doesn't matter.
+
+Both the timeline and the reverberation proc must then be registered with the transport. Alternatively
+(`Snippet9Var`),
+we also could have added the reverberation to the timeline with the special position `Span.All`:
+
+@@snip [Snippet9 Variant]($sp_tut$/Snippet9Var.scala) { #snippet9var }
+
+In Mellite, processes inside a timeline with `Span.All` are called "global" processese. In the timeline
+editor they appear in the left table of the editor window.
