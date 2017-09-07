@@ -8,19 +8,19 @@ in the previous tutorial. We start off with temporal arrangments, and then proce
 
 There are two objects in SoundProcesses that associate other objects with temporal positions: [`Grapheme`](latest/api/de/sciss/synth/proc/Grapheme.html)
 and [`Timeline`](latest/api/de/sciss/synth/proc/Timeline.html). If you look up the API docs, you'll see that `Grapheme` derives from a type
-`BiPin` where the stored element type is fixed to `Obj`, and likewise `Timeline` dervies from `BiGroup` with a fixed element type of `Obj`.
-A current limitation of the `Obj`  type system is that type parameters can not represented, and therefore we need particular sub-types to
+`BiPin[S, A]` where the element type `A` is fixed to `Obj`, and likewise `Timeline` dervies from `BiGroup[S, A]` with a fixed element type `A` of `Obj`.
+A current limitation of the `Obj`  type system is that type parameters can not be represented, and therefore we need particular sub-types to
 fix type parameters, in this case the most generic type `Obj`. The difference between the two is as follows:
 
 - a `Grapheme` is similar to a breakpoint function, such that at any point in time, if the function has been defined in the past,
   there exists exactly one value. In a `Grapheme`, elements are associated with a _point in time_, specified as a `LongObj`. As outlined
-  in the previous example, temporal value are given as sample frames with respect to `TimeRef.SampleRate`. You can think of a grapheme
+  in the previous example, temporal values are given as sample frames with respect to `TimeRef.SampleRate`. You can think of a grapheme
   as a sorted list, so it allows efficent queries by time.
 - a `Timeline` is similar to a timeline in a multi-track editor, such that its elements are associated with _time spans_, and at any
   time there may be zero, one, or multiple overlapping elements. The time spans are specified as `SpanLikeObj`, which is an
   `Expr[S, SpanLike]`, and the primitive type [`SpanLike`](latest/api/de/sciss/span/SpanLike.html) can be either a bounded `Span(start, stop)`, or an open
   interval such as `Span.From(start)` or `Span.Until(stop)`. There are also special cases `Span.Void` (empty) and `Span.All` (infinite duration).
-  A timeline allows efficient query by point in time or time interval.
+  A timeline allows efficient queries by points in time or time intervals.
 
 @@@ note
 
@@ -39,7 +39,7 @@ Before we kick off, here is an example trait we can "mix in" to our next snippet
 
 @@snip [In-memory sound app]($sp_tut$/InMemorySoundApp.scala) { #inmemorysoundapp }
 
-This starts up the system like we did before, with a small change - we wait until the server is booted before doing anything else, so
+This starts up the system like we did before, with a small change&mdash;we wait until the server is booted before doing anything else, so
 we can be sure that when we create a transport and play it, it will sound immediately. The `def main` line ensures that the program can
 be executed, it doesn't do anything special, but it so happens that the body of the object containing this trait will also be initialised,
 so all the other statements will be automatically executed when the program is started. The last line `def run` is __abstract__; it does
@@ -50,7 +50,7 @@ But otherwise, the following example should make clear how this works:
 @@snip [Snippet5]($sp_tut$/Snippet5.scala) { #snippet5 }
 
 If we hadn't defined `def run`, the compiler would refuse to compile this. You see that implementing or "mixing in" a trait is done by
-writing `extends TraitName`. Before we had always implemented the `App` trait, now we implementing our battries-included trait. Scala
+writing `extends TraitName`. Before, we had always implemented the `App` trait, now we are implementing our battries-included trait. Scala
 allows multiple trait mixin which is very powerful. It's syntax would be `object MyObject extends Trait1 with Trait2` or 
 `class MyClass extends Trait1 with Trait2`. The object or class can then use any members defined in those traits&mdash;here for example
 type `S` and value `cursor`&mdash;unless they are marked `private`.
@@ -76,7 +76,7 @@ a simple high-pass filter that differentiates the signal, subtracting from the c
 If the signal does not change, the output of `HPZ1` is zero, if it changes it will be non-zero. To ensure we have a consistent
 signal of zero or one, `.signum.abs` converts any non-zero signal to one. There are other possibilities to express the same
 idea, for example `pitch sig_!= Delay1.ar(pitch)` would have been one. What complicates the matter is that SuperCollider has a
-notorious problem of UGen initialisation. What should the output of UGen be when the synth is started? Until now, many UGens
+notorious problem of UGen initialisation. What should the output of a UGen be when the synth is started? Until version 3.8 of SuperCollider, many UGens
 have a rather unintuitive behaviour, for example `Delay1` will not start by outputting zero, as if the delay line was "empty",
 but instead it will repeat the first input sample. As a result, `strike` would not produce an initial trigger at time zero.
 To compensate for that, we simply add an `Impulse.ar(0)` which is a trick to create a single sample impulse at time zero.
@@ -89,10 +89,10 @@ The other important bit is how the grapheme is created and registered:
 
 Similar to creating a new "blank" proc with `Proc[S]` (aka `Proc.apply[S]`), a new empty grapheme is created with
 `Grapheme[S]` (aka `Grapheme.apply[S]`). We stored a combination of time values and pitches in the `pitches` sequence.
-In Scala, you can create ad-hoc records or _tuples_ by putting together comma separated values in parenthesis. So `(a, b)`
+In Scala, you can create ad-hoc records or _tuples_ by putting together comma separated values in parentheses. So `(a, b)`
 is a tuple of arity two, its class is actually `Tuple2` with the type parameters corresponding to the types of the first
 and second tuple element, respectively. So `(0, 78)`, containing two integer numbers, is of type `Tuple2[Int, Int]`.
-To tranfer those values into the grapheme, we iterate over the sequence, this is done with the `foreach` method which
+To transfer those values into the grapheme, we iterate over the sequence, this is done with the `foreach` method which
 corresponds with `do` in SuperCollider's collections, although we don't automatically get an extra index counter argument.
 The `{ case (beat, pch) => ... }` way of writing a lambda is special in Scala in that we use _pattern matching_. A
 function literal in Scala can be written with a list of `case` statements, each of which checks the function's input
@@ -116,7 +116,7 @@ point numbers, because that's the only precision understood by the SuperCollider
 
 @@@ note
 
-So you can see that when synthesis parameters refer to the proc's attribute map, we can use both scalar values in the form
+When synthesis parameters refer to the proc's attribute map, we can use both scalar values in the form
 of, for example, a `DoubleObj`, but we can also use more complex objects as control signals, such as a `Grapheme` which
 then acts as a breakpoint function, where time zero is aligned with the starting point of the synth.
 
@@ -141,10 +141,10 @@ individual procs on a timeline:
 
 @@snip [Snippet7]($sp_tut$/Snippet7.scala) { #snippet7 }
 
-If you play that, you will here a ritardando, and the piano starts from single pitches and goes into chords, the pitches
+If you play that, you will hear a ritardando, and the piano starts from single pitches and goes into chords, the pitches
 being random but with a slight upward tendency. So the timeline is created using `Timeline[S]`, and we add elements to
 it using the `add` method that takes a `SpanLikeObj` for time region and the object to place. How are the pitches
-generated and how does the number of voices increases over time? Here is the relevant code:
+generated and how does the number of voices increase over time? Here is the relevant code:
 
 @@snip [Snippet7 Pitches]($sp_tut$/Snippet7Parts.scala) { #snippet7vec }
 
@@ -177,7 +177,7 @@ equivalent to `fill` and `tabulate` would be `Array.fill(n, f)`.
 
 Now we can explain why the number of voices increases over time. It's the size of the vectors we create, so `(i/5 + 1)` where
 `i` runs from 0 (inclusive) until 30 (exclusive). In Scala, `for (i <- range) do-something` is a for-loop that iterates
-over a range of numbers with `i` become the iteration variable. A range literal can be `start until stop` for an exclusive end,
+over a range of numbers with `i` becoming the iteration variable. A range literal can be `start until stop` for an exclusive end,
 or `start to stop` for an inclusive end. If you evaluate the number of voices, it goes from `(0/5 + 1) == 1` to `(29/5 + 1) == 6`.
 If we now look at the relevant part of the synth graph:
 
@@ -186,7 +186,7 @@ If we now look at the relevant part of the synth graph:
 We see that we didn't specify a default value for the `pitch` control. Because SoundProcesses expands the UGen graph _late_,
 it can look up, in each case, what number of channels the control would have, so in our example, we actually get different
 synth-defs in the end, because the pitch control changes from monophonic (a vector of size 1) up to 6 channels.
-The late expansion is also the reason why we cannot query directly the number of channels of a graph element or UGen inside
+The late expansion is also the reason why we cannot directly query the number of channels of a graph element or UGen inside
 the synth-graph definition. Here the `NumChannels` graph element (or pseudo-UGen) comes to the rescue. It simply expands to
 a constant denoting the number of channels of its input argument. We use it here to scale down the amplitude by a factor
 determined by the square-root of the number of channels, thereby compensating for the increased volume due to the increased
