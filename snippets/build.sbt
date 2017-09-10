@@ -12,9 +12,11 @@ resolvers          += "Oracle Repository" at "http://download.oracle.com/maven" 
 // ---- main dependencies ----
 
 lazy val melliteVersion = "2.17.1"
+lazy val ugensVersion   = "1.16.6"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite" % melliteVersion
+  "de.sciss" %% "mellite" % melliteVersion,
+  "de.sciss" %% "scalacolliderugens-plugins" % ugensVersion
 )
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Xfuture", "-encoding", "utf8", "-Xlint", "-Yrangepos")

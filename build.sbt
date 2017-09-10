@@ -105,9 +105,10 @@ val root = (project in file("."))
     lMellite
   )
 
+/*
 val snippets = (project in file("snippets"))
   // .dependsOn(lMellite)
   .settings(
     name := s"$baseName-Snippets"
   )
-
+*/
