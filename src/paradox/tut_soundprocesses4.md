@@ -193,7 +193,62 @@ The dollar method along with for-comprehensions is useful, as we can extract all
 
 @@snip [Snippet12 Multiple Attributes]($sp_tut$/Snippet12Parts.scala) { #snippet12multiple }
 
-
 ## Reacting to Real-time Sound
 
+Rather than scheduling actions at precise moments, for example on a timeline, one often wants to use them to react to some input to the system, such as
+a real-time sound signal. For the purpose of this tutorial, we don't use a microphone signal or anything like that, but something that can be directly
+reproduced on any computer. We use a synth that plays a sequence of four random pitches, and when the sound has decayed to -60 dB, an action is invoked.
+That action then decreases a counter, and as long as the new counter value is greater than zero, it restarts the same sound process. The code is in
+`Snippet13`:
 
+@@snip [Snippet13]($sp_tut$/Snippet13.scala) { #snippet13 }
+
+Let's break that up into several bits. First the overall structure:
+
+@@snip [Snippet13 Scaffold]($sp_tut$/Snippet13Parts.scala) { #snippet13scaffold }
+
+It introduces two new objects, `Folder` and `Ensemble`. The folder is simply a linear list of other objects, and it is in fact the thing you see first in Mellite when you create a workspace: Every workspace starts with a root folder. You can add objects to a folder using `addHead` (to the beginning of the list) and `addLast` (to the end of the list). We add a `Proc` to the folder. An `Ensemble`, in turn, combines a folder with a time offset (here zero) and a boolean playing state. It is the ensemble `ens` that we finally add to the transport. We can then use the `BooleanObj.Var` that we passed to the ensemble constructor to toggle the playing of that ensemble. To play an ensemble means to play all objects inside its folder, so here the single `Proc`.
+
+We want to access the counter variable of type `IntObj.Var` and the playing state variable of type `BooleanObj.Var` from within the action. The easiest way to do that is put them in its attribute map.
+Inside the action's body we look for those objects again using `universe.self.attr`. We cannot use the more specific variable type like `attr.$[BooleanObj.Var]("play")`, but only the main type `attr.$[BooleanObj]("play")`&mdash;this is a limitation in the "type system" of SoundProcesses&mdash;but we can use an additional pattern match by writing `BooleanObj.Var(x)` on the left-hand side inside the for-comprehension:
+
+@@snip [Snippet13 Body]($sp_tut$/Snippet13Parts.scala) { #snippet13body }
+
+Thus, `ply` is now of type `BooleanObj.Var` and we can update it writing `ply() = ...`, and `cnt` is now of type `IntObj.Var` and we can update it writing `cnt() = ...`.
+
+Similar to plugging the objects we need inside the action to the action's attribute map, we also need to make an association from the action to the proc that triggers the action.
+We put the action in the proc's attribute map, and inside the graph function, we make use of the special graph element `Reaction`:
+
+@@snip [Snippet13 Reaction]($sp_tut$/Snippet13Parts.scala) { #snippet13reaction }
+
+The `DetectSilence` UGen goes from zero to one when the input signal `sig` falls below a given threshold for a given period (100ms default). In order to avoid it triggering multiple times, we wrap it in a `SetResetFF` with no reset signal. `Reaction` then takes that `done` trigger and invokes an action looked up in the proc's attribute map at key `"done"`, setting its universe's `value` field to the value of the graph element `pitch`. If you observe the console printing of the snippet, it looks like this:
+
+> Action - last midi pitch was FloatVector(Vector(54.0))<br>
+> Counter is 3 - restarting.<br>
+> Action - last midi pitch was FloatVector(Vector(72.0))<br>
+> Counter is 2 - restarting.<br>
+> Action - last midi pitch was FloatVector(Vector(70.0))<br>
+> Counter is 1 - restarting.<br>
+> Action - last midi pitch was FloatVector(Vector(57.0))<br>
+> Counter reached zero.
+
+The value passed to the action has the perhaps strange appearing type `FloatVector`. Like `SendReply`, `Reaction` may transmit multiple values to the client, so that is the reason we have a vector (sequence) of floats instead of a single float. The extra wrapping `FloatVector` makes it easier to extract or pattern match the untyped (`Any`) `value` method of the `Action.Universe`. So if we wanted to use the single pitch value as a number in the action body, we could have written:
+
+@@snip [Snippet13 Value Extractor]($sp_tut$/Snippet13Parts.scala) { #snippet13value }
+
+And the output would have been:
+
+> Action - last midi pitch was 67.0<br>
+> Counter is 3 - restarting.<br>
+> Action - last midi pitch was 71.0<br>
+> Counter is 2 - restarting.<br>
+> Action - last midi pitch was 57.0<br>
+> Counter is 1 - restarting.<br>
+> Action - last midi pitch was 66.0<br>
+> Counter reached zero.
+
+@@@ warning
+
+A word of caution: Using pattern extraction in the way `val Pattern(x) = ...` can result in runtime errors if the pattern matching fails, for example if we made a mistake and wrongly assumed the `value` to be of type `FloatVector`. But if we take that risk, we can write very succinct code.
+
+@@@
