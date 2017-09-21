@@ -93,39 +93,20 @@ There is another, related shortcut here in Scala. The call we're making is actua
 on the `SynthGraphObj.Var` type, which I will talk about in a second. So when a method on some object `x` is `def update(v: A): Unit`, we can use the alternative
 syntax `x() = v`. This is really cool, because we can define mutable cells or variables that way:
 
-```scala
-trait Cell[A] {  // fictitious type
-  def apply(): A
-  def update(v: A): Unit
-}
-```
+@@snip [Apply and Update - Cell]($sp_tut$/ApplyUpdate.scala) { #cell }
 
 With such definition, we could write:
 
-```scala
-val cell: Cell[Int] = ???   // imagine we had such cell
-val oldValue = cell()       // aka cell.apply()
-val newValue = oldValue + 1
-cell() = newValue           // aka cell.update(newValue)
-```
+@@snip [Apply and Update - Cell Usage]($sp_tut$/ApplyUpdate.scala) { #cell-use }
 
 Scala uses this principle in many cases. Take for example arrays:
 
-```scala
-val xs = Array(3, 5, 8, 0)
-xs(3) = x(1) + x(2)  // aka xs.update(3, x.apply(1) + x.apply(2))
-assert(x(3) == 13)
-```
+@@snip [Apply and Update - Array]($sp_tut$/ApplyUpdate.scala) { #array }
 
 This also works when we have an additional implicit argument list. This is the case for `SynthGraphObj.Var` which is an extension
 of [stm.Var](latest/api/de/sciss/lucre/stm/Var.html):
 
-```scala
-trait Var[Tx, A] {
-  def apply()(implicit tx: Tx): A
-  def update(v: A)(implicit tx: Tx): Unit
-}
-```
+@@snip [Apply and Update - Var]($sp_tut$/ApplyUpdate.scala) { #var }
 
 What is the element type `A` in the case of `SynthGraphObj.Var`? It is `SynthGraphObj`. It is defined as [follows](latest/api/de/sciss/synth/proc/SynthGraphObj.html):
 
