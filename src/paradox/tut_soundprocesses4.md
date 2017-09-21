@@ -12,7 +12,7 @@ server. But often times we need to be able to insert some imperative actions, we
 happens as a piece is performing. In a dynamically typed language, this is rather straight forward: just schedule the execution of a function. For Scala,
 this requires a bit more infrastructure, because we want to be able to persist those functions with the workspace, and we want to persist them as compiled
 objects in order to minimise the latency that occurs when they are executed. Luckily, most of this infrastructure is hidden from you. On the other hand,
-it is useful for you to understand how this is actually made possible, and therefore the first snippet, `Snippet10`, shows the "old workaround" of creating
+it is useful to understand how this is actually made possible, and therefore the first snippet, `Snippet10`, shows the "old workaround" of creating
 actions:
 
 @@snip [Snippet10]($sp_tut$/Snippet10.scala) { #snippet10 }
@@ -41,12 +41,10 @@ def apply[S <: Sys[S]](universe: Action.Universe[S])(implicit tx: S#Tx): Unit
 
 In the snippet, we used `T` instead of `S` as type parameter to stress the fact that this is a "fresh" type parameter that does not need
 to be identical to the system we used when creating the action. This pecularity helps us understand, what it actually means to create an
-action: It is a piece of code that will usually be persisted in the database of workspace to be retrieved and executed at a later point in
+action: It is a piece of code that will usually be persisted in the database of a workspace to be retrieved and executed at a later point in
 time. If you have worked with Mellite, you know that objects can be copied, even from workspace to workspace, even from an in-memory
 workspace to a durable workspace and vice versa. The body of the action stays the same, but it may be invoked with different systems,
 and that is the reason its `apply` method has a system type parameter.
-
-### Predefined Actions
 
 The argument passed to `apply`, of type `Action.Universe` can be explained in a similar manner: The purpose of an action usually is to
 operate on other objects in the workspace, other compositional objects. How do we access them? Look at the snippet: It might have been
@@ -56,7 +54,10 @@ wrong with it. But imagine that the action is placed in a workspace&mdash;someth
 has the function of _generating_ or _manipulating_ that workspace, but it stands "outside" of that workspace. The workspace would have no
 knowledge of ephemeral objects such as the transport in here.
 
-The way the action was created in `Snippet10` is via a the regstration of _predefined_ action.
+### Predefined Actions
+
+The way the action was created in `Snippet10` is via a the regstration of _predefined_ action. Its body is not persisted in a workspace,
+and therefore must be explicitly registered before it can be used.
 
 @@@ note
 
@@ -73,25 +74,125 @@ a consistent self-contained system, and we don't need to store any actual Scala 
 
 ### Actions from Compiled Source-Code
 
+![I herd you like compilers](.../tut_sp_meme_compiler_in_runtime.jpg)
+
 To overcome this, the "old" solution&mdash;the solution until recently&mdash;was to create actions by _compiling source code at runtime_.
-
-@@@ warning
-
-This tutorial is in the making and still incomplete.
-
-@@@
+SoundProcesses has a light-weight type to represent source code, called `Code` with different sub-types for the kind of programs (including
+the type of `import` statements implicitly provided and the kind of output produced by the program). The source code itself can be given
+as a `String`, for example using Scala's triple-quotes `"""` so that line breaks can be used without escaping them. The code object then can be
+passed to `Action.compile`, as shown in the following `Snippet11`:
 
 @@snip [Snippet11]($sp_tut$/Snippet11.scala) { #snippet11 }
 
-![I herd you like compilers](.../tut_sp_meme_compiler_in_runtime.jpg)
+It's clear that this approach is inconvenient, because it adds a number of problems:
+
+- The source code being a `String` means that it is not checked at the time the outer program is compiled. As a workaround, you would
+  probably write the code as in the first ('predef') example, and then escape it as a string later.
+- The compilation can be slow, especially in the first run, when the compiler has not been initialised yet. Therefore, the API decision was
+  to return a `Future[A]` from `Action.compile`. A [`Future` in Scala](http://docs.scala-lang.org/overviews/core/futures.html) denotes an asynchronous process that eventually, in the future, leads to
+  a computed value of type `A` (or a failure). So `Action.compile` returns immediately, but the compiled `Action` is not available immediately.
+  Therefore, what the snippet does, is to use `fut.foreach` to execute a function when the future is completed. This function must open a
+  new transaction, because the old one from which `Action.compile` was called, has been completed at this point. To create a new transaction, we use
+  `cursor.step { implicit tx => ... }`. The value of the future is of type `stm.Source[S#Tx, Action[S]]`, a reference to the action. It must
+  be resolved in the new transaction, using the `apply` method, i.e. `actH.apply()` or just `actH()`. Only then can we continue with our
+  program building process, invoking `runWithAction` as a separate step.
+
+These problems led to the current design alternative of using macros to generate actions.
 
 ### Macro-generated Actions
 
-@@snip [Snippet12]($sp_tut$/Snippet12.scala) { #snippet12 }
-
 ![I herd you like compilers](.../tut_sp_meme_compiler_in_compiler.jpg)
 
+Macros are meta-programs or 'program synthesisers'. In Scala, the most common form is a `def`-macro, i.e. a macro in the shape of a method
+that, when called, synthesises part of the program around the call-site. For the user, a `def`-macro may look very much like a regular
+method invocation, but with the ability to do some "magic" to the code. In our case, we added a `def`-macro as method `Action.apply`. It
+generates a "full" action that can be persisted along with its body, without the two problems of the `Action.compile` approach shown in the
+previous section. The macro essentially _compiles at compile-time_ the function passed as argument to `Action.apply` using another specially created compiler,
+storing the serialised program in the returned object, and as a nice side-effect, it also stores the source code for the action body in
+the attribute map of the action object, making it possible to open the source code editor later in the Mellite GUI.
+
+`Snippet12` shows how macro-based action generation looks like:
+
+@@snip [Snippet12]($sp_tut$/Snippet12.scala) { #snippet12 }
+
+Note that `import MacroImplicits._` brings `Action.apply` into scope as an extension method that otherwise doesn't exist.
+Another interesting aspect of this is, as the macro compiles, using a fresh compiler, _the source code extracted from the call_,
+there is no risk of accidentally catching symbols from the environment. You can try this out yourself. If you attempted to
+compile a program containing:
+
+```scala
+val act1 = Action.apply[S] { universe =>
+  println("Transport: " + t)
+}
+```
+
+The compiler would report:
+
+>     /tmp/temp4836962927583971584.scala:12: error: not found: value t
+>     println("Transport: " + t)
+>                             ^
+
+On the other hand, you need to be sure to place all necessary import statements inside the `apply` block. SoundProcesses by default gives you the most
+common imports, such as `de.sciss.synth.proc._`, but not everything that is at the top of your source file. Imagine you wanted to print the current
+time:
+
+```scala
+import java.util.Date
+val act1 = Action.apply[S] { universe =>
+  println("Current time: " + new Date)
+}
+```
+
+This this would fail to compile:
+
+>     /tmp/temp3097917770584164351.scala:12: error: not found: type Date
+>     println("Current time: " + new Date)
+>                                    ^
+
+In other words, the compiler that compiles the body of the action doesn't see anything that's outside that body. Your editor, e.g. IntelliJ, may not
+indicate this problem, as it doesn't have any idea that we are calling a special macro. To make the above work, put the import inside the body:
+
+```scala
+val act1 = Action.apply[S] { universe =>
+  import java.util.Date
+  println("Current time: " + new Date)
+}
+```
+
 ### An Action's Universe
+
+The action's body is invoked with an argument of type [`Action.Universe`](latest/api/de/sciss/synth/proc/Action$$Universe.html).
+This is the interface to the "outer world" of the body,
+a way to find and access other objects in SoundProcesses. It has the following methods:
+
+- `cursor: Cursor[S]`, if we have the need to issue new transactions (the action's body is called inside a transaction, so in most cases we don't need the cursor)
+- `self: Action[S]`, the action object whose body is executed. A common pattern is to use that action's attribute map to find other objects. This is what the
+  example snippets are doing and is explained further down.
+- `workspace: WorkspaceHandle[S]`, if we need to access objects by traversing the workspace's root folder, for example
+- `invoker: Option[Obj[S]]`, an object that functions as a "parent" to the action in its invocation; this is used by `Proc`, as we will see later
+- `value: Any`, a general interface for passing all sorts of data to the action. Again, we will see a use case later
+
+The last snippets made use of `self` to get to the attribute map, looking for a string object at key `"foo"`. Here is again the relevant portion:
+
+@@snip [Snippet12 Self]($sp_tut$/Snippet12Parts.scala) { #snippet12self }
+
+The method `$` on the attribute map is a convenient way to query an entry with an _expected value type_. Since values in attribute map can be all sorts of
+objects, the `get` method would only return an `Option[Obj[S]]`, which means that to do anything meaningful with the return value, we would need an additional
+pattern match. The dollar method avoids this by taking a type parameter, specifying the expected type of the value. Here, we pass the type without its own
+system type parameter, so we write `attr.$[StringObj]("foo")` instead of `attr.$[StringObj[S]]("foo")`, saving at least some boiler plate. This call looks
+for an entry at key `"foo"`, and only if the entry is found _and the value type is string object_. The method's return type thus becomes `Option[StringObj[S]]`
+instead of the generic `Option[Obj[S]]`. Furthermore, we use a [for-comprehension](https://stackoverflow.com/questions/3754089/scala-for-comprehension#3754568)
+to match the result and extract the string object inside the option. In Scala, `for (x <- anOption) { }` is the same as `anOption.foreach { x => ... }`.
+The assignment `val v = fooObj.value` then evaluates the found expression to a primitive string value which is then printed to the console.
+
+Without the use of the `$` method, the body could have been written as follows:
+
+@@snip [Snippet12 Without Dollar]($sp_tut$/Snippet12Parts.scala) { #snippet12nodollar }
+
+The dollar method along with for-comprehensions is useful, as we can extract all attributes the action wishes to use in a sequentially written manner:
+
+@@snip [Snippet12 Multiple Attributes]($sp_tut$/Snippet12Parts.scala) { #snippet12multiple }
+
 
 ## Reacting to Real-time Sound
 
