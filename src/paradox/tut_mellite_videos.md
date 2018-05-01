@@ -77,7 +77,19 @@ This tutorial introduces the Wolkenpumpe live interface object:
 
 ## Tutorial 5 - Patterns
 
-Coming soon.
+[Video Link](https://vimeo.com/album/4473871/video/267466035) (16 min)
+
+This tutorial introduces the Pattern abstraction:
+
+ - creating a new Pattern object
+ - writing and evaluating a pattern expression in the editor
+ - naming differences and operational differences between SuperCollider and Scala
+ - looking up the API docs
+ - type parameters of patterns
+ - constant patterns and a pattern of given elements, looping patterns
+ - collection-like operations such as `++`, `drop`, `take`, `sorted`
+ - feeding a pattern into the attribute map of a proc to control a sound parameter
+ - future plans
 
 ## Tutorial 6...
 
