@@ -39,8 +39,8 @@ in compliance with the GNU GPL.
 
 In order to run Mellite, you also need to have installed on your computer:
 
-- [Java](https://www.java.com/download/) (version 8 or newer)
-- [SuperCollider](https://supercollider.github.io/download) (version 3.8.0 is recommended, but 3.7.x should work, too)
+- [Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (version 8; try to avoid Java 9 which may cause issues)
+- [SuperCollider](https://supercollider.github.io/download) (version 3.9.0 is recommended, but 3.7.x should work, too)
 
 ## Resources
 

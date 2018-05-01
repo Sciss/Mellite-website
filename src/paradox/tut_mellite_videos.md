@@ -75,7 +75,11 @@ This tutorial introduces the Wolkenpumpe live interface object:
  - defining a custom filter
  - copying an empty template setup
 
-## Tutorial 5...
+## Tutorial 5 - Patterns
+
+Coming soon.
+
+## Tutorial 6...
 
 More tutorials that cover the API and ways of actually programming the system will appear soon (hopefully)...
 

@@ -33,7 +33,8 @@ val lPatterns           = RootProject(uri(s"https://github.com/Sciss/Patterns.gi
 val lMellite            = RootProject(uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}"))
 
 val nuagesURI           = uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${deps.nuages}")
-val lNuages             = ProjectRef(nuagesURI, "wolkenpumpe-core")
+val lNuagesCore         = ProjectRef(nuagesURI, "wolkenpumpe-core")
+val lNuagesBasic        = ProjectRef(nuagesURI, "wolkenpumpe-basic")
 
 val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
 val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
@@ -85,6 +86,9 @@ val root = project.in(file("."))
         "de.sciss.mellite.gui.impl",
         "de.sciss.mellite.impl",
         "de.sciss.osc.impl", 
+        "de.sciss.patterns.example", 
+        "de.sciss.patterns.impl", 
+        "de.sciss.patterns.stream.impl", 
         "de.sciss.synth.impl",
         "de.sciss.synth.proc.graph.impl",
         "de.sciss.synth.proc.gui.impl",
@@ -94,7 +98,8 @@ val root = project.in(file("."))
         "snippets"
       ).mkString(":"),
       "-doc-title", s"${baseName} ${PROJECT_VERSION} API"
-    )
+    ),
+    unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lNuagesBasic) -- inProjects(lLucreBdb6)
   )
   // XXX TODO --- don't know how to exclude bdb5/6 from lucre
   .aggregate(
@@ -106,7 +111,7 @@ val root = project.in(file("."))
     lFScape, 
     lSoundProcesses,
     lPatterns,
-    lNuages,
+    lNuagesCore, //  XXX TODO --- this is currently broken, sbt still tries to compile wolkenpumpe-basic which has a macro problem
     lLucreCore, 
     lLucreExpr, 
     lMellite
