@@ -2,15 +2,18 @@ lazy val melliteVersion        = "2.22.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 
-lazy val soundProcessesVersion = "3.19.0"
-lazy val nuagesVersion         = "2.24.0"
-lazy val oscVersion            = "1.1.6"
-lazy val audioFileVersion      = "1.5.0"
-lazy val scalaColliderVersion  = "1.26.0"
-lazy val ugensVersion          = "1.18.0"
-lazy val fscapeVersion         = "2.14.0"
-lazy val lucreVersion          = "3.7.1"
-lazy val spanVersion           = "1.4.1"
+lazy val deps = new {
+  val audioFile      = "1.5.0"
+  val fscape         = "2.14.0"
+  val lucre          = "3.7.1"
+  val nuages         = "2.24.0"
+  val osc            = "1.1.6"
+  val patterns       = "0.2.0"
+  val scalaCollider  = "1.26.0"
+  val soundProcesses = "3.19.0"
+  val span           = "1.4.1"
+  val ugens          = "1.18.0"
+}
 
 scalaVersion in ThisBuild := "2.12.6"
 
@@ -19,17 +22,20 @@ val commonSettings = Seq(
   version      := PROJECT_VERSION
 )
 
-val lSpan               = RootProject(uri(s"https://github.com/Sciss/Span.git#v${spanVersion}"))
-val lScalaOSC           = RootProject(uri(s"https://github.com/Sciss/ScalaOSC.git#v${oscVersion}"))
-val lAudioFile          = RootProject(uri(s"https://github.com/Sciss/AudioFile.git#v${audioFileVersion}"))
-val lScalaColliderUGens = RootProject(uri(s"https://github.com/Sciss/ScalaColliderUGens.git#v${ugensVersion}"))
-val lScalaCollider      = RootProject(uri(s"https://github.com/Sciss/ScalaCollider.git#v${scalaColliderVersion}"))
-val lFScape             = RootProject(uri(s"https://github.com/Sciss/FScape-next.git#v${fscapeVersion}"))
-val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#v${soundProcessesVersion}"))
-val lNuages             = RootProject(uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${nuagesVersion}"))
+val lSpan               = RootProject(uri(s"https://github.com/Sciss/Span.git#v${deps.span}"))
+val lScalaOSC           = RootProject(uri(s"https://github.com/Sciss/ScalaOSC.git#v${deps.osc}"))
+val lAudioFile          = RootProject(uri(s"https://github.com/Sciss/AudioFile.git#v${deps.audioFile}"))
+val lScalaColliderUGens = RootProject(uri(s"https://github.com/Sciss/ScalaColliderUGens.git#v${deps.ugens}"))
+val lScalaCollider      = RootProject(uri(s"https://github.com/Sciss/ScalaCollider.git#v${deps.scalaCollider}"))
+val lFScape             = RootProject(uri(s"https://github.com/Sciss/FScape-next.git#v${deps.fscape}"))
+val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#v${deps.soundProcesses}"))
+val lPatterns           = RootProject(uri(s"https://github.com/Sciss/Patterns.git#v${deps.patterns}"))
 val lMellite            = RootProject(uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}"))
 
-val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${lucreVersion}")
+val nuagesURI           = uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${deps.nuages}")
+val lNuages             = ProjectRef(nuagesURI, "wolkenpumpe-core")
+
+val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
 val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
 val lLucreExpr          = ProjectRef(lucreURI, "lucre-expr")
 val lLucreBdb6          = ProjectRef(lucreURI, "lucre-bdb6")
@@ -98,8 +104,9 @@ val root = project.in(file("."))
     lScalaColliderUGens, 
     lScalaCollider, 
     lFScape, 
-    lSoundProcesses, 
-    // lNuages,  // XXX TODO --- sbt crashes with macro expansions, can't run nsc.Global
+    lSoundProcesses,
+    lPatterns,
+    lNuages,
     lLucreCore, 
     lLucreExpr, 
     lMellite
