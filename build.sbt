@@ -1,18 +1,18 @@
-lazy val melliteVersion        = "2.22.0"
+lazy val melliteVersion        = "2.23.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 
 lazy val deps = new {
   val audioFile      = "1.5.0"
-  val fscape         = "2.14.0"
-  val lucre          = "3.7.1"
-  val nuages         = "2.24.0"
+  val fscape         = "2.15.0"
+  val lucre          = "3.8.0"
+  val nuages         = "2.25.0"
   val osc            = "1.1.6"
-  val patterns       = "0.2.0"
-  val scalaCollider  = "1.26.0"
-  val soundProcesses = "3.19.0"
+  val patterns       = "0.3.0"
+  val scalaCollider  = "1.27.0"
+  val soundProcesses = "3.20.0"
   val span           = "1.4.1"
-  val ugens          = "1.18.0"
+  val ugens          = "1.19.0"
 }
 
 scalaVersion in ThisBuild := "2.12.6"
