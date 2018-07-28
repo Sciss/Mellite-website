@@ -42,7 +42,7 @@ confused with other types of cursors). The reason for marking this value implici
 compiler will find it.
 The type annotation `: stm.Cursor[S]` is not necessary, strictly speaking, because Scala will otherwise infer the type automatically. But 
 it is good practice to always specify the types of implicit values, because it avoids surprises and ambiguities in the compiler's search for implicit
-values. We could also have choosen to use the more precise type `: InMemory` here, but we never need to refer to this value as this particular
+values. We could also have chosen to use the more precise type `: InMemory` here, but we never need to refer to this value as this particular
 system, so the more general type is sufficient and therefore better indicates the use case.
 
 The third line imports an implicit method that provides a [`WorkspaceHandle`](latest/api/de/sciss/synth/proc/WorkspaceHandle.html).
@@ -65,7 +65,7 @@ object Proc {
 ```
 
 This is the companion object of the trait (type) `Proc`. Often we create instances of classes and traits not through `new ClassName`
-but through a method on their companion object. This is the case here. But shouldn't that call then have been `Proc.apply[S]`?
+but through a method on their companion object. This is the case here. But should that call then not have been `Proc.apply[S]`?
 
 @@@ note
 
@@ -158,7 +158,7 @@ Both `Expr` and `Proc` are sub-types of [`Obj`](latest/api/de/sciss/lucre/stm/Ob
   attribute map with type [`AttrMap`](latest/api/de/sciss/lucre/stm/Obj$.html#AttrMap[S<:de.sciss.lucre.stm.Sys[S]]=de.sciss.lucre.event.Map.Modifiable[S,String,de.sciss.lucre.stm.Obj]).
 
 Using the attribute map, it is easy to annotate objects with additional information. It's SoundProcesses' way of contextualising objects
-and linking them together. The concept of a heterogenous dictionary is well known from dynamically typed languages. It is a simple way to
+and linking them together. The concept of a heterogeneous dictionary is well known from dynamically typed languages. It is a simple way to
 extend the otherwise determined interface (methods) of an object. On the downside, attribute maps work by means of convention: The keys
 into this dictionary are ordinary strings, so we lose a bit of type safety by using the dictionary, as we must ensure ourselves that we
 use the correct keys for retrieving a particular type of information. If we mistyped the attribute's key or name, the map would not
@@ -197,7 +197,7 @@ very odd, and that's this at the periphery:
 
 Note how the original assignment `val p = Proc[S]` is inside the first `cursor.step` block, so that local variable would not be visible in
 the next `cursor.step` block. We therefore return something from the first block to the _outer scope_, so we can use it again in the next
-nested scope. Why didn't we just write:
+nested scope. Why did we not just write:
 
 ```scala
 val p = cursor.step { implicit tx =>
@@ -243,7 +243,7 @@ you wish to have aural representations created. Finally, you use the transport's
 you want to start and stop listening to these objects. You can call `play` even before the server is booted,
 and the transport will internally start scheduling objects, but they only become sound when the server is ready as well.
 That happens in our example, it thus takes less than the eight seconds between first hearing the bubbles and their frequency changing,
-because there is a delay from `aural.start()` to the server actually having booted. It we didn't want that, we'd have to defer
+because there is a delay from `aural.start()` to the server actually having booted. It we did not want that, we'd have to defer
 the `t.play()` call and the `Thread.sleep` until the moment that the aural system was booted.
 
 ## Using a Scheduler
@@ -283,7 +283,7 @@ First, you can see what the type of the transactional handle is: `stm.Source[S#T
 returns a fresh version of the encapsulated object. The transactional `iterate` method does exactly that in its first line, it creates a
 fresh version of the pitch variable `val pch = pchH()`, then updates it with a random value. `math` is an object that belongs to the Scala
 standard library and lives in the `scala.` package, so we can use it directly without import. The `random()` method emits a pseudo-random
-`Double` number between 0.0 (inclusive) and 1.0 (exclusive), very much what `1.0.rand` would do in SuperCollider. With the mulitplication
+`Double` number between 0.0 (inclusive) and 1.0 (exclusive), very much what `1.0.rand` would do in SuperCollider. With the multiplication
 and addition, we bring it into the range of 60 to 100; as a midi pitch, that means we produce a frequency between 261.6 Hz and 2637.0 Hz.
 The system that maintains the synth for the proc sees this update and automatically adjusts the control value inside the UGen graph.
 

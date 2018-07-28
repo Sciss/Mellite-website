@@ -37,7 +37,7 @@ trait Snippet13Parts extends InMemorySoundApp {
       val pitch : GE = ???
       // #snippet13reaction
       Out.ar(0, sig)
-      val done = SetResetFF.kr(DetectSilence.ar(sig, amp = -60.dbamp), 0)
+      val done = SetResetFF.kr(DetectSilence.ar(sig, amp = -60.dbAmp), 0)
       Reaction(done, pitch, "done")
       // #snippet13reaction
     }

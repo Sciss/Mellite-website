@@ -21,7 +21,7 @@ object Snippet6 extends InMemorySoundApp {
         Mix.tabulate(3) { i =>
           // detune strings, calculate delay time :
           val detune = Array(-0.05, 0, 0.04)(i)
-          val delayTime = 1 / (pitch + detune).midicps
+          val delayTime = 1 / (pitch + detune).midiCps
           // each string gets own exciter :
           val hammer = LFNoise2.ar(3000) * hammerEnv   // 3000 Hz was chosen by ear
           CombL.ar(hammer, // used as a string resonator

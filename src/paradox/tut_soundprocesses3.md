@@ -2,20 +2,20 @@
 
 So far we have only looked at a singular sound producing `Proc`. This tutorial will address the question of how multiple processes
 can be connected together, and how temporal developments may happen beyond the rather low-level scheduler shown
-in the previous tutorial. We start off with temporal arrangments, and then proceed to the exchange between processes.
+in the previous tutorial. We start off with temporal arrangements, and then proceed to the exchange between processes.
 
 ## Graphemes
 
 There are two objects in SoundProcesses that associate other objects with temporal positions: [`Grapheme`](latest/api/de/sciss/synth/proc/Grapheme.html)
 and [`Timeline`](latest/api/de/sciss/synth/proc/Timeline.html). If you look up the API docs, you'll see that `Grapheme` derives from a type
-`BiPin[S, A]` where the element type `A` is fixed to `Obj`, and likewise `Timeline` dervies from `BiGroup[S, A]` with a fixed element type `A` of `Obj`.
+`BiPin[S, A]` where the element type `A` is fixed to `Obj`, and likewise `Timeline` derives from `BiGroup[S, A]` with a fixed element type `A` of `Obj`.
 A current limitation of the `Obj`  type system is that type parameters can not be represented, and therefore we need particular sub-types to
 fix type parameters, in this case the most generic type `Obj`. The difference between the two is as follows:
 
 - a `Grapheme` is similar to a breakpoint function, such that at any point in time, if the function has been defined in the past,
   there exists exactly one value. In a `Grapheme`, elements are associated with a _point in time_, specified as a `LongObj`. As outlined
   in the previous example, temporal values are given as sample frames with respect to `TimeRef.SampleRate`. You can think of a grapheme
-  as a sorted list, so it allows efficent queries by time.
+  as a sorted list, so it allows efficient queries by time.
 - a `Timeline` is similar to a timeline in a multi-track editor, such that its elements are associated with _time spans_, and at any
   time there may be zero, one, or multiple overlapping elements. The time spans are specified as `SpanLikeObj`, which is an
   `Expr[S, SpanLike]`, and the primitive type [`SpanLike`](latest/api/de/sciss/span/SpanLike.html) can be either a bounded `Span(start, stop)`, or an open
@@ -41,7 +41,7 @@ Before we kick off, here is an example trait we can "mix in" to our next snippet
 
 This starts up the system like we did before, with a small change&mdash;we wait until the server is booted before doing anything else, so
 we can be sure that when we create a transport and play it, it will sound immediately. The `def main` line ensures that the program can
-be executed, it doesn't do anything special, but it so happens that the body of the object containing this trait will also be initialised,
+be executed, it does not do anything special, but it so happens that the body of the object containing this trait will also be initialised,
 so all the other statements will be automatically executed when the program is started. The last line `def run` is __abstract__; it does
 not end with a `=` and a right-hand side defining the body of the method. Traits can contain abstract methods, and when we use the trait,
 we have to define that method. This is a standard object-oriented mechanism, so you have probably encountered it in other languages.
@@ -50,7 +50,7 @@ But otherwise, the following example should make clear how this works:
 @@snip [Snippet5]($sp_tut$/Snippet5.scala) { #snippet5 }
 
 If we hadn't defined `def run`, the compiler would refuse to compile this. You see that implementing or "mixing in" a trait is done by
-writing `extends TraitName`. Before, we had always implemented the `App` trait, now we are implementing our battries-included trait. Scala
+writing `extends TraitName`. Before, we had always implemented the `App` trait, now we are implementing our batteries-included trait. Scala
 allows multiple trait mixin which is very powerful. It's syntax would be `object MyObject extends Trait1 with Trait2` or 
 `class MyClass extends Trait1 with Trait2`. The object or class can then use any members defined in those traits&mdash;here for example
 type `S` and value `cursor`&mdash;unless they are marked `private`.
@@ -183,7 +183,7 @@ If we now look at the relevant part of the synth graph:
 
 @@snip [Snippet7 Pitch Control]($sp_tut$/Snippet7Parts.scala) { #snippet7graph }
 
-We see that we didn't specify a default value for the `pitch` control. Because SoundProcesses expands the UGen graph _late_,
+We see that we did not specify a default value for the `pitch` control. Because SoundProcesses expands the UGen graph _late_,
 it can look up, in each case, what number of channels the control would have, so in our example, we actually get different
 synth-defs in the end, because the pitch control changes from monophonic (a vector of size 1) up to 6 channels.
 The late expansion is also the reason why we cannot directly query the number of channels of a graph element or UGen inside
@@ -275,7 +275,7 @@ to the timeline, and we add the outputs to a separate object of type `Folder` wh
 @@snip [Snippet9 Attr In]($sp_tut$/Snippet9Parts.scala) { #snippet9in }
 
 The `Folder` type has methods `addHead` and `addLast` to add an element either at the beginning or the 
-end of the sequence. In our case, the order of the outputs inside the folder doesn't matter.
+end of the sequence. In our case, the order of the outputs inside the folder does not matter.
 
 Both the timeline and the reverberation proc must then be registered with the transport. Alternatively
 (`Snippet9Var`),
@@ -283,5 +283,5 @@ we also could have added the reverberation to the timeline with the special posi
 
 @@snip [Snippet9 Variant]($sp_tut$/Snippet9Var.scala) { #snippet9var }
 
-In Mellite, processes inside a timeline with `Span.All` are called "global" processese. In the timeline
+In Mellite, processes inside a timeline with `Span.All` are called "global" processes. In the timeline
 editor they appear in the left table of the editor window.

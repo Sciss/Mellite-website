@@ -19,7 +19,7 @@ object Snippet7 extends InMemorySoundApp {
       val sig       = Pan2.ar(
         Mix.tabulate(3) { i =>
           val detune    = Array(-0.05, 0, 0.04)(i)
-          val delayTime = 1 / (pitch + detune).midicps
+          val delayTime = 1 / (pitch + detune).midiCps
           val hammer    = LFNoise2.ar(3000) * hammerEnv
           CombL.ar(hammer, delayTime, delayTime, 6)
         },
@@ -33,9 +33,9 @@ object Snippet7 extends InMemorySoundApp {
       val p       = Proc[S]
       p.graph()   = piano
       import de.sciss.numbers.Implicits._
-      val pitches = Vector.fill(i/5 + 1)(math.random().linlin(0, 1, 49, 76) + i)
+      val pitches = Vector.fill(i/5 + 1)(math.random().linLin(0, 1, 49, 76) + i)
       p.attr.put("pitch", DoubleVector.newConst(pitches))
-      val timeSec = i.linexp(0, 29, 7, 21)
+      val timeSec = i.linExp(0, 29, 7, 21)
       val time    = (timeSec * TimeRef.SampleRate).toLong
       val dur     = (      8 * TimeRef.SampleRate).toLong
       tl.add(Span(time, time + dur), p)

@@ -404,7 +404,7 @@ b = SynthDef(\bubbles, {
 @@@ note
 
 Using `.madd` calls in SuperCollider is not very common. Most UGens do have artificial trailing inputs for multiplication and addition, which are then rewritten as `.madd` calls that
-produce the according binary-op or `MulAdd` UGen. I didn't adopt this approach in ScalaCollider, so here you have to explicitly use `.madd` to scale the output of UGens.
+produce the according binary-op or `MulAdd` UGen. I did not adopt this approach in ScalaCollider, so here you have to explicitly use `.mulAdd` (ScalaCollider's equivalent to SuperCollider's `.madd`) to scale the output of UGens.
 
 @@@
 
@@ -424,11 +424,11 @@ If you are completely unfamiliar with SuperCollider, here are the core concepts 
   In the SuperCollider server, UGens can either run at full audio rate (`ar`) or at a reduced control rate (`kr`). `ir` is a special case of control rate, called scalar or init rate,
   where the UGen's value is calculated only once when the synthesis process is started.
 - so we can read the function from top to bottom: `LFSaw.kr` creates a low-frequency (LF) sawtooth oscillator with a frequency in Hertz given by its argument. Like many oscillators, the output of
-  this sawtooth runs between -1 to +1, so the subsequent `.madd` wraps this UGen in a second UGen that scales this value range to the range (-1 * 3 + 80 = 77) to (+1 * 3 + 80 = 83).
+  this sawtooth runs between -1 to +1, so the subsequent `.mulAdd` wraps this UGen in a second UGen that scales this value range to the range (-1 * 3 + 80 = 77) to (+1 * 3 + 80 = 83).
 - the next line produces another sawtooth oscillator at 0.4 cycles per second, mixing its output with the previous sawtooth oscillator, 
   producing the nominal range (-1 * 24 + 77 = 53) to (+1 * 24 + 83 = 107).
-- the next line creates a sine oscillator at audio rate, the frequency between the summed sawtooth oscillators fed through the `.midicps` unary operator function, translating from
-  [midi pitch](https://en.wikipedia.org/wiki/MIDI_tuning_standard#Frequency_values) values to Hertz. The sine oscillator frequency thus moves in the range (53.midicps = 174.6) to (107.midicps = 3951.1). The amplitude of the sine's nominal -1 to +1 is scaled by
+- the next line creates a sine oscillator at audio rate, the frequency between the summed sawtooth oscillators fed through the `.midiCps` unary operator function, translating from
+  [midi pitch](https://en.wikipedia.org/wiki/MIDI_tuning_standard#Frequency_values) values to Hertz. The sine oscillator frequency thus moves in the range (53.midiCps = 174.6) to (107.midiCps = 3951.1). The amplitude of the sine's nominal -1 to +1 is scaled by
   the factor 0.04 or -28 dB.
 - the `CombN` UGen is a non-interpolating comb filter, the input here being the sine oscillator, using a fixed delay time of 0.2 seconds and a 60 dB decay time of 4 seconds. It reverberates
   the sine oscillator.

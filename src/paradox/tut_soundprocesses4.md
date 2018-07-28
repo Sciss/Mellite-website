@@ -40,7 +40,7 @@ def apply[S <: Sys[S]](universe: Action.Universe[S])(implicit tx: S#Tx): Unit
 ```
 
 In the snippet, we used `T` instead of `S` as type parameter to stress the fact that this is a "fresh" type parameter that does not need
-to be identical to the system we used when creating the action. This pecularity helps us understand, what it actually means to create an
+to be identical to the system we used when creating the action. This peculiarity helps us understand, what it actually means to create an
 action: It is a piece of code that will usually be persisted in the database of a workspace to be retrieved and executed at a later point in
 time. If you have worked with Mellite, you know that objects can be copied, even from workspace to workspace, even from an in-memory
 workspace to a durable workspace and vice versa. The body of the action stays the same, but it may be invoked with different systems,
@@ -56,7 +56,7 @@ knowledge of ephemeral objects such as the transport in here.
 
 ### Predefined Actions
 
-The way the action was created in `Snippet10` is via a the regstration of _predefined_ action. Its body is not persisted in a workspace,
+The way the action was created in `Snippet10` is via a the registration of _predefined_ action. Its body is not persisted in a workspace,
 and therefore must be explicitly registered before it can be used.
 
 @@@ note
@@ -115,7 +115,7 @@ the attribute map of the action object, making it possible to open the source co
 
 @@snip [Snippet12]($sp_tut$/Snippet12.scala) { #snippet12 }
 
-Note that `import MacroImplicits._` brings `Action.apply` into scope as an extension method that otherwise doesn't exist.
+Note that `import MacroImplicits._` brings `Action.apply` into scope as an extension method that otherwise does not exist.
 Another interesting aspect of this is, as the macro compiles, using a fresh compiler, _the source code extracted from the call_,
 there is no risk of accidentally catching symbols from the environment. You can try this out yourself. If you attempted to
 compile a program containing:
@@ -149,8 +149,8 @@ This this would fail to compile:
 >     println("Current time: " + new Date)
 >                                    ^
 
-In other words, the compiler that compiles the body of the action doesn't see anything that's outside that body. Your editor, e.g. IntelliJ, may not
-indicate this problem, as it doesn't have any idea that we are calling a special macro. To make the above work, put the import inside the body:
+In other words, the compiler that compiles the body of the action does not see anything that's outside that body. Your editor, e.g. IntelliJ, may not
+indicate this problem, as it does not have any idea that we are calling a special macro. To make the above work, put the import inside the body:
 
 ```scala
 val act1 = Action.apply[S] { universe =>

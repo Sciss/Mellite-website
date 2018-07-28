@@ -15,7 +15,7 @@ object Snippet6Mda extends InMemorySoundApp {
       val pitch = "pitch".ar
       val gate  = HPZ1.ar(pitch).signum.abs + Impulse.ar(0)
       pitch.poll(gate, "note")
-      val sig   = MdaPiano.ar(freq = pitch.midicps, gate = gate)
+      val sig   = MdaPiano.ar(freq = pitch.midiCps, gate = gate)
       Out.ar(0, sig)
     }
 

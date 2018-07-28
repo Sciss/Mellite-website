@@ -18,9 +18,9 @@ object Snippet3 extends App {
   val bubbles = SynthGraph {
     import de.sciss.synth.proc.graph.Ops._
     val f0  = "freq".kr
-    val o   = LFSaw.kr(Seq(f0, f0 * 8/7.23)).madd(3, 80)
-    val f   = LFSaw.kr(0.4).madd(24, o)
-    val s   = SinOsc.ar(f.midicps) * 0.04
+    val o   = LFSaw.kr(Seq(f0, f0 * 8/7.23)).mulAdd(3, 80)
+    val f   = LFSaw.kr(0.4).mulAdd(24, o)
+    val s   = SinOsc.ar(f.midiCps) * 0.04
     val c   = CombN.ar(s, 0.2, 0.2, 4)
     Out.ar(0, c)
   }

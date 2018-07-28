@@ -18,7 +18,7 @@ object Snippet13 extends InMemorySoundApp {
 
       val pitchLo   = 50
       val pitchHi   = 75
-      val maxPeriod = pitchLo.midicps.reciprocal
+      val maxPeriod = pitchLo.midiCps.reciprocal
       val numVoices = 4
       val trigAll   = Impulse.kr(3)
       val trigCnt   = PulseCount.kr(trigAll) - 1
@@ -27,13 +27,13 @@ object Snippet13 extends InMemorySoundApp {
       val out = Mix.tabulate(numVoices) { i =>
         val trigVc  = Trig.kr(trigCnt sig_== i, dur = 0.01f)
         val pluck   = PinkNoise.ar(Decay.kr(trigVc, 0.05))
-        val period  = Latch.kr(pitch, trigVc).midicps.reciprocal
+        val period  = Latch.kr(pitch, trigVc).midiCps.reciprocal
         val string  = CombL.ar(pluck, delayTime = period, maxDelayTime = maxPeriod, decayTime = 8)
-        Pan2.ar(string, i.linlin(0, numVoices - 1, -0.75, 0.75))
+        Pan2.ar(string, i.linLin(0, numVoices - 1, -0.75, 0.75))
       }
       val sig = LeakDC.ar(out)
       Out.ar(0, sig)
-      val done = SetResetFF.kr(DetectSilence.ar(sig, amp = -60.dbamp), 0)
+      val done = SetResetFF.kr(DetectSilence.ar(sig, amp = -60.dbAmp), 0)
       Reaction(done, pitch, "done")
     }
     p.graph() = g

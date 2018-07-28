@@ -21,8 +21,8 @@ trait Snippet9Parts extends InMemorySoundApp {
       val pOsc  = Proc[S]
       // ...
       // #snippet9tl
-      val dur   = math.random().linlin(0, 1, 10, 20)
-      val off   = math.random().linlin(0, 1,  0, 20) + i.linlin(0, 15, 0, 60)
+      val dur   = math.random().linLin(0, 1, 10, 20)
+      val off   = math.random().linLin(0, 1,  0, 20) + i.linLin(0, 15, 0, 60)
       val oOsc  = pOsc.outputs.add("out")
       val span  = Span(off.seconds, (off + dur).seconds)
       // #snippet9add
@@ -34,7 +34,7 @@ trait Snippet9Parts extends InMemorySoundApp {
     val gVerb = SynthGraph {
       val in  = ScanInFix(2)
       val y   = in * 0.6
-      val sig = in + Mix.fill(2)(CombL.ar(y, 0.06, LFNoise1.kr(Rand(0, 0.3)).madd(0.025, 0.035), 1))
+      val sig = in + Mix.fill(2)(CombL.ar(y, 0.06, LFNoise1.kr(Rand(0, 0.3)).mulAdd(0.025, 0.035), 1))
       Out.ar(0, sig)
     }
     // #snippet9in

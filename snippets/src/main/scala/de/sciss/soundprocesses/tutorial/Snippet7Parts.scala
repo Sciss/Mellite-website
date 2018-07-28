@@ -25,11 +25,11 @@ trait Snippet7Parts extends InMemorySoundApp {
       p.graph()   = piano
       // #snippet7vec
       import de.sciss.numbers.Implicits._
-      val pitches = Vector.fill(i/5 + 1)(math.random().linlin(0, 1, 49, 76) + i)
+      val pitches = Vector.fill(i/5 + 1)(math.random().linLin(0, 1, 49, 76) + i)
       p.attr.put("pitch", DoubleVector.newConst(pitches))
       // #snippet7vec
       // #snippet7span
-      val timeSec = i.linexp(0, 29, 7, 21)
+      val timeSec = i.linExp(0, 29, 7, 21)
       val time    = (timeSec * TimeRef.SampleRate).toLong
       val dur     = (      8 * TimeRef.SampleRate).toLong
       tl.add(Span(time, time + dur), p)
