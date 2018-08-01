@@ -2,8 +2,9 @@ package de.sciss.soundprocesses.tutorial
 
 // #inmemorysoundapp
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
-import de.sciss.synth.proc.{AuralSystem, Transport, WorkspaceHandle}
+import de.sciss.synth.proc.{AuralSystem, Transport}
 
 trait InMemorySoundApp {
   type S = InMemory

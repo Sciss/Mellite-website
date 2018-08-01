@@ -1,5 +1,6 @@
 package de.sciss.soundprocesses.tutorial
 
+import de.sciss.lucre.stm.Folder
 import de.sciss.span.Span
 import de.sciss.synth._
 import de.sciss.synth.proc._

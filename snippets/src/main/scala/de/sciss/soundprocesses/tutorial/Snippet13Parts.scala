@@ -1,6 +1,7 @@
 package de.sciss.soundprocesses.tutorial
 
 import de.sciss.lucre.expr.{BooleanObj, IntObj}
+import de.sciss.lucre.stm.Folder
 import de.sciss.synth.SynthGraph
 import de.sciss.synth.proc._
 

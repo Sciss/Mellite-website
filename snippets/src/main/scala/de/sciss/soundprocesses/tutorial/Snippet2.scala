@@ -2,9 +2,10 @@ package de.sciss.soundprocesses.tutorial
 
 // #snippet2
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport, WorkspaceHandle}
+import de.sciss.synth.proc.{AuralSystem, Proc, Transport}
 import de.sciss.synth.ugen._
 
 object Snippet2 extends App {

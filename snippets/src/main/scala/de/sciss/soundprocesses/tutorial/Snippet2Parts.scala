@@ -1,9 +1,10 @@
 package de.sciss.soundprocesses.tutorial
 
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport, WorkspaceHandle}
+import de.sciss.synth.proc.{AuralSystem, Proc, Transport}
 import de.sciss.synth.ugen._
 
 trait Snippet2Parts {

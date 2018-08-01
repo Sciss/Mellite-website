@@ -3,9 +3,10 @@ package de.sciss.soundprocesses.tutorial
 // #snippet4
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Scheduler, TimeRef, Transport, WorkspaceHandle}
+import de.sciss.synth.proc.{AuralSystem, Proc, Scheduler, TimeRef, Transport}
 import de.sciss.synth.ugen._
 
 object Snippet4 extends App {

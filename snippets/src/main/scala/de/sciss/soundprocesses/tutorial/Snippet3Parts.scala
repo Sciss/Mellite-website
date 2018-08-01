@@ -2,9 +2,10 @@ package de.sciss.soundprocesses.tutorial
 
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport, WorkspaceHandle}
+import de.sciss.synth.proc.{AuralSystem, Proc, Transport}
 
 trait Snippet3Parts {
   type S = InMemory
