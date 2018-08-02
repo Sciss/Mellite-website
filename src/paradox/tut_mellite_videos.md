@@ -91,7 +91,7 @@ This tutorial introduces the Pattern abstraction:
  - feeding a pattern into the attribute map of a proc to control a sound parameter
  - future plans
 
-## Tutorial 7
+## Tutorial 6
 
 [Video Link](https://peertube.social/videos/watch/de98dae5-c3d4-464c-9c79-6bfed1367ae3) (21 min)
 
