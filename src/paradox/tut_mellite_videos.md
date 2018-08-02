@@ -1,10 +1,10 @@
 # Mellite Video Tutorials
 
-Video tutorials for version 2.10 and newer are available from a [Vimeo album](https://vimeo.com/album/4473871).
+Video tutorials for version 2.10 and newer are available from a [Peertube channel](https://peertube.social/video-channels/da59306f-d732-42d5-864f-3b70b868e9fb/videos) ([Vimeo backup](https://vimeo.com/album/4473871)).
 
 ## Tutorial 1 - Getting Started
 
-[Video Link](https://vimeo.com/208302767) (14 min)
+[Video Link](https://peertube.social/videos/watch/d5c98baf-fa70-4211-a31d-95c9181a3dfb) (14 min)
 
 This is a basic introduction from scratch:
 
@@ -20,7 +20,7 @@ This is a basic introduction from scratch:
 
 ## Tutorial 2 - Timeline and Audio Files
 
-[Video Link](https://vimeo.com/208354987) (19 min)
+[Video Link](https://peertube.social/videos/watch/8a664318-87b4-4e8a-83bb-a847eacbbca2) (19 min)
 
 This tutorial introduces the timeline object and shows how to arrange sound file regions:
 
@@ -39,7 +39,7 @@ This tutorial introduces the timeline object and shows how to arrange sound file
 
 ## Tutorial 3 - Freesound.org
 
-[Video Link](https://vimeo.com/216298165) (16 min)
+[Video Link](https://peertube.social/videos/watch/306e11ce-d01f-42ac-bb07-62d5d406b85b) (16 min)
 
 This tutorial introduces the freesound.org sound file retrieval object:
 
@@ -51,7 +51,7 @@ This tutorial introduces the freesound.org sound file retrieval object:
 
 ## Tutorial 4 - Wolkenpumpe
 
-[Video Link](https://vimeo.com/222107666) (33 min)
+[Video Link](https://peertube.social/videos/watch/1a179f03-402c-4844-b2e9-653664fe17ca) (33 min)
 
 This tutorial introduces the Wolkenpumpe live interface object:
 
@@ -77,7 +77,7 @@ This tutorial introduces the Wolkenpumpe live interface object:
 
 ## Tutorial 5 - Patterns
 
-[Video Link](https://vimeo.com/album/4473871/video/267466035) (16 min)
+[Video Link](https://peertube.social/videos/watch/2bb93731-d6a5-4d97-8dd5-1f6417d1be6f) (16 min)
 
 This tutorial introduces the Pattern abstraction:
 
@@ -91,9 +91,25 @@ This tutorial introduces the Pattern abstraction:
  - feeding a pattern into the attribute map of a proc to control a sound parameter
  - future plans
 
-## Tutorial 6...
+## Tutorial 7
 
-More tutorials that cover the API and ways of actually programming the system will appear soon (hopefully)...
+[Video Link](https://peertube.social/videos/watch/de98dae5-c3d4-464c-9c79-6bfed1367ae3) (21 min)
+
+This tutorial introduces Widget programs:
+
+- creating a Widget object
+- creating a static text `Label`
+- creating a `Slider` with label and custom value ranges
+- composing expressions and assigning them to a label text
+- API documentation
+- widget graph programs vs. proc (UGen graph) programs
+- linking widget model to an attribute map
+- bidirectional mapping (persisting models)
+- `DoubleField` as alternative to `Slider`
+- `Runner` control to play a proc from the widget program
+- `Button` component, triggers (`Trig`) and actions (`Act`)
+
+---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332).
 I'm planning to cover this topic in updated tutorials.
