@@ -20,14 +20,14 @@ A binary version, ready to run, can be downloaded on [archive.org](https://archi
 Mellite is cross-platform, it is provided through a universal zip archive that can run on any platform
 including Mac and Windows, and a `.deb` package suitable for Linux Debian and Ubuntu.
 
-If you want to build from the source code, go to [framagit.org/sciss/Mellite](https://framagit.org/sciss/Mellite).
+If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite).
 
 ----
 
 **Legal disclaimer:**
 Mellite contains libraries also released under the GNU AGPL and GPL.
 You are entitled to the source code of all these libraries. The licenses of
-all libraries are [available here](https://framagit.org/sciss/Mellite/tree/master/licenses). To
+all libraries are [available here](https://git.iem.at/sciss/Mellite/tree/master/licenses). To
 obtain the source code, clone the source code repository of Mellite (see above), and in the file
 `build.sbt` add the qualification `withSources()` to any library before running `sbt update`.
 For example, to receive the source code of the PDFlitz library used by Mellite, change
