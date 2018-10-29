@@ -22,7 +22,7 @@ object Snippet12 extends InMemorySoundApp {
       }
     }
 
-    val tl = Timeline[S]
+    val tl = Timeline[S]()
     act1.attr.put("foo", StringObj.newConst("first occurrence"))
     tl.add(Span.From((2 * TimeRef.SampleRate).toLong), act1)
     val act2: Action[S] = Obj.copy(act1)

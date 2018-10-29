@@ -26,3 +26,7 @@ The (obsolete) GitHub pages publication works through
 There is a sub-directory `snippets` which contains another sbt build file. This is the base directory for the code used in the online
 tutorials. You may want to import _that sub-directory_ into IntelliJ IDEA. (If you import the root directory, you'll get the build
 for the website instead, not the tutorial snippets).
+
+## Notes
+
+Don't use sbt 1.2.6 -- it is broken, will have "API hash" errors, even when running `update clean`.

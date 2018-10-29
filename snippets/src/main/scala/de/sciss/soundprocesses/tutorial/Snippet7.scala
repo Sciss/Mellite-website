@@ -28,9 +28,9 @@ object Snippet7 extends InMemorySoundApp {
       Out.ar(0, Mix(sig))
     }
 
-    val tl = Timeline[S]
+    val tl = Timeline[S]()
     for (i <- 0 until 30) {
-      val p       = Proc[S]
+      val p       = Proc[S]()
       p.graph()   = piano
       import de.sciss.numbers.Implicits._
       val pitches = Vector.fill(i/5 + 1)(math.random().linLin(0, 1, 49, 76) + i)

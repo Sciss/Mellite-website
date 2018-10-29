@@ -2,17 +2,13 @@ package de.sciss.soundprocesses.tutorial
 
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport}
+import de.sciss.synth.proc.{Proc, Transport, Universe}
 
 trait Snippet3Parts {
   type S = InMemory
   implicit val cursor: stm.Cursor[S] = InMemory()
-  import WorkspaceHandle.Implicits._
-
-  val aural = AuralSystem()
 
   val bubbles = SynthGraph {
     // #snippet3stringcontrol
@@ -23,12 +19,13 @@ trait Snippet3Parts {
   }
 
   cursor.step { implicit tx =>
-    val p = Proc[S]
+    val p = Proc()
     // #snippet3attrput
     p.attr.put("freq", DoubleObj.newConst(8.0))
     // #snippet3attrput
     // #snippet3transport
-    val t = Transport[S](aural)
+    val u = Universe.dummy[S]
+    val t = Transport(u)
     t.addObject(p)
     t.play()
     // #snippet3transport
@@ -36,7 +33,7 @@ trait Snippet3Parts {
 
   // #snippet3txhandle
   val pH = cursor.step { implicit tx =>
-    val p = Proc[S]
+    val p = Proc()
     // ...
     tx.newHandle(p)
   }

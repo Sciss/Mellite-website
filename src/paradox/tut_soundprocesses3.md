@@ -87,8 +87,8 @@ The other important bit is how the grapheme is created and registered:
 
 @@snip [Snippet6 Grapheme]($sp_tut$/Snippet6Parts.scala) { #snippet6attr }
 
-Similar to creating a new "blank" proc with `Proc[S]` (aka `Proc.apply[S]`), a new empty grapheme is created with
-`Grapheme[S]` (aka `Grapheme.apply[S]`). We stored a combination of time values and pitches in the `pitches` sequence.
+Similar to creating a new "blank" proc with `Proc[S]()` (aka `Proc.apply[S]()`), a new empty grapheme is created with
+`Grapheme[S]()` (aka `Grapheme.apply[S]()`). We stored a combination of time values and pitches in the `pitches` sequence.
 In Scala, you can create ad-hoc records or _tuples_ by putting together comma separated values in parentheses. So `(a, b)`
 is a tuple of arity two, its class is actually `Tuple2` with the type parameters corresponding to the types of the first
 and second tuple element, respectively. So `(0, 78)`, containing two integer numbers, is of type `Tuple2[Int, Int]`.
@@ -142,13 +142,13 @@ individual procs on a timeline:
 @@snip [Snippet7]($sp_tut$/Snippet7.scala) { #snippet7 }
 
 If you play that, you will hear a ritardando, and the piano starts from single pitches and goes into chords, the pitches
-being random but with a slight upward tendency. So the timeline is created using `Timeline[S]`, and we add elements to
+being random but with a slight upward tendency. So the timeline is created using `Timeline[S]()`, and we add elements to
 it using the `add` method that takes a `SpanLikeObj` for time region and the object to place. How are the pitches
 generated and how does the number of voices increase over time? Here is the relevant code:
 
 @@snip [Snippet7 Pitches]($sp_tut$/Snippet7Parts.scala) { #snippet7vec }
 
-The import adds as extension method `linlin` on numbers, something we know from SuperCollider but normally not supported
+The import adds as extension method `linLin` on numbers, something we know from SuperCollider but normally not supported
 by numbers in Scala. For those who are curious, you can easily extend classes with new methods in Scala, using so-called
 implicit classes (the import above brings such an implicit class into scope):
 

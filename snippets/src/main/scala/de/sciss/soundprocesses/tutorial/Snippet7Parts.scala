@@ -19,9 +19,9 @@ trait Snippet7Parts extends InMemorySoundApp {
       strike
     }
 
-    val tl = Timeline[S]
+    val tl = Timeline[S]()
     for (i <- 0 until 30) {
-      val p       = Proc[S]
+      val p       = Proc[S]()
       p.graph()   = piano
       // #snippet7vec
       import de.sciss.numbers.Implicits._

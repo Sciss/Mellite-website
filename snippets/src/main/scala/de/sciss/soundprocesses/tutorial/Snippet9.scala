@@ -29,10 +29,10 @@ object Snippet9 extends InMemorySoundApp {
       ScanOut(sig)
     }
 
-    val tlProc  = Timeline[S]
-    val fOut    = Folder  [S]
+    val tlProc  = Timeline[S]()
+    val fOut    = Folder[S]
     for (i <- 0 to 15) {
-      val pOsc  = Proc[S]
+      val pOsc  = Proc[S]()
       pOsc.graph() = gOsc
       val pitch = i.linLin(0, 15, 30, 110).toInt
       pOsc.attr.put("pitch", IntObj.newConst(pitch))
@@ -51,7 +51,7 @@ object Snippet9 extends InMemorySoundApp {
       val sig = in + Mix.fill(2)(CombL.ar(y, 0.06, LFNoise1.kr(Rand(0, 0.3)).mulAdd(0.025, 0.035), 1))
       Out.ar(0, sig)
     }
-    val pVerb = Proc[S]
+    val pVerb = Proc[S]()
     pVerb.attr.put("in", fOut)
     pVerb.graph() = gVerb
 

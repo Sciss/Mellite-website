@@ -1,17 +1,15 @@
 package de.sciss.soundprocesses.tutorial
 
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport}
+import de.sciss.synth.proc.{AuralSystem, Proc, Transport, Universe}
 import de.sciss.synth.ugen._
 
 trait Snippet2Parts {
   // #snippet2implicits
   type S = InMemory
   implicit val cursor: stm.Cursor[S] = InMemory()
-  import WorkspaceHandle.Implicits._
   // #snippet2implicits
 
   val aural = AuralSystem()
@@ -26,17 +24,18 @@ trait Snippet2Parts {
 
   cursor.step { implicit tx =>
     // #snippet2proc
-    val p = Proc[S]
+    val p = Proc()
     p.graph() = bubbles
     // #snippet2proc
 
     // #snippet2transport
-    val t = Transport[S](aural)
+    val u = Universe.dummy[S]
+    val t = Transport(u)
     t.addObject(p)
     t.play()
     // #snippet2transport
 
-    aural.start()
+    u.auralSystem.start()
   }
 
   Thread.sleep(10000)

@@ -163,12 +163,13 @@ val act1 = Action.apply[S] { universe =>
 
 The action's body is invoked with an argument of type [`Action.Universe`](latest/api/de/sciss/synth/proc/Action$$Universe.html).
 This is the interface to the "outer world" of the body,
-a way to find and access other objects in SoundProcesses. It has the following methods:
+a way to find and access other objects in SoundProcesses. It extends the general [`Universe`](latest/api/de/sciss/synth/proc/Universe.html),
+which contains pointers to the cursor and workspace, and adds additional methods. Methods include:
 
 - `cursor: Cursor[S]`, if we have the need to issue new transactions (the action's body is called inside a transaction, so in most cases we don't need the cursor)
 - `self: Action[S]`, the action object whose body is executed. A common pattern is to use that action's attribute map to find other objects. This is what the
   example snippets are doing and is explained further down.
-- `workspace: WorkspaceHandle[S]`, if we need to access objects by traversing the workspace's root folder, for example
+- `workspace: Workspace[S]`, if we need to access objects by traversing the workspace's root folder, for example
 - `invoker: Option[Obj[S]]`, an object that functions as a "parent" to the action in its invocation; this is used by `Proc`, as we will see later
 - `value: Any`, a general interface for passing all sorts of data to the action. Again, we will see a use case later
 
@@ -207,21 +208,35 @@ Let's break that up into several bits. First the overall structure:
 
 @@snip [Snippet13 Scaffold]($sp_tut$/Snippet13Parts.scala) { #snippet13scaffold }
 
-It introduces two new objects, `Folder` and `Ensemble`. The folder is simply a linear list of other objects, and it is in fact the thing you see first in Mellite when you create a workspace: Every workspace starts with a root folder. You can add objects to a folder using `addHead` (to the beginning of the list) and `addLast` (to the end of the list). We add a `Proc` to the folder. An `Ensemble`, in turn, combines a folder with a time offset (here zero) and a boolean playing state. It is the ensemble `ens` that we finally add to the transport. We can then use the `BooleanObj.Var` that we passed to the ensemble constructor to toggle the playing of that ensemble. To play an ensemble means to play all objects inside its folder, so here the single `Proc`.
+It introduces two new objects, `Folder` and `Ensemble`. The folder is simply a linear list of other objects, and it is in fact the 
+thing you see first in Mellite when you create a workspace: Every workspace starts with a root folder. You can add objects to a 
+folder using `addHead` (to the beginning of the list) and `addLast` (to the end of the list). We add a `Proc` to the folder. 
+An `Ensemble`, in turn, combines a folder with a time offset (here zero) and a boolean playing state. It is the ensemble `ens` that
+we finally add to the transport. We can then use the `BooleanObj.Var` that we passed to the ensemble constructor to toggle the
+playing of that ensemble. To play an ensemble means to play all objects inside its folder, so here the single `Proc`.
 
-We want to access the counter variable of type `IntObj.Var` and the playing state variable of type `BooleanObj.Var` from within the action. The easiest way to do that is put them in its attribute map.
-Inside the action's body we look for those objects again using `universe.self.attr`. We cannot use the more specific variable type like `attr.$[BooleanObj.Var]("play")`, but only the main type `attr.$[BooleanObj]("play")`&mdash;this is a limitation in the "type system" of SoundProcesses&mdash;but we can use an additional pattern match by writing `BooleanObj.Var(x)` on the left-hand side inside the for-comprehension:
+We want to access the counter variable of type `IntObj.Var` and the playing state variable of type `BooleanObj.Var` from within
+the action. The easiest way to do that is put them in its attribute map.
+Inside the action's body we look for those objects again using `universe.self.attr`. We cannot use the more specific variable
+type like `attr.$[BooleanObj.Var]("play")`, but only the main type `attr.$[BooleanObj]("play")`&mdash;this is a limitation in
+the "type system" of SoundProcesses&mdash;but we can use an additional pattern match by writing `BooleanObj.Var(x)` on the
+left-hand side inside the for-comprehension:
 
 @@snip [Snippet13 Body]($sp_tut$/Snippet13Parts.scala) { #snippet13body }
 
-Thus, `ply` is now of type `BooleanObj.Var` and we can update it writing `ply() = ...`, and `cnt` is now of type `IntObj.Var` and we can update it writing `cnt() = ...`.
+Thus, `ply` is now of type `BooleanObj.Var` and we can update it writing `ply() = ...`, and `cnt` is now of type `IntObj.Var` and
+we can update it writing `cnt() = ...`.
 
-Similar to plugging the objects we need inside the action to the action's attribute map, we also need to make an association from the action to the proc that triggers the action.
+Similar to plugging the objects we need inside the action to the action's attribute map, we also need to make an association from
+the action to the proc that triggers the action.
 We put the action in the proc's attribute map, and inside the graph function, we make use of the special graph element `Reaction`:
 
 @@snip [Snippet13 Reaction]($sp_tut$/Snippet13Parts.scala) { #snippet13reaction }
 
-The `DetectSilence` UGen goes from zero to one when the input signal `sig` falls below a given threshold for a given period (100ms default). In order to avoid it triggering multiple times, we wrap it in a `SetResetFF` with no reset signal. `Reaction` then takes that `done` trigger and invokes an action looked up in the proc's attribute map at key `"done"`, setting its universe's `value` field to the value of the graph element `pitch`. If you observe the console printing of the snippet, it looks like this:
+The `DetectSilence` UGen goes from zero to one when the input signal `sig` falls below a given threshold for a given period
+(100ms default). In order to avoid it triggering multiple times, we wrap it in a `SetResetFF` with no reset signal. `Reaction` then
+takes that `done` trigger and invokes an action looked up in the proc's attribute map at key `"done"`, setting its
+universe's `value` field to the value of the graph element `pitch`. If you observe the console printing of the snippet, it looks like this:
 
 > Action - last midi pitch was FloatVector(Vector(54.0))<br>
 > Counter is 3 - restarting.<br>
@@ -232,7 +247,10 @@ The `DetectSilence` UGen goes from zero to one when the input signal `sig` falls
 > Action - last midi pitch was FloatVector(Vector(57.0))<br>
 > Counter reached zero.
 
-The value passed to the action has the perhaps strange appearing type `FloatVector`. Like `SendReply`, `Reaction` may transmit multiple values to the client, so that is the reason we have a vector (sequence) of floats instead of a single float. The extra wrapping `FloatVector` makes it easier to extract or pattern match the untyped (`Any`) `value` method of the `Action.Universe`. So if we wanted to use the single pitch value as a number in the action body, we could have written:
+The value passed to the action has the perhaps strange appearing type `FloatVector`. Like `SendReply`, `Reaction` may transmit
+multiple values to the client, so that is the reason we have a vector (sequence) of floats instead of a single float. The extra
+wrapping `FloatVector` makes it easier to extract or pattern match the untyped (`Any`) `value` method of the `Action.Universe`. So
+if we wanted to use the single pitch value as a number in the action body, we could have written:
 
 @@snip [Snippet13 Value Extractor]($sp_tut$/Snippet13Parts.scala) { #snippet13value }
 
@@ -249,6 +267,8 @@ And the output would have been:
 
 @@@ warning
 
-A word of caution: Using pattern extraction in the way `val Pattern(x) = ...` can result in runtime errors if the pattern matching fails, for example if we made a mistake and wrongly assumed the `value` to be of type `FloatVector`. But if we take that risk, we can write very succinct code.
+A word of caution: Using pattern extraction in the way `val Pattern(x) = ...` can result in runtime errors if the pattern matching
+fails, for example if we made a mistake and wrongly assumed the `value` to be of type `FloatVector`. But if we take that risk,
+we can write very succinct code.
 
 @@@

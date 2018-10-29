@@ -45,43 +45,34 @@ it is good practice to always specify the types of implicit values, because it a
 values. We could also have chosen to use the more precise type `: InMemory` here, but we never need to refer to this value as this particular
 system, so the more general type is sufficient and therefore better indicates the use case.
 
-The third line imports an implicit method that provides a [`WorkspaceHandle`](latest/api/de/sciss/synth/proc/WorkspaceHandle.html).
-This is a "dummy" workspace that we can use in the absence of a real workspace which we have not dealt with yet. A workspace handle allows
-objects to register callbacks for when the workspace closes. For example, the transport registers itself with a workspace in order to ensure
-that it stops and frees resources if the corresponding workspace closes. Other than that, it is not of any importance here.
-
 ### Instantiating and Configuring Proc
 
 Next, let's see the creation of the `Proc` instance:
 
 @@snip [Snippet2 Proc]($sp_tut$/Snippet2Parts.scala) { #snippet2proc }
 
-It may not be obvious that `Proc[S]` _instantiates_ a class, so let's look at the signature of what's being called here:
+It may not be obvious that `Proc[S]()` _instantiates_ a class, so let's look at the signature of what's being called here:
 
 ```scala
 object Proc {
-  def apply[S <: Sys[S]](implicit tx: S#Tx): Proc[S] = ...
+  def apply[S <: Sys[S]]()(implicit tx: S#Tx): Proc[S] = ...
 }
 ```
 
 This is the companion object of the trait (type) `Proc`. Often we create instances of classes and traits not through `new ClassName`
-but through a method on their companion object. This is the case here. But should that call then not have been `Proc.apply[S]`?
+but through a method on their companion object. This is the case here. But should that call then not have been `Proc.apply[S]()`?
 
 @@@ note
 
 Scala offers a very convenient shortcut: When a method is called `apply`, we can remove that method selection in the invocation
 and jump right to the type parameters and arguments.
-So instead of `Proc.apply[S]`, we can just write `Proc[S]` and Scala will fill in the `.apply`.
+So instead of `Proc.apply[S]()`, we can just write `Proc[S]()` and Scala will fill in the `.apply`.
 
 @@@
 
 We had used this before with other types: Creating the in-memory system via `InMemory()` is nothing but `InMemory.apply()`, a call of the
-`apply` method in `InMemory`'s companion object. The same with `AuralSystem()`, and also with `SynthGraph {}` (we can drop the parentheses
+`apply` method in `InMemory`'s companion object. The same with `SynthGraph {}` (we can drop the parentheses
 here, because the argument is a function, although parameterless).
-Note that in the case of `Proc` there is no argument list except the implicit argument list
-containing the current transaction, therefore we do not have empty parentheses such as `Proc[S]()`. The decision whether to add an empty
-argument list or not, is a design decision of our API. Since we almost always have to provide the type parameter `S`, I decided for `Proc`
-that an empty argument list was not needed.
 
 Next is `p.graph() = bubbles`. The `graph` method is defined as follows:
 
@@ -195,13 +186,13 @@ very odd, and that's this at the periphery:
 
 @@snip [Snippet3 Tx Handle]($sp_tut$/Snippet3Parts.scala) { #snippet3txhandle }
 
-Note how the original assignment `val p = Proc[S]` is inside the first `cursor.step` block, so that local variable would not be visible in
+Note how the original assignment `val p = Proc[S]()` is inside the first `cursor.step` block, so that local variable would not be visible in
 the next `cursor.step` block. We therefore return something from the first block to the _outer scope_, so we can use it again in the next
 nested scope. Why did we not just write:
 
 ```scala
 val p = cursor.step { implicit tx =>
-  val p0 = Proc[S]
+  val p0 = Proc[S]()
   // ...
   p0 // this is the functions return value and thus becomes the outer `p`
 }
@@ -227,23 +218,32 @@ the objects directly without wrapping them with `tx.newHandle`!
 
 @@@
 
-## Transport
+## Universe and Transport
 
 The last change in `Snippet3` is to create and start a transport:
 
 @@snip [Snippet3 Transport]($sp_tut$/Snippet3Parts.scala) { #snippet3transport }
 
-The [`Transport`](latest/api/de/sciss/synth/proc/Transport.html) type is a way to connect object "models" to their "aural views", in other words, to turn data into actual sound. 
+The [`Transport`](latest/api/de/sciss/synth/proc/Transport.html) type is a way to connect object "models" to their
+"aural views", in other words, to turn data into actual sound. 
 Unlike a `Synth`, which you can only create when there is a booted server, a `Proc` can be created at any point. It is simply a
 _description of a sound_. In order to hear that sound, it must be turned into what SoundProcesses calls an __aural view__. The
-transport class takes care of this translation. A side effect of this design is that you can have multiple sounding representations of the same model at the same time.
+transport class takes care of this translation. A side effect of this design is that you can have multiple sounding
+representations of the same model at the same time.
 
-A transport is created with an aural system as parameter, then you add objects for which
+A transport is created with a "universe" as parameter. A `Universe` is a context that holds together various useful
+things, such as a handle to workspace, a scheduler, an aural-system, etc. We do not use an actual workspace
+here, so we can shortcut its creation by using `Universe.dummy`. Normally,
+a [`Workspace`](latest/api/de/sciss/lucre/stm/Workspace.html) allows
+objects to register callbacks for when the workspace closes. For example, the transport registers itself with a
+workspace in order to ensure that it stops and frees resources if the corresponding workspace closes.
+
+After the transport has been instantiated, you add objects for which
 you wish to have aural representations created. Finally, you use the transport's methods `play()` and `stop()` to tell it
 you want to start and stop listening to these objects. You can call `play` even before the server is booted,
 and the transport will internally start scheduling objects, but they only become sound when the server is ready as well.
 That happens in our example, it thus takes less than the eight seconds between first hearing the bubbles and their frequency changing,
-because there is a delay from `aural.start()` to the server actually having booted. It we did not want that, we'd have to defer
+because there is a delay from `u.auralSystem.start()` to the server actually having booted. It we did not want that, we'd have to defer
 the `t.play()` call and the `Thread.sleep` until the moment that the aural system was booted.
 
 ## Using a Scheduler
@@ -266,9 +266,10 @@ overwriting the attribute map entry again:
 
 @@snip [Snippet4 Double Var]($sp_tut$/Snippet4Parts.scala) { #snippet4pitchvar }
 
-Remember that `DoubleObj.newVar[S](0.0)` is
-shorthand for `DoubleObj.newVar[S](DoubleObj.newConst[S](0.0))`.
-The initial value of `0.0` doesn't matter, as we're going to change it few lines further down: We are creating an instance of an auxiliary class
+Remember that `DoubleObj.newVar(0.0)` is
+shorthand for `DoubleObj.newVar[S](DoubleObj.newConst[S](0.0))` (in some cases, the system type parameter `S` is also
+automatically inferred by Scala).
+The initial value of `0.0` does not matter, as we're going to change it few lines further down: We are creating an instance of an auxiliary class
 `PitchMod` with its parameters being the _scheduler_ of the transport, available through `t.scheduler` and a transactional handle of the double
 expression variable just created. This class, that we created ourselves in the code, has a method `iterate` which is called once:
 
@@ -279,7 +280,8 @@ before, this is not strictly necessary if the system is in-memory. Now let's see
 
 @@snip [Snippet4 Mod Class]($sp_tut$/Snippet4Parts.scala) { #snippet4modclass }
 
-First, you can see what the type of the transactional handle is: `stm.Source[S#Tx, DoubleObj.Var[S]]`. An `stm.Source` (the handle) has a single method `apply()` that
+First, you can see what the type of the transactional handle is: `stm.Source[S#Tx, DoubleObj.Var[S]]`. An `stm.Source` (the handle)
+has a single method `apply()` that
 returns a fresh version of the encapsulated object. The transactional `iterate` method does exactly that in its first line, it creates a
 fresh version of the pitch variable `val pch = pchH()`, then updates it with a random value. `math` is an object that belongs to the Scala
 standard library and lives in the `scala.` package, so we can use it directly without import. The `random()` method emits a pseudo-random

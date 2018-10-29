@@ -2,18 +2,14 @@ package de.sciss.soundprocesses.tutorial
 
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Scheduler, TimeRef, Transport}
+import de.sciss.synth.proc.{Proc, Scheduler, TimeRef, Transport, Universe}
 import de.sciss.synth.ugen._
 
 object Snippet4Parts extends App {
   type S = InMemory
   implicit val cursor: stm.Cursor[S] = InMemory()
-  import WorkspaceHandle.Implicits._
-
-  val aural = AuralSystem()
 
   val bubbles = SynthGraph {
     import de.sciss.synth.proc.graph.Ops._
@@ -40,14 +36,15 @@ object Snippet4Parts extends App {
   // #snippet4modclass
 
   cursor.step { implicit tx =>
-    val p = Proc[S]
+    val p = Proc()
     p.graph() = bubbles
     // #snippet4pitchvar
-    val pch = DoubleObj.newVar[S](0.0)
+    val pch = DoubleObj.newVar(0.0)
     p.attr.put("pitch", pch)
     // #snippet4pitchvar
 
-    val t   = Transport[S](aural)
+    val u   = Universe.dummy[S]
+    val t   = Transport(u)
     // #snippet4createmod
     val sch = t.scheduler
     val mod = new PitchMod(sch, tx.newHandle(pch))
@@ -56,6 +53,6 @@ object Snippet4Parts extends App {
     t.addObject(p)
     t.play()
 
-    aural.start()
+    u.auralSystem.start()
   }
 }

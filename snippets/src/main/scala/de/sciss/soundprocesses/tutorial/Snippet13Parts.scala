@@ -11,7 +11,7 @@ trait Snippet13Parts extends InMemorySoundApp {
 
     // #snippet13scaffold
     val f     = Folder[S]
-    val p     = Proc[S]
+    val p     = Proc[S]()
     val g     = SynthGraph { }
     p.graph() = g
     f.addLast(p)

@@ -16,7 +16,7 @@ object Snippet8 extends InMemorySoundApp {
       val pulse = Pulse.ar(freq, width) * 0.04
       ScanOut(pulse)
     }
-    val pOsc = Proc[S]
+    val pOsc = Proc[S]()
     pOsc.graph() = gOsc
     val outOsc = pOsc.outputs.add("out")
 
@@ -25,7 +25,7 @@ object Snippet8 extends InMemorySoundApp {
       val res = RLPF.ar(in, LFNoise1.kr(0.2).mulAdd(2000, 2400), 0.2)
       ScanOut(res)
     }
-    val pRes = Proc[S]
+    val pRes = Proc[S]()
     pRes.graph() = gRes
     pRes.attr.put("in", outOsc)
     val outRes = pRes.outputs.add("out")
@@ -39,7 +39,7 @@ object Snippet8 extends InMemorySoundApp {
       )
       Out.ar(0, sig)
     }
-    val pVerb = Proc[S]
+    val pVerb = Proc[S]()
     pVerb.graph() = gVerb
     pVerb.attr.put("in", outRes)
 

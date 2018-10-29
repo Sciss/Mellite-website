@@ -36,7 +36,7 @@ trait Snippet6Parts extends InMemorySoundApp {
       Out.ar(0, sig)
     }
 
-    val p = Proc[S]
+    val p = Proc[S]()
     p.graph() = piano
     // #snippet6attr
     val pitches = Seq(
@@ -48,7 +48,7 @@ trait Snippet6Parts extends InMemorySoundApp {
       (64,74), (65,76), (66,77), (67,79), (68,81), (69,72), (70,74), (71,76), (72,74), (73,71), (74,74) // ...
     )
 
-    val g = Grapheme[S]
+    val g = Grapheme[S]()
     pitches.foreach { case (beat, pch) =>
       val time = (beat * 0.5 * TimeRef.SampleRate).toLong
       g.add(time, IntObj.newConst(pch))

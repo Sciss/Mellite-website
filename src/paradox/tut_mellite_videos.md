@@ -109,6 +109,23 @@ This tutorial introduces Widget programs:
 - `Runner` control to play a proc from the widget program
 - `Button` component, triggers (`Trig`) and actions (`Act`)
 
+## Tutorial 7 - Patterns II
+
+[Video Link](https://peertube.social/videos/watch/46e65cde-b459-487a-9884-0f00725e1980) (18 min)
+
+This tutorial continues with patterns, introducing a way to play them as main objects,
+specifying auxiliary sound producing functions.
+
+- recall how patterns can provide a parameter input to a signal proc object
+- reverse dependency of pattern and proc: proc becomes input to the pattern
+- using `Bind` to create fully specified event patterns
+- `"play"` pointing to an object to play, arbitrary keys to feed patterns into that object
+- timing: delta, legato, sustain keys
+- embedding a pattern in a timeline
+- a pattern to play the soundfiles within a folder in a random order
+- creating a pattern from the pattern object's attribute map
+- auto-run an object when launching Mellite
+
 ---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332).

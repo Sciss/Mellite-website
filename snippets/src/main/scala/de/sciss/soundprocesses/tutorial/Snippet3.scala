@@ -3,18 +3,14 @@ package de.sciss.soundprocesses.tutorial
 // #snippet3
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.WorkspaceHandle
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport}
+import de.sciss.synth.proc.{Proc, Transport, Universe}
 import de.sciss.synth.ugen._
 
 object Snippet3 extends App {
   type S = InMemory
   implicit val cursor: stm.Cursor[S] = InMemory()
-  import WorkspaceHandle.Implicits._
-
-  val aural = AuralSystem()
 
   val bubbles = SynthGraph {
     import de.sciss.synth.proc.graph.Ops._
@@ -27,15 +23,16 @@ object Snippet3 extends App {
   }
 
   val pH = cursor.step { implicit tx =>
-    val p = Proc[S]
+    val p = Proc()
     p.graph() = bubbles
     p.attr.put("freq", DoubleObj.newConst(8.0))
 
-    val t = Transport[S](aural)
+    val u = Universe.dummy[S]
+    val t = Transport(u)
     t.addObject(p)
     t.play()
 
-    aural.start()
+    u.auralSystem.start()
     tx.newHandle(p)
   }
 

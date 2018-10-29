@@ -1,23 +1,23 @@
-lazy val melliteVersion        = "2.27.0"
+lazy val melliteVersion        = "2.29.1"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 
 lazy val deps = new {
   val audioFile      = "1.5.0"
-  val fscape         = "2.17.0"
-  val lucre          = "3.9.1"
-  val lucreSwing     = "1.11.0"
-  val nuages         = "2.26.0"
+  val fscape         = "2.19.0"
+  val lucre          = "3.10.1"
+  val lucreSwing     = "1.13.0"
+  val nuages         = "2.28.0"
   val osc            = "1.1.6"
-  val patterns       = "0.4.0"
-  val scalaCollider  = "1.27.0"
+  val patterns       = "0.6.1"
+  val scalaCollider  = "1.27.1"
   val serial         = "1.1.1"
-  val soundProcesses = "3.21.0"
-  val span           = "1.4.1"
+  val soundProcesses = "3.23.1"
+  val span           = "1.4.2"
   val ugens          = "1.19.0"
 }
 
-scalaVersion in ThisBuild := "2.12.6"
+scalaVersion in ThisBuild := "2.12.7"
 
 val commonSettings = Seq(
   organization := "de.sciss",
@@ -96,6 +96,7 @@ val root = project.in(file("."))
         "de.sciss.osc.impl", 
         "de.sciss.patterns.example", 
         "de.sciss.patterns.impl", 
+        "de.sciss.patterns.stream", 
         "de.sciss.patterns.stream.impl", 
         "de.sciss.serial.impl",
         "de.sciss.synth.impl",

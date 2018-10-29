@@ -24,7 +24,7 @@ object Snippet10 extends InMemorySoundApp {
 
     Action.registerPredef("my-action", body)
 
-    val tl    = Timeline[S]
+    val tl    = Timeline[S]()
     val act1  = Action.predef[S]("my-action")
     act1.attr.put("foo", StringObj.newConst("first occurrence"))
     tl.add(Span.From((2 * TimeRef.SampleRate).toLong), act1)

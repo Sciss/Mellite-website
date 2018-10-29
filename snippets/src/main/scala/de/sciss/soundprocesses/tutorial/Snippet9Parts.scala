@@ -16,10 +16,10 @@ trait Snippet9Parts extends InMemorySoundApp {
     // #snippet9sec
 
     // #snippet9tl
-    val tlProc  = Timeline[S]
-    val fOut    = Folder  [S]
+    val tlProc  = Timeline[S]()
+    val fOut    = Folder[S]
     for (i <- 0 to 15) {
-      val pOsc  = Proc[S]
+      val pOsc  = Proc[S]()
       // ...
       // #snippet9tl
       val dur   = math.random().linLin(0, 1, 10, 20)
@@ -39,7 +39,7 @@ trait Snippet9Parts extends InMemorySoundApp {
       Out.ar(0, sig)
     }
     // #snippet9in
-    val pVerb = Proc[S]
+    val pVerb = Proc[S]()
     pVerb.attr.put("in", fOut)
     // #snippet9in
     pVerb.graph() = gVerb

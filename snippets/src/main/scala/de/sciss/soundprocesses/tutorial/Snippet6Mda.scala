@@ -19,7 +19,7 @@ object Snippet6Mda extends InMemorySoundApp {
       Out.ar(0, sig)
     }
 
-    val p = Proc[S]
+    val p = Proc[S]()
     p.graph() = piano
     val pitches = Seq(
       ( 0,78), ( 1,81), ( 2,79), ( 3,78), ( 4,73), ( 5,71), ( 6,73), ( 7,74), ( 8,69),
@@ -30,7 +30,7 @@ object Snippet6Mda extends InMemorySoundApp {
       (64,74), (65,76), (66,77), (67,79), (68,81), (69,72), (70,74), (71,76), (72,74), (73,71), (74,74) // ...
     )
 
-    val g = Grapheme[S]
+    val g = Grapheme[S]()
     pitches.foreach { case (beat, pch) =>
       val time = (beat * 0.5 * TimeRef.SampleRate).toLong
       g.add(time, IntObj.newConst(pch))

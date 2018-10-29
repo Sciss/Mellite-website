@@ -11,7 +11,7 @@ object Snippet13 extends InMemorySoundApp {
     import de.sciss.synth.proc.MacroImplicits._
 
     val f     = Folder[S]
-    val p     = Proc[S]
+    val p     = Proc[S]()
     val g     = SynthGraph {
       import de.sciss.synth._
       import de.sciss.synth.ugen._
