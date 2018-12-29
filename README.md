@@ -12,7 +12,11 @@ You can run the site via a local web server as `sbt previewSite` which is a func
 To publish here, prepare the files using `sbt clean packageSite`. The directory `target/site/` contains the stuff
 that must be uploaded, i.e. `scp -r target/site/* <credentials>@ssh.strato.de:mellite/`
 
-__TO-DO:__ Note down `rsync` variant here to minimise upload bandwidth.
+__TO-DO:__ `rsync` is a smarter option. Use it like the following:
+
+    rsync -rltDvc --delete-after --exclude=.git target/site/ www.sciss.de@ssh.strato.de:mellite/
+
+(add `--dry-run` to check first).
 
 It seems that `packageSite` does not pick up changes, e.g. to `index.md`; better run `previewSite` once.
 
@@ -27,6 +31,3 @@ There is a sub-directory `snippets` which contains another sbt build file. This 
 tutorials. You may want to import _that sub-directory_ into IntelliJ IDEA. (If you import the root directory, you'll get the build
 for the website instead, not the tutorial snippets).
 
-## Notes
-
-Don't use sbt 1.2.6 -- it is broken, will have "API hash" errors, even when running `update clean`.

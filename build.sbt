@@ -1,23 +1,23 @@
-lazy val melliteVersion        = "2.29.1"
+lazy val melliteVersion        = "2.30.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 
 lazy val deps = new {
   val audioFile      = "1.5.0"
-  val fscape         = "2.19.0"
-  val lucre          = "3.10.1"
-  val lucreSwing     = "1.13.0"
-  val nuages         = "2.28.0"
-  val osc            = "1.1.6"
-  val patterns       = "0.6.1"
-  val scalaCollider  = "1.27.1"
+  val fscape         = "2.20.0"
+  val lucre          = "3.11.0"
+  val lucreSwing     = "1.14.0"
+  val nuages         = "2.29.0"
+  val osc            = "1.2.0"
+  val patterns       = "0.7.0"
+  val scalaCollider  = "1.28.0"
   val serial         = "1.1.1"
-  val soundProcesses = "3.23.1"
+  val soundProcesses = "3.24.0"
   val span           = "1.4.2"
   val ugens          = "1.19.0"
 }
 
-scalaVersion in ThisBuild := "2.12.7"
+scalaVersion in ThisBuild := "2.12.8"
 
 val commonSettings = Seq(
   organization := "de.sciss",
@@ -45,6 +45,7 @@ val lLucreBase          = ProjectRef(lucreURI, "lucre-base")
 val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
 val lLucreExpr          = ProjectRef(lucreURI, "lucre-expr")
 val lLucreBdb6          = ProjectRef(lucreURI, "lucre-bdb6")
+val lLucreBdb7          = ProjectRef(lucreURI, "lucre-bdb7")
 
 git.gitCurrentBranch in ThisBuild := "master"
 
@@ -109,9 +110,9 @@ val root = project.in(file("."))
       ).mkString(":"),
       "-doc-title", s"${baseName} ${PROJECT_VERSION} API"
     ),
-    unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lNuagesBasic) -- inProjects(lLucreBdb6)
+    unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lNuagesBasic) -- inProjects(lLucreBdb6) -- inProjects(lLucreBdb7)
   )
-  // XXX TODO --- don't know how to exclude bdb5/6 from lucre
+  // XXX TODO --- don't know how to exclude bdb5/6/7 from lucre
   .aggregate(
     lAudioFile, 
     lFScape, 
