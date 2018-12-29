@@ -9,7 +9,7 @@ You can run the site via a local web server as `sbt previewSite` which is a func
 
 ## sciss.de
 
-To publish here, prepare the files using `sbt clean packageSite`. The directory `target/site/` contains the stuff
+To publish here, prepare the files using `sbt ++2.12.8 clean packageSite`. The directory `target/site/` contains the stuff
 that must be uploaded, i.e. `scp -r target/site/* <credentials>@ssh.strato.de:mellite/`
 
 __TO-DO:__ `rsync` is a smarter option. Use it like the following:
@@ -23,7 +23,7 @@ It seems that `packageSite` does not pick up changes, e.g. to `index.md`; better
 ## GitHub pages
 
 The (obsolete) GitHub pages publication works through 
-`sbt ghpagesPushSite` which is provided by the [sbt-ghpages](https://github.com/sbt/sbt-ghpages) plugin.
+`sbt ++2.12.8 ghpagesPushSite` which is provided by the [sbt-ghpages](https://github.com/sbt/sbt-ghpages) plugin.
 
 ## Snippets
 
