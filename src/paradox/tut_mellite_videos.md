@@ -126,6 +126,22 @@ specifying auxiliary sound producing functions.
 - creating a pattern from the pattern object's attribute map
 - auto-run an object when launching Mellite
 
+## Tutorial 8 -- CLI and Grapheme Editor
+
+[Video Link](https://peertube.social/videos/watch/6ef9d4cf-7ae0-47c0-b011-f0559e464fea) (16 min)
+
+This tutorial is more casual and introduces a new command line interface for creating objects,
+as well as the grapheme (break-point function) editor.
+
+- opening the CLI with <kbd>control</kbd>-<kbd>1</kbd> in the folder window
+- showing usage help for an object, and listing available objects
+- creating a zig-zag break-point function
+- writing a proc whose frequency parameter is patched to the grapheme
+- using the CLI to create entries in an attribute map
+- editing individual `EnvSegment` break-points (magnitude and curvature)
+- a look at a recording session: a grapheme to control reverb-gain
+- using `FadeInOut.ar` as another straight forward way to control filters
+
 ---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332).

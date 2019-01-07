@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "2.30.0"
+lazy val melliteVersion        = "2.31.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 
