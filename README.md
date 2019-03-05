@@ -31,3 +31,13 @@ There is a sub-directory `snippets` which contains another sbt build file. This 
 tutorials. You may want to import _that sub-directory_ into IntelliJ IDEA. (If you import the root directory, you'll get the build
 for the website instead, not the tutorial snippets).
 
+## Publishing unified docs
+
+To preview docs
+
+    sbt ++2.12.8 mellite-aggr/unidoc
+
+To publish a unidoc only artifact:
+
+    sbt ++2.12.8 mellite-unidoc/publishSigned
+
