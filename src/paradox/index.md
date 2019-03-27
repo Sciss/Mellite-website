@@ -22,6 +22,8 @@ including Mac and Windows, and a `.deb` package suitable for Linux Debian and Ub
 
 If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite).
 
+See below for additional requirements (Java, SuperCollider).
+
 ----
 
 **Legal disclaimer:**
@@ -41,12 +43,14 @@ in compliance with the GNU AGPL.
 In order to run Mellite, you also need to have installed on your computer:
 
 - [Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (version 8; try to avoid Java 9 which may cause issues).
-  If using OpenJDK, you may also have to install OpenJFX, since the API browser uses JavaFX.
+  If using OpenJDK, you may also have to install OpenJFX, since the API browser uses JavaFX. In Debian'ish system, you can use
+  `sudo apt install openjdk-8-jdk` and `sudo apt install openjfx` to do so. On Raspbian, use Oracle JDK instead because of stability issues.
 - [SuperCollider](https://supercollider.github.io/download) (version 3.9.x is recommended, but 3.7.x should work, too)
 
 ## Resources
 
-The API docs can be found [here](latest/api/de/sciss/).
+The API docs can be found [here](latest/api/de/sciss/), however the website is very slow. The recommended way to browse the API
+is from within the application itself, using the menu item Help &gt; API Documentation.
 
 The best way to ask questions, no matter if newbie or expert, is to use the [Gitter Channel](https://gitter.im/Sciss/Mellite).
 You need a GitLab, GitHub or Twitter account to sign in.

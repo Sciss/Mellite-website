@@ -11,7 +11,7 @@ resolvers          += "Oracle Repository" at "http://download.oracle.com/maven" 
 
 // ---- main dependencies ----
 
-lazy val melliteVersion = "2.31.0"
+lazy val melliteVersion = "2.33.0"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "mellite" % melliteVersion
