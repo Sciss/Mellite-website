@@ -1,19 +1,19 @@
-lazy val melliteVersion        = "2.33.0"
+lazy val melliteVersion        = "2.34.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
 
 lazy val deps = new {
   val audioFile      = "1.5.0"
-  val fscape         = "2.23.0"
-  val lucre          = "3.11.0"
-  val lucreSwing     = "1.15.0"
+  val fscape         = "2.24.0"
+  val lucre          = "3.11.1"
+  val lucreSwing     = "1.15.2"
   val nuages         = "2.31.0"
   val osc            = "1.2.0"
   val patterns       = "0.10.0"
   val scalaCollider  = "1.28.1"
   val serial         = "1.1.1"
-  val soundProcesses = "3.27.0"
+  val soundProcesses = "3.27.1"
   val span           = "1.4.2"
   val ugens          = "1.19.3"
 }
@@ -26,7 +26,6 @@ val commonSettings = Seq(
 )
 
 val lAudioFile          = RootProject(uri(s"https://github.com/Sciss/AudioFile.git#v${deps.audioFile}"))
-val lFScape             = RootProject(uri(s"https://github.com/Sciss/FScape-next.git#v${deps.fscape}"))
 val lLucreSwing         = RootProject(uri(s"https://github.com/Sciss/LucreSwing.git#v${deps.lucreSwing}"))
 val lPatterns           = RootProject(uri(s"https://github.com/Sciss/Patterns.git#v${deps.patterns}"))
 val lScalaCollider      = RootProject(uri(s"https://github.com/Sciss/ScalaCollider.git#v${deps.scalaCollider}"))
@@ -41,6 +40,13 @@ val nuagesURI           = uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${deps
 val lNuagesCore         = ProjectRef(nuagesURI, "wolkenpumpe-core")
 val lNuagesBasic        = ProjectRef(nuagesURI, "wolkenpumpe-basic")
 
+// bloody unidoc
+// val fscapeURI           = uri(s"https://github.com/Sciss/FScape-next.git#v${deps.fscape}")
+val fscapeURI           = uri(s"https://github.com/Sciss/FScape-next.git#7b200536f4da98b845bf7f129eb4846705a1c920")
+val lFScapeCore         = ProjectRef(fscapeURI, "fscape-core")
+val lFScapeLucre        = ProjectRef(fscapeURI, "fscape-lucre")
+val lFScapeViews        = ProjectRef(fscapeURI, "fscape-views")
+
 val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
 val lLucreBase          = ProjectRef(lucreURI, "lucre-base")
 val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
@@ -50,7 +56,9 @@ val lLucreBdb7          = ProjectRef(lucreURI, "lucre-bdb7")
 
 lazy val lList = Seq(
   lAudioFile,
-  lFScape,
+  lFScapeCore,
+  lFScapeLucre,
+  lFScapeViews,
   lLucreBase,
   lLucreCore,
   lLucreExpr,
@@ -83,6 +91,7 @@ lazy val unidocSettings = Seq(
       "de.sciss.fscape.lucre.impl",
       "de.sciss.fscape.lucre.stream",
       "de.sciss.fscape.stream",
+      "de.sciss.fscape.modules",
       "de.sciss.lucre.artifact.impl",
       "de.sciss.lucre.bitemp.impl",
       "de.sciss.lucre.confluent.impl",
@@ -110,7 +119,8 @@ lazy val unidocSettings = Seq(
       "de.sciss.nuages.impl",
       "snippets"
     ).mkString(":"),
-    "-doc-title", s"${baseName} ${PROJECT_VERSION} API"
+    "-doc-title", s"${baseName} ${PROJECT_VERSION} API",
+    "-Ymacro-no-expand"
   )
 )
 

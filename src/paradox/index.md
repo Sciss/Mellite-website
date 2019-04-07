@@ -24,6 +24,14 @@ If you want to build from the source code, go to [git.iem.at/sciss/Mellite](http
 
 See below for additional requirements (Java, SuperCollider).
 
+On __Mac__, you need to allow the system to launch Mellite the first time you download it. Extract the zip
+archive, and go into the `bin` directory. Right-click (or Ctrl-click) on the `mellite` program, then choose `Open`.
+The computer will now warn you that the program is not verified, you have to confirm that you really want to open
+it. A terminal window should then pop up and soon after the Mellite main window should be opened. If this is not
+the case, you might be using a too old Java version (or not have Java installed at all). You can verify this by
+opening the terminal application (in the `/Applications/Utilities` directory) and executing `java -version` from the
+text prompt. You need version 8 or newer. See below for more information.
+
 ----
 
 **Legal disclaimer:**
@@ -42,15 +50,21 @@ in compliance with the GNU AGPL.
 
 In order to run Mellite, you also need to have installed on your computer:
 
-- [Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (version 8; try to avoid Java 9 which may cause issues).
-  If using OpenJDK, you may also have to install OpenJFX, since the API browser uses JavaFX. In Debian'ish system, you can use
-  `sudo apt install openjdk-8-jdk` and `sudo apt install openjfx` to do so. On Raspbian, use Oracle JDK instead because of stability issues.
+- [Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). The recommended
+  version is 8, currently _Java SE Development Kit 8u201_.
+  If using OpenJDK, you may also have to install OpenJFX, since the API browser uses JavaFX. In some Linux systems
+  (Debian, Ubuntu), you can use `sudo apt install openjdk-8-jdk` and `sudo apt install openjfx` to do so.
+  On Raspbian, use Oracle JDK instead because of stability issues.
 - [SuperCollider](https://supercollider.github.io/download) (version 3.9.x is recommended, but 3.7.x should work, too)
+
+We have now tested Mellite with JDK 11; it does not provide an installable package for JavaFX, which means the API
+browser does not work, and we still recommend JDK 8. However, you should be fine to run Mellite under JDK 11, if you
+do not need the API browser.
 
 ## Resources
 
-The API docs can be found [here](latest/api/de/sciss/), however the website is very slow. The recommended way to browse the API
-is from within the application itself, using the menu item Help &gt; API Documentation.
+The API docs can be found [here](latest/api/de/sciss/), however the website is very slow. The recommended way to 
+browse the API is from within the application itself, using the menu item Help &gt; API Documentation.
 
 The best way to ask questions, no matter if newbie or expert, is to use the [Gitter Channel](https://gitter.im/Sciss/Mellite).
 You need a GitLab, GitHub or Twitter account to sign in.
