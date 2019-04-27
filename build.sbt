@@ -1,19 +1,19 @@
-lazy val melliteVersion        = "2.34.0"
+lazy val melliteVersion        = "2.35.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
 
 lazy val deps = new {
   val audioFile      = "1.5.0"
-  val fscape         = "2.24.0"
-  val lucre          = "3.11.1"
-  val lucreSwing     = "1.15.2"
-  val nuages         = "2.31.0"
+  val fscape         = "2.25.0"
+  val lucre          = "3.12.0"
+  val lucreSwing     = "1.16.0"
+  val nuages         = "2.32.0"
   val osc            = "1.2.0"
-  val patterns       = "0.10.0"
+  val patterns       = "0.11.0"
   val scalaCollider  = "1.28.1"
   val serial         = "1.1.1"
-  val soundProcesses = "3.27.1"
+  val soundProcesses = "3.28.0"
   val span           = "1.4.2"
   val ugens          = "1.19.3"
 }
@@ -40,9 +40,7 @@ val nuagesURI           = uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${deps
 val lNuagesCore         = ProjectRef(nuagesURI, "wolkenpumpe-core")
 val lNuagesBasic        = ProjectRef(nuagesURI, "wolkenpumpe-basic")
 
-// bloody unidoc
-// val fscapeURI           = uri(s"https://github.com/Sciss/FScape-next.git#v${deps.fscape}")
-val fscapeURI           = uri(s"https://github.com/Sciss/FScape-next.git#7b200536f4da98b845bf7f129eb4846705a1c920")
+val fscapeURI           = uri(s"https://github.com/Sciss/FScape-next.git#v${deps.fscape}")
 val lFScapeCore         = ProjectRef(fscapeURI, "fscape-core")
 val lFScapeLucre        = ProjectRef(fscapeURI, "fscape-lucre")
 val lFScapeViews        = ProjectRef(fscapeURI, "fscape-views")
