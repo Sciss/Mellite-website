@@ -1,19 +1,20 @@
-lazy val melliteVersion        = "2.35.0"
+lazy val melliteVersion        = "2.36.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
 
 lazy val deps = new {
   val audioFile      = "1.5.0"
-  val fscape         = "2.25.0"
-  val lucre          = "3.12.0"
-  val lucreSwing     = "1.16.0"
-  val nuages         = "2.32.0"
+  val desktop        = "0.10.4"
+  val fscape         = "2.26.0"
+  val lucre          = "3.13.0"
+  val lucreSwing     = "1.17.0"
+  val nuages         = "2.33.0"
   val osc            = "1.2.0"
-  val patterns       = "0.11.0"
+  val patterns       = "0.12.0"
   val scalaCollider  = "1.28.1"
   val serial         = "1.1.1"
-  val soundProcesses = "3.28.0"
+  val soundProcesses = "3.29.0"
   val span           = "1.4.2"
   val ugens          = "1.19.3"
 }
@@ -26,6 +27,7 @@ val commonSettings = Seq(
 )
 
 val lAudioFile          = RootProject(uri(s"https://github.com/Sciss/AudioFile.git#v${deps.audioFile}"))
+val lDesktop            = RootProject(uri(s"https://github.com/Sciss/Desktop.git#v${deps.desktop}"))
 val lLucreSwing         = RootProject(uri(s"https://github.com/Sciss/LucreSwing.git#v${deps.lucreSwing}"))
 val lPatterns           = RootProject(uri(s"https://github.com/Sciss/Patterns.git#v${deps.patterns}"))
 val lScalaCollider      = RootProject(uri(s"https://github.com/Sciss/ScalaCollider.git#v${deps.scalaCollider}"))
@@ -54,6 +56,7 @@ val lLucreBdb7          = ProjectRef(lucreURI, "lucre-bdb7")
 
 lazy val lList = Seq(
   lAudioFile,
+  lDesktop,
   lFScapeCore,
   lFScapeLucre,
   lFScapeViews,
@@ -85,16 +88,19 @@ lazy val unidocSettings = Seq(
     "-skip-packages", Seq(
       "akka.stream.sciss",
       "scala.tools",
+      "de.sciss.desktop",
       "de.sciss.fscape.graph.impl",
       "de.sciss.fscape.lucre.impl",
       "de.sciss.fscape.lucre.stream",
       "de.sciss.fscape.stream",
       "de.sciss.fscape.modules",
       "de.sciss.lucre.artifact.impl",
+      "de.sciss.lucre.aux.impl",
       "de.sciss.lucre.bitemp.impl",
       "de.sciss.lucre.confluent.impl",
       "de.sciss.lucre.event.impl",
       "de.sciss.lucre.expr.impl",
+      "de.sciss.lucre.expr.graph.impl",
       "de.sciss.lucre.stm.impl",
       "de.sciss.lucre.swing.edit",
       "de.sciss.lucre.swing.graph.impl",
@@ -106,6 +112,7 @@ lazy val unidocSettings = Seq(
       "de.sciss.osc.impl", 
       "de.sciss.patterns.example", 
       "de.sciss.patterns.impl", 
+      "de.sciss.patterns.lucre.impl", 
       "de.sciss.patterns.stream", 
       "de.sciss.patterns.stream.impl", 
       "de.sciss.serial.impl",
