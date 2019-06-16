@@ -142,6 +142,44 @@ as well as the grapheme (break-point function) editor.
 - a look at a recording session: a grapheme to control reverb-gain
 - using `FadeInOut.ar` as another straight forward way to control filters
 
+## Tutorial 9 -- Built-in API docs, and new code editor
+
+[Video Link](https://peertube.social/videos/watch/39933fdf-2cc8-4594-87aa-8f0ac6e8ed45) (15 min)
+
+This tutorial introduces the new Dotterweide editor used for the embedded
+Scala snippets.
+
+- Cache and API documentation
+- new Dotterweide embedded Scala editor
+- `play { }` idiom in a Proc graph
+- Error diagnostics and code completion
+- API look-up
+- look-up from FScape
+- Show usage of a symbol, go to definition
+- Editor keyboard shortcuts
+
+## Tutorial 10 -- Widgets and receiving OSC
+
+[Video Link](https://peertube.social/videos/watch/e10b8a0c-7d26-4bcc-a611-1175faa6287c) (21 min)
+
+This tutorial introduces the Widget object, using as example the communication from
+Processing to Mellite via Open Sound Control messages.
+
+- Creating a new Widget program
+- Label and FlowPanel
+- OscUdpNode to create an OSC socket
+- the Bang component
+- Connecting a trigger to an action
+- Processing and its oscP5 library
+- Sending mouse coordinate from Processing to Mellite
+- Matching on particular OSC messages
+- Displaying an OSC argument
+- Runner control for a Proc object
+- References through the attribute map
+- Sequential actions
+- Nested attribute references
+- Arithmetic composition of expressions
+
 ---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332).
