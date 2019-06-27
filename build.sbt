@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "2.36.2"
+lazy val melliteVersion        = "2.37.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
@@ -6,7 +6,7 @@ lazy val baseNameL             = baseName.toLowerCase
 lazy val deps = new {
   val audioFile      = "1.5.3"
   val desktop        = "0.10.4"
-  val fscape         = "2.26.2"
+  val fscape         = "2.27.0"
   val lucre          = "3.13.1"
   val lucreSwing     = "1.17.2"
   val nuages         = "2.33.1"
