@@ -22,6 +22,8 @@ It seems that `packageSite` does not pick up changes, e.g. to `index.md`; better
 
 ## GitHub pages
 
+__Note:__ I deleted that branch now!
+
 The (obsolete) GitHub pages publication works through 
 `sbt ++2.12.8 ghpagesPushSite` which is provided by the [sbt-ghpages](https://github.com/sbt/sbt-ghpages) plugin.
 
