@@ -180,7 +180,25 @@ Processing to Mellite via Open Sound Control messages.
 - Nested attribute references
 - Arithmetic composition of expressions
 
+## Tutorial 11 -- Negatum genetic programming
+
+[Video Link](https://peertube.social/videos/watch/0ae57dac-5f7d-4f0b-87e8-7d49250bb1da) (39 min)
+
+This tutorial introduces the Negatum object, a process for generating sound synthesis
+structure through automated genetic programming.
+
+- Introduction to Genetic Algorithms and Genetic Programming
+- Creating a `Negatum` object, selecting an input (target) sound
+- Walk through the algorithm's parameters (generation, evaluation, breeding)
+- Starting and stopping iterations
+- Examining individual sound results; auto-generated sound code
+- Copying and optimising selected sound programs
+- Drawing a UGen graph diagram of a sound program
+- Experimenting with the results: Adding multi-channel expansion and named controls
+- Future outlook
+- Examining the `Mix` set of tree leaves
+
 ---
 
-If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332).
+If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332) (see 17'15" into the video).
 I'm planning to cover this topic in updated tutorials.

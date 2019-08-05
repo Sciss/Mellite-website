@@ -8,10 +8,18 @@
 @@@
 
 Mellite is an environment for creating experimental computer-based music and sound art.
-This system has been developed since 2012 by its author, Hanns Holger Rutz, and is made
-available under the GNU Affero General Public License.
+It is a desktop application, allowing you to work with
+real-time and offline sound synthesis processes, combining multiple perspectives
+such as live improvisation, implementing sound installations, or working in DAW-like
+timeline views. Mellite runs on all major operating systems and can be used both in
+a purely graphical fashion, or by writing and connecting snippets in the Scala programming
+language.
 
 ![Mellite Screenshot](.../screenshot.png)
+
+Mellite has been developed since 2012 by its author, Hanns Holger Rutz, and is made
+available under the GNU Affero General Public License. If you like the software and want
+to encourage its continued development and documentation, please support me via [Liberapay](https://liberapay.com/sciss/donate).
 
 ## Download
 
@@ -55,7 +63,7 @@ In order to run Mellite, you also need to have installed on your computer:
   If using OpenJDK, you may also have to install OpenJFX, since the API browser uses JavaFX. In some Linux systems
   (Debian, Ubuntu), you can use `sudo apt install openjdk-8-jdk` and `sudo apt install openjfx` to do so.
   On Raspbian, use Oracle JDK instead because of stability issues.
-- [SuperCollider](https://supercollider.github.io/download) (version 3.9.x is recommended, but 3.7.x should work, too)
+- [SuperCollider](https://supercollider.github.io/download) (versions 3.10.x and 3.9.x are recommended, but 3.8.x should work, too)
 
 We have now tested Mellite with JDK 11; it does not provide an installable package for JavaFX, which means the API
 browser does not work, and we still recommend JDK 8. However, you should be fine to run Mellite under JDK 11, if you
@@ -63,8 +71,9 @@ do not need the API browser.
 
 ## Resources
 
+For documentation, see the video and text tutorials on the left navigation bar.
 The API docs can be found [here](latest/api/de/sciss/), however the website is very slow. The recommended way to 
-browse the API is from within the application itself, using the menu item Help &gt; API Documentation.
+browse the API is from within the application itself, using the menu item _Help &gt; API Documentation_.
 
 The best way to ask questions, no matter if newbie or expert, is to use the [Gitter Channel](https://gitter.im/Sciss/Mellite).
 You need a GitLab, GitHub or Twitter account to sign in.

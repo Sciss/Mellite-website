@@ -6,6 +6,7 @@ It's root folder contains an sbt build file for creating the static site, includ
 __To build the API docs locally, run `sbt unidoc`. You can view the results via `open target/scala-2.12/unidoc/index.html`.__
 
 You can run the site via a local web server as `sbt previewSite` which is a functionality of the [sbt-site](https://github.com/sbt/sbt-site) plugin.
+For continuous preview, use `sbt ++2.12.8 previewAuto`.
 
 ## sciss.de
 
