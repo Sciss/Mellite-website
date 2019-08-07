@@ -38,7 +38,7 @@ The computer will now warn you that the program is not verified, you have to con
 it. A terminal window should then pop up and soon after the Mellite main window should be opened. If this is not
 the case, you might be using a too old Java version (or not have Java installed at all). You can verify this by
 opening the terminal application (in the `/Applications/Utilities` directory) and executing `java -version` from the
-text prompt. You need version 8 or newer. See below for more information.
+text prompt. You need version 8 or newer. Often macOS comes with an outdated Java 1.6! See below for more information. 
 
 ----
 
@@ -58,11 +58,13 @@ in compliance with the GNU AGPL.
 
 In order to run Mellite, you also need to have installed on your computer:
 
-- [Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). The recommended
-  version is 8, currently _Java SE Development Kit 8u201_.
-  If using OpenJDK, you may also have to install OpenJFX, since the API browser uses JavaFX. In some Linux systems
+- __Java__ development kit (JDK). The recommended
+  version is JDK 8 (JDK 11 should also be fine).
+  On Linux, if you install OpenJDK 8, you may also have to install OpenJFX. In some Linux systems
   (Debian, Ubuntu), you can use `sudo apt install openjdk-8-jdk` and `sudo apt install openjfx` to do so.
-  On Raspbian, use Oracle JDK instead because of stability issues.
+  On Raspbian, use Oracle JDK instead because of stability issues. For all other platforms, the recommended way
+  is to grab an installer from [AdoptOpenJDK](https://adoptopenjdk.net/). It should automatically detect your
+  platform (if not, choose 'Other platforms'). Stick to the HotSpot JVM and OpenJDK 8 (or 11).
 - [SuperCollider](https://supercollider.github.io/download) (versions 3.10.x and 3.9.x are recommended, but 3.8.x should work, too)
 
 We have now tested Mellite with JDK 11; it does not provide an installable package for JavaFX, which means the API

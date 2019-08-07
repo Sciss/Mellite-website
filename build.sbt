@@ -19,7 +19,7 @@ lazy val deps = new {
   val ugens          = "1.19.5"
 }
 
-scalaVersion in ThisBuild := "2.12.8"
+scalaVersion in ThisBuild := "2.12.9"
 
 val commonSettings = Seq(
   organization := "de.sciss",
