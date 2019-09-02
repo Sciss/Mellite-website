@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "2.38.1"
+lazy val melliteVersion        = "2.39.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
@@ -6,15 +6,15 @@ lazy val baseNameL             = baseName.toLowerCase
 lazy val deps = new {
   val audioFile      = "1.5.3"
   val desktop        = "0.10.4"
-  val fscape         = "2.28.0"
-  val lucre          = "3.13.1"
-  val lucreSwing     = "1.17.2"
-  val nuages         = "2.34.0"
+  val fscape         = "2.30.0"
+  val lucre          = "3.15.0" // WARNING: see below
+  val lucreSwing     = "1.19.0"
+  val nuages         = "2.36.0"
   val osc            = "1.2.0"
-  val patterns       = "0.13.0"
+  val patterns       = "0.15.1"
   val scalaCollider  = "1.28.4"
   val serial         = "1.1.1"
-  val soundProcesses = "3.30.0"
+  val soundProcesses = "3.32.0"
   val span           = "1.4.2"
   val ugens          = "1.19.5"
 }
@@ -36,7 +36,7 @@ val lScalaOSC           = RootProject(uri(s"https://github.com/Sciss/ScalaOSC.gi
 val lSerial             = RootProject(uri(s"https://github.com/Sciss/Serial.git#v${deps.serial}"))
 val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#v${deps.soundProcesses}"))
 val lSpan               = RootProject(uri(s"https://github.com/Sciss/Span.git#v${deps.span}"))
-val lMellite            = RootProject(uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}"))
+// val lMellite            = RootProject(uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}"))
 
 val nuagesURI           = uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${deps.nuages}")
 val lNuagesCore         = ProjectRef(nuagesURI, "wolkenpumpe-core")
@@ -47,12 +47,17 @@ val lFScapeCore         = ProjectRef(fscapeURI, "fscape-core")
 val lFScapeLucre        = ProjectRef(fscapeURI, "fscape-lucre")
 val lFScapeViews        = ProjectRef(fscapeURI, "fscape-views")
 
-val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
+// val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
+val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#993332e1bafb016e867b4736966c2170e5fefc23")  // unidoc problem fix
+val lLucreAdjunct       = ProjectRef(lucreURI, "lucre-adjunct")
 val lLucreBase          = ProjectRef(lucreURI, "lucre-base")
 val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
 val lLucreExpr          = ProjectRef(lucreURI, "lucre-expr")
-val lLucreBdb6          = ProjectRef(lucreURI, "lucre-bdb6")
-val lLucreBdb7          = ProjectRef(lucreURI, "lucre-bdb7")
+val lLucreBdb           = ProjectRef(lucreURI, "lucre-bdb")
+
+val melliteURI          = uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}")
+val lMelliteCore        = ProjectRef(melliteURI, s"$baseNameL-core")
+val lMelliteApp         = ProjectRef(melliteURI, s"$baseNameL-app")
 
 lazy val lList = Seq(
   lAudioFile,
@@ -60,6 +65,7 @@ lazy val lList = Seq(
   lFScapeCore,
   lFScapeLucre,
   lFScapeViews,
+  lLucreAdjunct,
   lLucreBase,
   lLucreCore,
   lLucreExpr,
@@ -72,7 +78,8 @@ lazy val lList = Seq(
   lSerial,
   lSoundProcesses,
   lSpan,
-  lMellite
+  lMelliteCore,
+  lMelliteApp,
 )
 
 git.gitCurrentBranch in ThisBuild := "master"
@@ -80,7 +87,7 @@ git.gitCurrentBranch in ThisBuild := "master"
 lazy val unidocSettings = Seq(
   // site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
   mappings in packageDoc in Compile := (mappings  in (ScalaUnidoc, packageDoc)).value,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lNuagesBasic) -- inProjects(lLucreBdb6) -- inProjects(lLucreBdb7),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lNuagesBasic), // -- inProjects(lLucreBdb),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value // % "provided" // this is needed for sbt-unidoc to work with macros used by Mellite!
   ),
@@ -95,7 +102,7 @@ lazy val unidocSettings = Seq(
       "de.sciss.fscape.stream",
       "de.sciss.fscape.modules",
       "de.sciss.lucre.artifact.impl",
-      "de.sciss.lucre.aux.impl",
+      "de.sciss.lucre.adjunct.impl",
       "de.sciss.lucre.bitemp.impl",
       "de.sciss.lucre.confluent.impl",
       "de.sciss.lucre.event.impl",
