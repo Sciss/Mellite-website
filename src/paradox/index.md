@@ -18,60 +18,64 @@ language.
 ![Mellite Screenshot](.../screenshot.png)
 
 Mellite has been developed since 2012 by its author, Hanns Holger Rutz, and is made
-available under the GNU Affero General Public License. If you like the software and want
+available under the [GNU Affero General Public License](http://www.gnu.org/licenses/agpl-3.0.txt). If you like the software and want
 to encourage its continued development and documentation, please support me via [Liberapay](https://liberapay.com/sciss/donate).
 
-## Download
+## Download and Run
 
-A binary version, ready to run, can be downloaded on [archive.org](https://archive.org/details/Mellite) or
+A binary version, ready to run, can be downloaded from [archive.org](https://archive.org/details/Mellite) or
 [GitHub releases](https://github.com/Sciss/Mellite/releases/latest).
-Mellite is cross-platform, it is provided through a universal zip archive that can run on any platform
-including Mac and Windows, and a `.deb` package suitable for Linux Debian and Ubuntu.
 
-If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite).
+@@@ note
 
-See below for additional requirements (Java, SuperCollider).
+Before running the program, please read carefully the license terms, and especially the disclaimer also found
+at the end of this page—Mellite is an experimental program, and while I do my best to prevent erroneous operation,
+I cannot guarantee this program to be error-free, thus you use it fully at your own risk.
+
+@@@
+
+We now provide downloads bundled with a
+so-called Java Development Kit (JDK) required to run the application:
+
+- `mellite-full_{version}_win_x64.zip` (for Windows)
+- `mellite-full_{version}_mac_x64.zip` (for Mac)
+- `mellite-full_{version}_linux_x64.zip` (for Linux 64-bit Intel/AMD)
+- `mellite-full_{version}_x64.deb` (alternative for Linux if you use Debian or Ubuntu)
+
+Just download and unpack the zip archive and run (open) the file `bin/mellite.bat` (Windows) or `bin/mellite` (Linux and macOS).
+If you use the deb package (Debian, Ubuntu), you install it via `sudo dpkg -i mellite-full_{version}_x64.deb`, then you should
+be able to find `mellite` on the system and add it to your desktop manager or execute it right away.
 
 On __Mac__, you need to allow the system to launch Mellite the first time you download it. Extract the zip
 archive, and go into the `bin` directory. Right-click (or Ctrl-click) on the `mellite` program, then choose `Open`.
 The computer will now warn you that the program is not verified, you have to confirm that you really want to open
-it. A terminal window should then pop up and soon after the Mellite main window should be opened. If this is not
-the case, you might be using a too old Java version (or not have Java installed at all). You can verify this by
-opening the terminal application (in the `/Applications/Utilities` directory) and executing `java -version` from the
-text prompt. You need version 8 or newer. Often macOS comes with an outdated Java 1.6! See below for more information. 
+it. A terminal window should then pop up and soon after the Mellite main window should be opened.
 
-----
+### Plain Platform Neutral Download
 
-**Legal disclaimer:**
-Mellite contains libraries also released under the GNU AGPL and GPL.
-You are entitled to the source code of all these libraries. The licenses of
-all libraries are [available here](https://git.iem.at/sciss/Mellite/tree/master/licenses). To
-obtain the source code, clone the source code repository of Mellite (see above), and in the file
-`build.sbt` add the qualification `withSources()` to any library before running `sbt update`.
-For example, to receive the source code of the PDFlitz library used by Mellite, change
-`"de.sciss" %% "pdflitz" % pdflitzVersion` to `"de.sciss" %% "pdflitz" % pdflitzVersion withSources()`.
-The sources will be downloaded to `~/.ivy2/cache/de.sciss/pdflitz_2.12/srcs`.
-If you have trouble obtaining the source code of incorporated libraries, I can send it to you via e-mail
-in compliance with the GNU AGPL.
+If you do not wish to use the bundled JDK , or if you are using a different platform such as Raspberry Pi, you can download the "universal" package:
 
-----
+- `mellite_{version}_all.zip`
 
-In order to run Mellite, you also need to have installed on your computer:
+This is platform neutral, and you must have Java separately installed on your system.
+You can verify this by opening a terminal and running `java -version`. On Windows you open the terminal by executing `cmd.exe`
+from the task bar, on macOS you find it in `Applications/Utilities`. If `java -version` fails or tells you that your version is older
+than 1.8 or 8, then you need to upgrade your Java. The easiest way to do so is visit [adoptopenjdk.net](https://adoptopenjdk.net/)
+and download the OpenJDK 11 HotSpot JVM for your system. Please note that the universal zip may have issues finding JavaFX, which means
+that the application's built-in API browser may not work.
 
-- __Java__ development kit (JDK). The recommended
-  version is JDK 8 (JDK 11 should also be fine).
-  On Linux, if you install OpenJDK 8, you may also have to install OpenJFX. In some Linux systems
-  (Debian, Ubuntu), you can use `sudo apt install openjdk-8-jdk` and `sudo apt install openjfx` to do so.
-  On Raspbian, use Oracle JDK instead because of stability issues. For all other platforms, the recommended way
-  is to grab an installer from [AdoptOpenJDK](https://adoptopenjdk.net/). It should automatically detect your
-  platform (if not, choose 'Other platforms'). Stick to the HotSpot JVM and OpenJDK 8 (or 11).
-- [SuperCollider](https://supercollider.github.io/download) (versions 3.10.x and 3.9.x are recommended, but 3.8.x should work, too)
+### Building from Source
 
-We have now tested Mellite with JDK 11; it does not provide an installable package for JavaFX, which means the API
-browser does not work, and we still recommend JDK 8. However, you should be fine to run Mellite under JDK 11, if you
-do not need the API browser.
+If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite) or [github.com/Sciss/Mellite](https://github.com/Sciss/Mellite/).
+The file `README.md` should give you details on the build process.
 
-## Resources
+## SuperCollider
+
+Mellite uses [SuperCollider](http://supercollider.github.io/) for real-time sound synthesis. If you haven't already done so,
+you must separately install SuperCollider from its website. Versions 3.10.x and 3.9.x are recommended, although older versions
+should work, too.
+
+## Help and Getting Started
 
 For documentation, see the video and text tutorials on the left navigation bar.
 The API docs can be found [here](latest/api/de/sciss/), however the website is very slow. The recommended way to 
@@ -79,3 +83,41 @@ browse the API is from within the application itself, using the menu item _Help 
 
 The best way to ask questions, no matter if newbie or expert, is to use the [Gitter Channel](https://gitter.im/Sciss/Mellite).
 You need a GitLab, GitHub or Twitter account to sign in.
+
+## Disclaimer and License Information
+
+@@@ note { title="Disclaimer of Warranty" }
+
+There is no warranty for the program (Mellite), to the extent permitted by
+applicable law. Except when otherwise stated in writing the copyright
+holders and/or other parties provide the program "as is" without warranty
+of any kind, either expressed or implied, including, but not limited to,
+the implied warranties of merchantability and fitness for a particular
+purpose. The entire risk as to the quality and performance of the program
+is with you. Should the program prove defective, you assume the cost of
+all necessary servicing, repair or correction.
+
+@@@
+
+@@@ note { title="Limitation of Liability" }
+
+In no event unless required by applicable law or agreed to in writing
+will any copyright holder, or any other party who modifies and/or conveys
+the program (Mellite) as permitted above, be liable to you for damages, including any
+general, special, incidental or consequential damages arising out of the
+use or inability to use the program (including but not limited to loss of
+data or data being rendered inaccurate or losses sustained by you or third
+parties or a failure of the program to operate with any other programs),
+even if such holder or other party has been advised of the possibility of
+such damages.
+
+@@@
+
+Mellite contains many libraries covered by Open Source licenses. A comprehensive overview is available inside the application
+by selecting the _Help_ > _About Mellite_ menu item and clicking on _License Details_. Libraries covered by the GNU AGPL and GPL
+licenses require me to provide you with their source code. You can simply select a library and click on _Download Library Sources_
+which takes you to a website hosting the library source code. When using the full package, the bundled OpenJDK is covered
+by the GNU GPL with Classpath Exception. See [adoptopenjdk.net/about.html](https://adoptopenjdk.net/about.html) for details.
+
+If you have trouble obtaining the source code of Mellite or its incorporated libraries, contact me via e-mail at _contact @ sciss.de_.
+
