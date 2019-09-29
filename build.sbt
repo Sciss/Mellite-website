@@ -1,25 +1,26 @@
-lazy val melliteVersion        = "2.39.0"
+lazy val melliteVersion        = "2.40.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
+lazy val repoName              = s"$baseName-website"
 
 lazy val deps = new {
   val audioFile      = "1.5.3"
   val desktop        = "0.10.4"
-  val fscape         = "2.30.0"
-  val lucre          = "3.15.0" // WARNING: see below
-  val lucreSwing     = "1.19.0"
-  val nuages         = "2.36.0"
+  val fscape         = "2.31.0"
+  val lucre          = "3.15.2"
+  val lucreSwing     = "1.19.1"
+  val nuages         = "2.37.0"
   val osc            = "1.2.0"
   val patterns       = "0.15.1"
   val scalaCollider  = "1.28.4"
   val serial         = "1.1.1"
-  val soundProcesses = "3.32.0"
-  val span           = "1.4.2"
+  val soundProcesses = "3.32.2"
+  val span           = "1.4.3"
   val ugens          = "1.19.5"
 }
 
-scalaVersion in ThisBuild := "2.12.9"
+scalaVersion in ThisBuild := "2.12.10"
 
 val commonSettings = Seq(
   organization := "de.sciss",
@@ -47,8 +48,8 @@ val lFScapeCore         = ProjectRef(fscapeURI, "fscape-core")
 val lFScapeLucre        = ProjectRef(fscapeURI, "fscape-lucre")
 val lFScapeViews        = ProjectRef(fscapeURI, "fscape-views")
 
-// val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
-val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#993332e1bafb016e867b4736966c2170e5fefc23")  // unidoc problem fix
+val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
+// val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#993332e1bafb016e867b4736966c2170e5fefc23")  // unidoc problem fix
 val lLucreAdjunct       = ProjectRef(lucreURI, "lucre-adjunct")
 val lLucreBase          = ProjectRef(lucreURI, "lucre-base")
 val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
@@ -82,7 +83,7 @@ lazy val lList = Seq(
   lMelliteApp,
 )
 
-git.gitCurrentBranch in ThisBuild := "master"
+// git.gitCurrentBranch in ThisBuild := "master"
 
 lazy val unidocSettings = Seq(
   // site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
@@ -141,14 +142,15 @@ lazy val unidocSettings = Seq(
 val site = project.withId(s"$baseNameL-site").in(file("."))
   .settings(commonSettings: _*)
   .enablePlugins(ScalaUnidocPlugin).settings(unidocSettings)
-  .enablePlugins(GhpagesPlugin, ParadoxSitePlugin, SiteScaladocPlugin)
+  // .enablePlugins(GhpagesPlugin)
+  .enablePlugins(ParadoxSitePlugin, SiteScaladocPlugin)
   .settings(
     name                           := baseName,  // used by GhpagesPlugin, must be base base!
     siteSubdirName in SiteScaladoc := "latest/api",
-    git.remoteRepo                 := s"git@github.com:Sciss/${baseName}.git",
-    git.gitCurrentBranch           := "master",
+    // git.remoteRepo                 := s"git@github.com:Sciss/${baseName}.git",
+    // git.gitCurrentBranch           := "master",
     paradoxTheme                   := Some(builtinParadoxTheme("generic")),
-    paradoxProperties in Paradox ++= Map(
+    paradoxProperties /* in Paradox */ ++= Map(
       "image.base_url"       -> "assets/images",
       "github.base_url"      -> "https://github.com/Sciss/Mellite-website",
       "snip.sp_tut.base_dir" -> s"${baseDirectory.value}/snippets/src/main/scala/de/sciss/soundprocesses/tutorial"
@@ -203,20 +205,18 @@ lazy val publishSettings = Seq(
     ),
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
-// N.B.: Bloody site plugin or ghpages already adds scm, then sonatype complains if
-// we define it twice
-//     <scm>
-//      <url>git@git.iem.at:sciss/{n}.git</url>
-//      <connection>scm:git:git@git.iem.at:sciss/{n}.git</connection>
-//    </scm>
-  pomExtra := { val n = baseName
-     <developers>
-        <developer>
-          <id>sciss</id>
-          <name>Hanns Holger Rutz</name>
-          <url>http://www.sciss.de</url>
-        </developer>
-      </developers>
+  pomExtra := {
+    <scm>
+      <url>git@git.iem.at:sciss/{repoName}.git</url>
+      <connection>scm:git:git@git.iem.at:sciss/{repoName}.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>sciss</id>
+        <name>Hanns Holger Rutz</name>
+        <url>http://www.sciss.de</url>
+      </developer>
+    </developers>
   }
 )
 
