@@ -1,10 +1,11 @@
 # Mellite Video Tutorials
 
-Video tutorials for version 2.10 and newer are available from a [Peertube channel](https://peertube.social/video-channels/da59306f-d732-42d5-864f-3b70b868e9fb/videos) ([Vimeo backup](https://vimeo.com/album/4473871)).
+Video tutorials for version 2.10 and newer are available from [diode.zone (Peertube)](https://diode.zone/video-channels/mellite/videos)
+or the [Vimeo backup](https://vimeo.com/album/4473871).
 
 ## Tutorial 1 - Getting Started
 
-[Video Link](https://peertube.social/videos/watch/d5c98baf-fa70-4211-a31d-95c9181a3dfb) (14 min)
+[Video Link](https://diode.zone/videos/watch/72b62385-a120-4de3-97f6-5203ca9efd01) (14 min)
 
 This is a basic introduction from scratch:
 
@@ -20,7 +21,7 @@ This is a basic introduction from scratch:
 
 ## Tutorial 2 - Timeline and Audio Files
 
-[Video Link](https://peertube.social/videos/watch/8a664318-87b4-4e8a-83bb-a847eacbbca2) (19 min)
+[Video Link](https://diode.zone/videos/watch/ddf44d04-40fa-41dd-bb5c-9a8c968d22ac) (19 min)
 
 This tutorial introduces the timeline object and shows how to arrange sound file regions:
 
@@ -39,7 +40,7 @@ This tutorial introduces the timeline object and shows how to arrange sound file
 
 ## Tutorial 3 - Freesound.org
 
-[Video Link](https://peertube.social/videos/watch/306e11ce-d01f-42ac-bb07-62d5d406b85b) (16 min)
+[Video Link](https://diode.zone/videos/watch/5f22fa2f-2af1-4c80-899f-3191d162aec7) (16 min)
 
 This tutorial introduces the freesound.org sound file retrieval object:
 
@@ -51,7 +52,7 @@ This tutorial introduces the freesound.org sound file retrieval object:
 
 ## Tutorial 4 - Wolkenpumpe
 
-[Video Link](https://peertube.social/videos/watch/1a179f03-402c-4844-b2e9-653664fe17ca) (33 min)
+[Video Link](https://diode.zone/videos/watch/6b6bb10e-1fb2-4fa3-be7e-0e04d7f0f10e) (33 min)
 
 This tutorial introduces the Wolkenpumpe live interface object:
 
@@ -77,7 +78,7 @@ This tutorial introduces the Wolkenpumpe live interface object:
 
 ## Tutorial 5 - Patterns
 
-[Video Link](https://peertube.social/videos/watch/2bb93731-d6a5-4d97-8dd5-1f6417d1be6f) (16 min)
+[Video Link](https://diode.zone/videos/watch/5ead4638-929c-4339-9364-1982f000d793) (16 min)
 
 This tutorial introduces the Pattern abstraction:
 
@@ -93,7 +94,7 @@ This tutorial introduces the Pattern abstraction:
 
 ## Tutorial 6 - Widgets
 
-[Video Link](https://peertube.social/videos/watch/de98dae5-c3d4-464c-9c79-6bfed1367ae3) (21 min)
+[Video Link](https://diode.zone/videos/watch/f1a0110a-b4ef-474d-860a-c8e2dabc9a7c) (21 min)
 
 This tutorial introduces Widget programs:
 
@@ -111,7 +112,7 @@ This tutorial introduces Widget programs:
 
 ## Tutorial 7 - Patterns II
 
-[Video Link](https://peertube.social/videos/watch/46e65cde-b459-487a-9884-0f00725e1980) (18 min)
+[Video Link](https://diode.zone/videos/watch/cc39dd19-f71e-4fc4-99b7-765b55f4c0df) (18 min)
 
 This tutorial continues with patterns, introducing a way to play them as main objects,
 specifying auxiliary sound producing functions.
@@ -128,7 +129,7 @@ specifying auxiliary sound producing functions.
 
 ## Tutorial 8 -- CLI and Grapheme Editor
 
-[Video Link](https://peertube.social/videos/watch/6ef9d4cf-7ae0-47c0-b011-f0559e464fea) (16 min)
+[Video Link](https://diode.zone/videos/watch/99140d27-3e82-4869-b768-dcf211e6e7f6) (16 min)
 
 This tutorial is more casual and introduces a new command line interface for creating objects,
 as well as the grapheme (break-point function) editor.
@@ -144,7 +145,7 @@ as well as the grapheme (break-point function) editor.
 
 ## Tutorial 9 -- Built-in API docs, and new code editor
 
-[Video Link](https://peertube.social/videos/watch/39933fdf-2cc8-4594-87aa-8f0ac6e8ed45) (15 min)
+[Video Link](https://diode.zone/videos/watch/0a5bff86-8600-49ee-ae4c-4f33c51a59fd) (15 min)
 
 This tutorial introduces the new Dotterweide editor used for the embedded
 Scala snippets.
@@ -160,7 +161,7 @@ Scala snippets.
 
 ## Tutorial 10 -- Widgets and receiving OSC
 
-[Video Link](https://peertube.social/videos/watch/e10b8a0c-7d26-4bcc-a611-1175faa6287c) (21 min)
+[Video Link](https://diode.zone/videos/watch/30e0a119-07b1-4c26-93dc-0f53ea88c420) (21 min)
 
 This tutorial introduces the Widget object, using as example the communication from
 Processing to Mellite via Open Sound Control messages.
@@ -182,7 +183,7 @@ Processing to Mellite via Open Sound Control messages.
 
 ## Tutorial 11 -- Negatum genetic programming
 
-[Video Link](https://peertube.social/videos/watch/0ae57dac-5f7d-4f0b-87e8-7d49250bb1da) (39 min)
+[Video Link](https://diode.zone/videos/watch/e3980e15-bdd1-48e1-9f40-77e4f7914d03) (39 min)
 
 This tutorial introduces the Negatum object, a process for generating sound synthesis
 structure through automated genetic programming.
