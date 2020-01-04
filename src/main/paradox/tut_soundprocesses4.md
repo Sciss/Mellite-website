@@ -1,5 +1,13 @@
 # SP4 - Acting and Reacting
 
+@@@ warning
+
+The use of the old `Action` object is deprecated, and it is now called `ActionRaw`. A new `Action` object
+has been introduced that has a well-defined API and better compatibility across versions. Currently, only
+this tutorial for the old, deprecated actions is available.
+
+@@@
+
 With the exception of the direct use of the scheduler, the structures so far have been created "once", even if they lead to developments that unroll in time.
 In this tutorial, we want to look at ways in which one can introduce code fragments that will be executed at specific points in time or when a specific
 trigger in a synth-graph happens.

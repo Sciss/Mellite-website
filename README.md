@@ -8,6 +8,15 @@ __To build the API docs locally, run `sbt unidoc`. You can view the results via 
 You can run the site via a local web server as `sbt previewSite` which is a functionality of the [sbt-site](https://github.com/sbt/sbt-site) plugin.
 For continuous preview, use `sbt ++2.12.10 previewAuto`.
 
+## updating the tutorials
+
+This assumes the [tutorials repository](https://git.iem.at/sciss/Mellite-tutorials) is found in `../Mellite-tutorials`.
+
+    cp ../Mellite-tutorials/tut-paulstretch/src/main/paradox/tut_mellite_paulstretch.md src/main/paradox/
+    cp ../Mellite-tutorials/tut-paulstretch/src/main/paradox/*.wav src/main/paradox/
+    cp ../Mellite-tutorials/tut-paulstretch/src/main/paradox/*.mp3 src/main/paradox/
+    cp ../Mellite-tutorials/tut-paulstretch/src/main/paradox/assets/images/tut-paulstretch-* src/main/paradox/assets/images/
+
 ## sciss.de
 
 To publish here, prepare the files using `sbt ++2.12.10 clean packageSite`. The directory `target/site/` contains the stuff
