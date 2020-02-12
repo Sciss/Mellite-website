@@ -39,12 +39,12 @@ Before explaining, the output from running this snippet is as follows:
 
 So we can state that placing an action on a timeline will execute it at the starting point of its time span. The duration of the span does not
 have any particular meaning, so I just used the open interval `Span.Form` here. The action itself seems to have been created through three
-steps: The instantiation of an `Action.Body`, the call `Action.registerPredef`, and the call `Action.predef`. You can think of `Action.Body`
+steps: The instantiation of an `ActionRaw.Body`, the call `ActionRaw.registerPredef`, and the call `ActionRaw.predef`. You can think of `ActionRaw.Body`
 as the equivalent of synth-graph for real-time sound synthesis; it defines the program that is executed. The body has a single method
 `apply` with this signature
 
 ```scala
-def apply[S <: Sys[S]](universe: Action.Universe[S])(implicit tx: S#Tx): Unit
+def apply[S <: Sys[S]](universe: ActionRaw.Universe[S])(implicit tx: S#Tx): Unit
 ```
 
 In the snippet, we used `T` instead of `S` as type parameter to stress the fact that this is a "fresh" type parameter that does not need
@@ -54,7 +54,7 @@ time. If you have worked with Mellite, you know that objects can be copied, even
 workspace to a durable workspace and vice versa. The body of the action stays the same, but it may be invoked with different systems,
 and that is the reason its `apply` method has a system type parameter.
 
-The argument passed to `apply`, of type `Action.Universe` can be explained in a similar manner: The purpose of an action usually is to
+The argument passed to `apply`, of type `ActionRaw.Universe` can be explained in a similar manner: The purpose of an action usually is to
 operate on other objects in the workspace, other compositional objects. How do we access them? Look at the snippet: It might have been
 tempting to assume that the action body could refer to the _enclosing scope_ and, for example, do something with the transport parameter
 of the `run` method, such as stopping or restarting the transport. If we consider the snippet a "normal" program, there would be nothing
@@ -70,8 +70,8 @@ and therefore must be explicitly registered before it can be used.
 @@@ note
 
 When we create and register a predefined action, we are telling SoundProcesses: Look, this action is provided by us on the classpath that is used
-when running the code. An action created via `Action.predef("key")` can be persisted, but it only stores the key in the workspace, and
-when executed, a body prior registered via `Action.registerPredef` is looked up in a global dictionary. That body is never written to the
+when running the code. An action created via `ActionRaw.predef("key")` can be persisted, but it only stores the key in the workspace, and
+when executed, a body prior registered via `ActionRaw.registerPredef` is looked up in a global dictionary. That body is never written to the
 workspace.
 
 @@@
@@ -88,7 +88,7 @@ To overcome this, the "old" solution&mdash;the solution until recently&mdash;was
 SoundProcesses has a light-weight type to represent source code, called `Code` with different sub-types for the kind of programs (including
 the type of `import` statements implicitly provided and the kind of output produced by the program). The source code itself can be given
 as a `String`, for example using Scala's triple-quotes `"""` so that line breaks can be used without escaping them. The code object then can be
-passed to `Action.compile`, as shown in the following `Snippet11`:
+passed to `ActionRaw.compile`, as shown in the following `Snippet11`:
 
 @@snip [Snippet11]($sp_tut$/Snippet11.scala) { #snippet11 }
 
@@ -97,11 +97,11 @@ It's clear that this approach is inconvenient, because it adds a number of probl
 - The source code being a `String` means that it is not checked at the time the outer program is compiled. As a workaround, you would
   probably write the code as in the first ('predef') example, and then escape it as a string later.
 - The compilation can be slow, especially in the first run, when the compiler has not been initialised yet. Therefore, the API decision was
-  to return a `Future[A]` from `Action.compile`. A [`Future` in Scala](http://docs.scala-lang.org/overviews/core/futures.html) denotes an asynchronous process that eventually, in the future, leads to
-  a computed value of type `A` (or a failure). So `Action.compile` returns immediately, but the compiled `Action` is not available immediately.
+  to return a `Future[A]` from `ActionRaw.compile`. A [`Future` in Scala](http://docs.scala-lang.org/overviews/core/futures.html) denotes an asynchronous process that eventually, in the future, leads to
+  a computed value of type `A` (or a failure). So `ActionRaw.compile` returns immediately, but the compiled `ActionRaw` is not available immediately.
   Therefore, what the snippet does, is to use `fut.foreach` to execute a function when the future is completed. This function must open a
-  new transaction, because the old one from which `Action.compile` was called, has been completed at this point. To create a new transaction, we use
-  `cursor.step { implicit tx => ... }`. The value of the future is of type `stm.Source[S#Tx, Action[S]]`, a reference to the action. It must
+  new transaction, because the old one from which `ActionRaw.compile` was called, has been completed at this point. To create a new transaction, we use
+  `cursor.step { implicit tx => ... }`. The value of the future is of type `stm.Source[S#Tx, ActionRaw[S]]`, a reference to the action. It must
   be resolved in the new transaction, using the `apply` method, i.e. `actH.apply()` or just `actH()`. Only then can we continue with our
   program building process, invoking `runWithAction` as a separate step.
 
@@ -113,9 +113,9 @@ These problems led to the current design alternative of using macros to generate
 
 Macros are meta-programs or 'program synthesisers'. In Scala, the most common form is a `def`-macro, i.e. a macro in the shape of a method
 that, when called, synthesises part of the program around the call-site. For the user, a `def`-macro may look very much like a regular
-method invocation, but with the ability to do some "magic" to the code. In our case, we added a `def`-macro as method `Action.apply`. It
-generates a "full" action that can be persisted along with its body, without the two problems of the `Action.compile` approach shown in the
-previous section. The macro essentially _compiles at compile-time_ the function passed as argument to `Action.apply` using another specially created compiler,
+method invocation, but with the ability to do some "magic" to the code. In our case, we added a `def`-macro as method `ActionRaw.apply`. It
+generates a "full" action that can be persisted along with its body, without the two problems of the `ActionRaw.compile` approach shown in the
+previous section. The macro essentially _compiles at compile-time_ the function passed as argument to `ActionRaw.apply` using another specially created compiler,
 storing the serialised program in the returned object, and as a nice side-effect, it also stores the source code for the action body in
 the attribute map of the action object, making it possible to open the source code editor later in the Mellite GUI.
 
@@ -123,13 +123,13 @@ the attribute map of the action object, making it possible to open the source co
 
 @@snip [Snippet12]($sp_tut$/Snippet12.scala) { #snippet12 }
 
-Note that `import MacroImplicits._` brings `Action.apply` into scope as an extension method that otherwise does not exist.
+Note that `import MacroImplicits._` brings `ActionRaw.apply` into scope as an extension method that otherwise does not exist.
 Another interesting aspect of this is, as the macro compiles, using a fresh compiler, _the source code extracted from the call_,
 there is no risk of accidentally catching symbols from the environment. You can try this out yourself. If you attempted to
 compile a program containing:
 
 ```scala
-val act1 = Action.apply[S] { universe =>
+val act1 = ActionRaw.apply[S] { universe =>
   println("Transport: " + t)
 }
 ```
@@ -146,7 +146,7 @@ time:
 
 ```scala
 import java.util.Date
-val act1 = Action.apply[S] { universe =>
+val act1 = ActionRaw.apply[S] { universe =>
   println("Current time: " + new Date)
 }
 ```
@@ -161,7 +161,7 @@ In other words, the compiler that compiles the body of the action does not see a
 indicate this problem, as it does not have any idea that we are calling a special macro. To make the above work, put the import inside the body:
 
 ```scala
-val act1 = Action.apply[S] { universe =>
+val act1 = ActionRaw.apply[S] { universe =>
   import java.util.Date
   println("Current time: " + new Date)
 }
@@ -169,7 +169,7 @@ val act1 = Action.apply[S] { universe =>
 
 ### An Action's Universe
 
-The action's body is invoked with an argument of type [`Action.Universe`](latest/api/de/sciss/synth/proc/Action$$Universe.html).
+The action's body is invoked with an argument of type [`ActionRaw.Universe`](latest/api/de/sciss/synth/proc/ActionRaw$$Universe.html).
 This is the interface to the "outer world" of the body,
 a way to find and access other objects in SoundProcesses. It extends the general [`Universe`](latest/api/de/sciss/synth/proc/Universe.html),
 which contains pointers to the cursor and workspace, and adds additional methods. Methods include:
@@ -257,7 +257,7 @@ universe's `value` field to the value of the graph element `pitch`. If you obser
 
 The value passed to the action has the perhaps strange appearing type `FloatVector`. Like `SendReply`, `Reaction` may transmit
 multiple values to the client, so that is the reason we have a vector (sequence) of floats instead of a single float. The extra
-wrapping `FloatVector` makes it easier to extract or pattern match the untyped (`Any`) `value` method of the `Action.Universe`. So
+wrapping `FloatVector` makes it easier to extract or pattern match the untyped (`Any`) `value` method of the `ActionRaw.Universe`. So
 if we wanted to use the single pitch value as a number in the action body, we could have written:
 
 @@snip [Snippet13 Value Extractor]($sp_tut$/Snippet13Parts.scala) { #snippet13value }

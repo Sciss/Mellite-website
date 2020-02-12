@@ -1,22 +1,32 @@
 lazy val baseName = "Mellite-Snippets"
 
-name               := baseName
-version            := "0.1.0-SNAPSHOT"
-organization       := "de.sciss"
-scalaVersion       := "2.12.10"
-description        := "Tutorial Snippets for SoundProcesses and Mellite"
-licenses           := Seq("AGPL v3+" -> url("http://www.gnu.org/licenses/agpl-3.0.txt"))
+lazy val deps = new {
+  val mellite             = "2.42.0"
+  val fscape              = "2.33.0"
+  val soundProcesses      = "3.33.0"
+  val scalaColliderUGens  = "1.19.6"
+}
 
-resolvers          += "Oracle Repository" at "http://download.oracle.com/maven"  // required for sleepycat
-
-// ---- main dependencies ----
-
-lazy val melliteVersion = "2.41.0"
-
-libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite" % melliteVersion
+lazy val commonSettings = Seq(
+  name               := baseName,
+  version            := "0.1.0-SNAPSHOT",
+  organization       := "de.sciss",
+  scalaVersion       := "2.12.10",
+  description        := "Tutorial Snippets for SoundProcesses and Mellite",
+  licenses           := Seq("AGPL v3+" -> url("http://www.gnu.org/licenses/agpl-3.0.txt")),
+  scalacOptions ++= Seq(
+    "-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xlint", "-Yrangepos", "-Xsource:2.13"
+  )
 )
 
-scalacOptions ++= Seq(
-  "-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xlint", "-Yrangepos", "-Xsource:2.13"
-)
+lazy val root = project.in(file("."))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "de.sciss" %% "fscape-core"                 % deps.fscape,
+      "de.sciss" %% "mellite-core"                % deps.mellite,
+      "de.sciss" %% "scalacolliderugens-plugins"  % deps.scalaColliderUGens,
+      "de.sciss" %% "soundprocesses-compiler"     % deps.soundProcesses,
+    )
+  )
+

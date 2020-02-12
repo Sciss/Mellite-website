@@ -154,7 +154,7 @@ val site = project.withId(s"$baseNameL-site").in(file("."))
     paradoxProperties /* in Paradox */ ++= Map(
       "image.base_url"       -> "assets/images",
       "github.base_url"      -> "https://github.com/Sciss/Mellite-website",
-      "snip.sp_tut.base_dir" -> s"${baseDirectory.value}/snippets/src/main/scala/de/sciss/soundprocesses/tutorial"
+      "snip.sp_tut.base_dir" -> s"${baseDirectory.value}/snippets/src/main/scala/de/sciss/tutorial"
     ),
   )
   .aggregate(lList: _*)
@@ -176,12 +176,12 @@ val snippets = (project in file("snippets"))
 // we can publish using `sbt scalacollider-unidoc/publishLocal` etc.
 // cf. https://github.com/sbt/sbt-unidoc/issues/65
 
-lazy val aggr: Project = project.withId(s"$baseNameL-aggr").in(file("aggr"))
+lazy val aggr = project.withId(s"$baseNameL-aggr").in(file("aggr"))
   .enablePlugins(ScalaUnidocPlugin)
   .settings(unidocSettings)
   .aggregate(lList: _*)
 
-lazy val pub: Project = project.withId(s"$baseNameL-unidoc").in(file("pub"))
+lazy val pub = project.withId(s"$baseNameL-unidoc").in(file("pub"))
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(
