@@ -1,26 +1,28 @@
-lazy val melliteVersion        = "2.43.0"
+lazy val melliteVersion        = "2.44.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
 lazy val repoName              = s"$baseName-website"
 
 lazy val deps = new {
-  val audioFile      = "1.5.3"
+  val audioFile      = "1.5.4"
   val desktop        = "0.10.5"
-  val fscape         = "2.33.1"
+  val fscape         = "2.34.0"
   val lucre          = "3.16.1"
   val lucreSwing     = "1.20.0"
-  val nuages         = "2.38.0"
+  val nuages         = "2.39.0"
   val osc            = "1.2.1"
-  val patterns       = "0.17.0"
+  val patterns       = "0.18.0"
   val scalaCollider  = "1.28.5"
-  val serial         = "1.1.1"
-  val soundProcesses = "3.33.0"
+  val serial         = "1.1.2"
+  val soundProcesses = "3.34.0"
   val span           = "1.4.3"
 //  val ugens          = "1.19.6"
 }
 
-scalaVersion in ThisBuild := "2.12.10"
+scalaVersion in ThisBuild := "2.13.1"
+
+mimaFailOnNoPrevious in ThisBuild := false
 
 val commonSettings = Seq(
   organization := "de.sciss",
@@ -134,7 +136,7 @@ lazy val unidocSettings = Seq(
       "snippets"
     ).mkString(":"),
     "-doc-title", s"${baseName} ${PROJECT_VERSION} API",
-    "-Ymacro-no-expand"
+    // "-Ymacro-no-expand"
   )
 )
 
