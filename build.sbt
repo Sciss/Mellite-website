@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "2.45.0"
+lazy val melliteVersion        = "2.46.0"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
@@ -7,7 +7,7 @@ lazy val repoName              = s"$baseName-website"
 lazy val deps = new {
   val audioFile      = "1.5.4"
   val desktop        = "0.10.5"
-  val fscape         = "2.35.0"
+  val fscape         = "2.36.0"
   val lucre          = "3.17.0"
   val lucreSwing     = "1.21.0"
   val nuages         = "2.40.0"
