@@ -199,6 +199,40 @@ structure through automated genetic programming.
 - Future outlook
 - Examining the `Mix` set of tree leaves
 
+## Tutorial 12 -- Measuring impulse responses
+
+[Video Link](https://diode.zone/videos/watch/889507c8-cf76-405f-baf9-c63220accb82) (28 min)
+
+This uses a workspace available in the Mellite downloads, which provides a widget for the entire measurement process
+(behind the scenes FScape and Proc are combined, but this is not shown in detail). The video starts with a general
+introduction how IR measurement with sine sweeps works.
+
+- What is the impulse response of an unknown (black box) linear system
+- Finite impulse response filters (frequency filters, reverberation, ...)
+- Principles of digitally measuring an impulse response
+- Sine sweeps
+- Deconvolution and a trick to use "normal" convolution
+- Walk through the parameters of the IR measuring tool
+- Applying the measured IR to a "dry" sound
+
+## Tutorial 13 -- Stream object, Oscilloscope
+
+[Video Link](https://diode.zone/videos/watch/7c973721-c189-48b4-901e-1130a84bbc61) (21 min)
+
+This tutorial shows the new Stream object - streams are "expanded" patterns that persist their internal state.
+Towards the end, the new Oscilloscope view is demonstrated.
+
+- Recap: a Pattern to produce Brownian movement; playing a Bind Pattern.
+- State of a Pattern
+- The Brownian movement as a Stream instead
+- A memorised counter Stream
+- An Action to take and print the next stream value
+- Options and default values for Action attributes
+- State is preserved even quitting Mellite
+- Resetting a Stream
+- Swapping the Stream back to a Pattern
+- the Oscilloscope view
+
 ---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332) (see 17'15" into the video).
