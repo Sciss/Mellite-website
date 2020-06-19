@@ -86,7 +86,7 @@ lazy val lList = Seq(
   lMelliteApp,
 )
 
-// git.gitCurrentBranch in ThisBuild := "master"
+// git.gitCurrentBranch in ThisBuild := "main"
 
 lazy val unidocSettings = Seq(
   // site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
@@ -151,7 +151,7 @@ val site = project.withId(s"$baseNameL-site").in(file("."))
     name                           := baseName,  // used by GhpagesPlugin, must be base base!
     siteSubdirName in SiteScaladoc := "latest/api",
     // git.remoteRepo                 := s"git@github.com:Sciss/${baseName}.git",
-    // git.gitCurrentBranch           := "master",
+    // git.gitCurrentBranch           := "main",
     paradoxTheme                   := Some(builtinParadoxTheme("generic")),
     paradoxProperties /* in Paradox */ ++= Map(
       "image.base_url"       -> "assets/images",

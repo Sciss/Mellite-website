@@ -41,7 +41,7 @@ terminal or shell prompt.
     $ git clone https://github.com/Sciss/Mellite-website.git
   
 This will take a while, then you will find the snippets project in `Mellite-website/snippets`. You can see that directory
-[online](https://github.com/Sciss/Mellite-website/tree/master/snippets). This project uses [sbt](http://www.scala-sbt.org/) as a
+[online](https://github.com/Sciss/Mellite-website/tree/main/snippets). This project uses [sbt](http://www.scala-sbt.org/) as a
 build tool, however we'll just build and run from IntelliJ IDEA, so you don't actually have to install sbt at this point.
 
 You can download IntelliJ IDEA [here](https://www.jetbrains.com/idea/download/). It is a development environment made by JetBrains,

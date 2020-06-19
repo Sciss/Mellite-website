@@ -223,7 +223,7 @@ patch processes together. We are going to look at that in this section.
 
 A common case would be the filtering of one process by another, or the routing of processes to some output buses.
 `Snippet8` shows this, decomposing one of SuperCollider's and ScalaCollider's standard example, the aptly named
-["what was I thinking?"](https://github.com/Sciss/ScalaCollider/blob/master/ExampleCmd.sc). In that example, a pulse
+["what was I thinking?"](https://github.com/Sciss/ScalaCollider/blob/main/ExampleCmd.sc). In that example, a pulse
 oscillator is fed through a resonant low-pass filter, and finally augmented by reverberation. If want to take these
 three things apart, we can create three individual `Proc`s, and in order to link them, we use the special graph
 elements `scan.In` and `scan.Out`. Additionally, we need to create output objects for the first two procs and place
