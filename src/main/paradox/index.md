@@ -51,6 +51,10 @@ archive, and go into the `bin` directory. Right-click (or Ctrl-click) on the `me
 The computer will now warn you that the program is not verified, you have to confirm that you really want to open
 it. A terminal window should then pop up and soon after the Mellite main window should be opened.
 
+Currently, you may see some messages beginning with _WARNING: An illegal reflective access operation has occurred_ when starting
+the application. This is perfectly normal and there is nothing dangerous or broken. I am sorry about these confusing messages, they
+come from the look-and-feel library and will be mitigated in future versions.
+
 ### Plain Platform Neutral Download
 
 If you do not wish to use the bundled JDK , or if you are using a different platform such as Raspberry Pi, you can download the "universal" package:

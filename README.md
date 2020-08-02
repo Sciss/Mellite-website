@@ -6,7 +6,7 @@ It's root folder contains an sbt build file for creating the static site, includ
 __To build the API docs locally, run `sbt unidoc`. You can view the results via `xdg-open target/scala-2.13/unidoc/index.html`.__
 
 You can run the site via a local web server as `sbt previewSite` which is a functionality of the [sbt-site](https://github.com/sbt/sbt-site) plugin.
-For continuous preview, use `sbt ++2.13.1! previewAuto`.
+For continuous preview, use `sbt ++2.13.3! previewAuto`.
 
 ## updating the tutorials
 
@@ -19,7 +19,7 @@ This assumes the [tutorials repository](https://git.iem.at/sciss/Mellite-tutoria
 
 ## sciss.de
 
-To publish here, prepare the files using `sbt ++2.13.1! clean packageSite`. The directory `target/site/` contains the stuff
+To publish here, prepare the files using `sbt ++2.13.3! clean packageSite`. The directory `target/site/` contains the stuff
 that must be uploaded, i.e. `scp -r target/site/* <credentials>@ssh.strato.de:mellite/`
 
 __Note:__ `rsync` is the best way now. Use it like the following:
@@ -29,13 +29,6 @@ __Note:__ `rsync` is the best way now. Use it like the following:
 (add `--dry-run` to check first).
 
 It seems that `packageSite` does not pick up changes, e.g. to `index.md`; better run `previewSite` once.
-
-## GitHub pages
-
-__Note:__ I deleted that branch now!
-
-The (obsolete) GitHub pages publication works through 
-`sbt ++2.13.10! ghpagesPushSite` which is provided by the [sbt-ghpages](https://github.com/sbt/sbt-ghpages) plugin.
 
 ## Snippets
 
@@ -47,9 +40,9 @@ for the website instead, not the tutorial snippets).
 
 To preview docs
 
-    sbt ++2.13.1! mellite-aggr/unidoc
+    sbt ++2.13.3! mellite-aggr/unidoc
 
 To publish a unidoc only artifact:
 
-    sbt ++2.13.1! mellite-unidoc/publishSigned
+    sbt ++2.13.3! mellite-unidoc/publishSigned
 
