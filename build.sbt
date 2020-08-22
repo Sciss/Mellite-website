@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "2.49.0"
+lazy val melliteVersion        = "2.49.1"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
@@ -9,13 +9,14 @@ lazy val deps = new {
   val desktop        = "0.10.5"
   val fscape         = "2.36.1"
   val lucre          = "3.17.6"
+  val lucrePi        = "0.1.0"
   val lucreSwing     = "1.21.0"
   val nuages         = "2.41.3"
   val osc            = "1.2.1"
   val patterns       = "0.20.0"
   val scalaCollider  = "1.28.5"
   val serial         = "1.1.2"
-  val soundProcesses = "3.35.8"
+//  val soundProcesses = "3.35.9"
   val span           = "1.4.3"
   val ugens          = "1.19.7"
 }
@@ -31,6 +32,7 @@ val commonSettings = Seq(
 
 val lAudioFile          = RootProject(uri(s"https://github.com/Sciss/AudioFile.git#v${deps.audioFile}"))
 val lDesktop            = RootProject(uri(s"https://github.com/Sciss/Desktop.git#v${deps.desktop}"))
+val lLucrePi            = RootProject(uri(s"https://github.com/Sciss/LucrePi.git#v${deps.lucrePi}"))
 val lLucreSwing         = RootProject(uri(s"https://github.com/Sciss/LucreSwing.git#v${deps.lucreSwing}"))
 val lPatterns           = RootProject(uri(s"https://github.com/Sciss/Patterns.git#v${deps.patterns}"))
 val lScalaCollider      = RootProject(uri(s"https://github.com/Sciss/ScalaCollider.git#v${deps.scalaCollider}"))
@@ -38,7 +40,8 @@ val lScalaColliderUGens = RootProject(uri(s"https://github.com/Sciss/ScalaCollid
 //val lScalaColliderUGens = RootProject(uri(s"https://github.com/Sciss/ScalaColliderUGens.git#61b0ec131c4ac9fbb934db4d62bed5ccad8dfc2d")) // unidoc problem fix
 val lScalaOSC           = RootProject(uri(s"https://github.com/Sciss/ScalaOSC.git#v${deps.osc}"))
 val lSerial             = RootProject(uri(s"https://github.com/Sciss/Serial.git#v${deps.serial}"))
-val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#v${deps.soundProcesses}"))
+//val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#v${deps.soundProcesses}"))
+val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#fb5cb5150344e186805f5f1f78c398077e604f3c")) // sbt-buildinfo issue
 val lSpan               = RootProject(uri(s"https://github.com/Sciss/Span.git#v${deps.span}"))
 // val lMellite            = RootProject(uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}"))
 
@@ -59,7 +62,8 @@ val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
 val lLucreExpr          = ProjectRef(lucreURI, "lucre-expr")
 val lLucreBdb           = ProjectRef(lucreURI, "lucre-bdb")
 
-val melliteURI          = uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}")
+//val melliteURI          = uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}")
+val melliteURI          = uri(s"https://github.com/Sciss/${baseName}.git#86042869528e6a847ac09804cebe3cedcb8f1099")
 val lMelliteCore        = ProjectRef(melliteURI, s"$baseNameL-core")
 val lMelliteApp         = ProjectRef(melliteURI, s"$baseNameL-app")
 
@@ -73,6 +77,7 @@ lazy val lList = Seq(
   lLucreBase,
   lLucreCore,
   lLucreExpr,
+  lLucrePi,
   lLucreSwing,
   lNuagesCore, //  XXX TODO --- this is currently broken, sbt still tries to compile wolkenpumpe-basic which has a macro problem
   lPatterns,
