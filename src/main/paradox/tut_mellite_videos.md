@@ -233,6 +233,22 @@ Towards the end, the new Oscilloscope view is demonstrated.
 - Swapping the Stream back to a Pattern
 - the Oscilloscope view
 
+## Tutorial 14 -- Raspberry Pi GPIO support, and system (shell) processes
+
+[Video Link](https://diode.zone/videos/watch/03ea9aa7-8321-4e4d-9d9c-bc5955fd2064) (37 min)
+
+This tutorial shows the basic GPIO support - accessing the digital input and output pins on a Raspberry Pi, the example being a button box and using a relay to route a sound signal to different speakers. Towards the end, showing how to start and parse system or shell processes, and passing key/value properties to Mellite and using it within a control program.
+
+- Wiring push buttons to the Raspberry Pi
+- Using the `GPIO.DigitalIn` object in a widget program
+- Specifying pull-up or pull-down resistors, inverting a signal
+- Attaching a mechanical relay to route an input sound signal to two alternative outputs
+- Using a Logic-Level Converter to lift the 3.3V GPIO output to 5V
+- Using the `GPIO.DigitalOut` object in a widget program
+- Combining input and output in a control program
+- Running shell commands with `Sys.Process`
+- Obtaining properties passed to Mellite with `Sys.Property`
+
 ---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332) (see 17'15" into the video).
