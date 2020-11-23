@@ -4,6 +4,7 @@ import de.sciss.fscape.Graph
 
 trait FScapeRecipes {
   import de.sciss.fscape.graph._
+  import de.sciss.fscape.Ops._
 
   def plain(): Unit = {
     // #fsc-recipe1-plain

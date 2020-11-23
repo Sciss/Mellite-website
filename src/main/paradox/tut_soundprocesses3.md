@@ -1,5 +1,12 @@
 # SP3 - Arranging and Linking
 
+@@@ warning
+
+This tutorial was written for SoundProcesses version 3. The API has undergone significant changes in version 4,
+and consequently this text needs updates.
+
+@@@
+
 So far we have only looked at a singular sound producing `Proc`. This tutorial will address the question of how multiple processes
 can be connected together, and how temporal developments may happen beyond the rather low-level scheduler shown
 in the previous tutorial. We start off with temporal arrangements, and then proceed to the exchange between processes.

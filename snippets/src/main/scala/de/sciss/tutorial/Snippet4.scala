@@ -1,16 +1,15 @@
 package de.sciss.tutorial
 
 // #snippet4
-import de.sciss.lucre.expr.DoubleObj
-import de.sciss.lucre.stm
 import de.sciss.lucre.synth.InMemory
+import de.sciss.lucre.{Cursor, DoubleObj, Source}
+import de.sciss.proc.{Proc, Scheduler, TimeRef, Transport, Universe}
 import de.sciss.synth._
-import de.sciss.synth.proc.{Proc, Scheduler, TimeRef, Transport, Universe}
 import de.sciss.synth.ugen._
 
 object Snippet4 extends App {
-  type S = InMemory
-  implicit val cursor: stm.Cursor[S] = InMemory()
+  type T = InMemory.Txn
+  implicit val cursor: Cursor[T] = InMemory()
 
   val bubbles = SynthGraph {
     import de.sciss.synth.proc.graph.Ops._
@@ -22,8 +21,8 @@ object Snippet4 extends App {
     Out.ar(0, c)
   }
 
-  class PitchMod(sch: Scheduler[S], pchH: stm.Source[S#Tx, DoubleObj.Var[S]]) {
-    def iterate()(implicit tx: S#Tx): Unit = {
+  class PitchMod(sch: Scheduler[T], pchH: Source[T, DoubleObj.Var[T]]) {
+    def iterate()(implicit tx: T): Unit = {
       val pch = pchH()
       pch() = math.random() * 40 + 60
       sch.schedule(sch.time + TimeRef.SampleRate.toLong) { implicit tx =>
@@ -38,7 +37,7 @@ object Snippet4 extends App {
     val pch = DoubleObj.newVar(0.0)
     p.attr.put("pitch", pch)
 
-    val u   = Universe.dummy[S]
+    val u   = Universe.dummy[T]
     val t   = Transport(u)
     val sch = t.scheduler
     val mod = new PitchMod(sch, tx.newHandle(pch))

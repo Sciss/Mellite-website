@@ -1,5 +1,12 @@
 # SP2 - Understanding Objects
 
+@@@ warning
+
+This tutorial was written for SoundProcesses version 3. The API has undergone significant changes in version 4,
+and consequently this text needs updates.
+
+@@@
+
 The introductory tutorial stopped short of going into the _customary_ way SoundProcesses is used, and instead showed the
 transactional variant of ScalaCollider to play a synth. Most of the time, instead of creating instances of `Synth` yourself, you
 will instead manipulate other objects that automatically spawn synths when the server is running and some other conditions are met.

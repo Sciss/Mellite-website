@@ -1,27 +1,27 @@
-lazy val melliteVersion        = "2.50.0"
+lazy val melliteVersion        = "3.2.1"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
 lazy val repoName              = s"$baseName-website"
 
 lazy val deps = new {
-  val audioFile      = "1.5.4"
-  val desktop        = "0.10.5"
-  val fscape         = "2.36.1"
-  val lucre          = "3.17.7"
-  val lucrePi        = "0.1.0"
-  val lucreSwing     = "1.21.0"
-  val nuages         = "2.41.3"
-  val osc            = "1.2.1"
-  val patterns       = "0.20.0"
-  val scalaCollider  = "1.28.5"
-  val serial         = "1.1.2"
-  val soundProcesses = "3.35.10"
-  val span           = "1.4.3"
-  val ugens          = "1.19.7"
+  val audioFile      = "2.3.1"
+  val desktop        = "0.11.3"
+  val fscape         = "3.3.0"
+  val lucre          = "4.2.0"
+  val lucrePi        = "1.2.0"
+  val lucreSwing     = "2.4.1"
+  val nuages         = "3.2.0"
+  val osc            = "1.2.3"
+  val patterns       = "1.2.0"
+  val scalaCollider  = "2.4.0"
+  val serial         = "2.0.0"
+  val soundProcesses = "4.4.0"
+  val span           = "2.0.0"
+  val ugens          = "1.20.0"
 }
 
-scalaVersion in ThisBuild := "2.13.3"
+scalaVersion in ThisBuild := "2.13.4"
 
 mimaFailOnNoPrevious in ThisBuild := false
 
@@ -30,36 +30,88 @@ val commonSettings = Seq(
   version      := PROJECT_VERSION
 )
 
-val lAudioFile          = RootProject(uri(s"https://github.com/Sciss/AudioFile.git#v${deps.audioFile}"))
+val audioFileURI        = uri(s"https://github.com/Sciss/AudioFile.git#v${deps.audioFile}")
+val lAudioFile          = ProjectRef(audioFileURI, "rootJVM")
+val xAudioFile          = ProjectRef(audioFileURI, "rootJS")
+
 val lDesktop            = RootProject(uri(s"https://github.com/Sciss/Desktop.git#v${deps.desktop}"))
 val lLucrePi            = RootProject(uri(s"https://github.com/Sciss/LucrePi.git#v${deps.lucrePi}"))
-val lLucreSwing         = RootProject(uri(s"https://github.com/Sciss/LucreSwing.git#v${deps.lucreSwing}"))
-val lPatterns           = RootProject(uri(s"https://github.com/Sciss/Patterns.git#v${deps.patterns}"))
-val lScalaCollider      = RootProject(uri(s"https://github.com/Sciss/ScalaCollider.git#v${deps.scalaCollider}"))
-val lScalaColliderUGens = RootProject(uri(s"https://github.com/Sciss/ScalaColliderUGens.git#v${deps.ugens}"))
-//val lScalaColliderUGens = RootProject(uri(s"https://github.com/Sciss/ScalaColliderUGens.git#61b0ec131c4ac9fbb934db4d62bed5ccad8dfc2d")) // unidoc problem fix
-val lScalaOSC           = RootProject(uri(s"https://github.com/Sciss/ScalaOSC.git#v${deps.osc}"))
-val lSerial             = RootProject(uri(s"https://github.com/Sciss/Serial.git#v${deps.serial}"))
-val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#v${deps.soundProcesses}"))
-//val lSoundProcesses     = RootProject(uri(s"https://github.com/Sciss/SoundProcesses.git#fb5cb5150344e186805f5f1f78c398077e604f3c")) // sbt-buildinfo issue
-val lSpan               = RootProject(uri(s"https://github.com/Sciss/Span.git#v${deps.span}"))
-// val lMellite            = RootProject(uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}"))
+
+val lucreSwingURI       = uri(s"https://github.com/Sciss/LucreSwing.git#v${deps.lucreSwing}")
+val lLucreSwing         = ProjectRef(lucreSwingURI, "rootJVM")
+val xLucreSwing         = ProjectRef(lucreSwingURI, "rootJS")
+
+val patternsURI         = uri(s"https://github.com/Sciss/Patterns.git#v${deps.patterns}")
+val lPatternsCore       = ProjectRef(patternsURI, "coreJVM")
+val xPatternsCore       = ProjectRef(patternsURI, "coreJS")
+val lPatternsLucre      = ProjectRef(patternsURI, "lucreJVM")
+val xPatternsLucre      = ProjectRef(patternsURI, "lucreJS")
+
+val scalaColliderURI    = uri(s"https://github.com/Sciss/ScalaCollider.git#v${deps.scalaCollider}")
+val lScalaCollider      = ProjectRef(scalaColliderURI, "rootJVM")
+val xScalaCollider      = ProjectRef(scalaColliderURI, "rootJS")
+
+val scalaColliderUGensURI = uri(s"https://github.com/Sciss/ScalaColliderUGens.git#1ec91cd64f621634f261e035500d9b8e27637d47") // sbt-buildinfo issue
+val lScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-api")
+val xScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-apiJS")
+val xScalaColliderUGensAPI3 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-api3_0")
+val xScalaColliderUGensAPI12 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-api2_12")
+val lScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-core")
+val xScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-coreJS")
+val xScalaColliderUGensCore3 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-core3_0")
+val xScalaColliderUGensCore12 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-core2_12")
+val lScalaColliderUGensPlugins = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-plugins")
+val xScalaColliderUGensPlugins = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-pluginsJS")
+val xScalaColliderUGensPlugins3 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-plugins3_0")
+val xScalaColliderUGensPlugins12 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-plugins2_12")
+
+val scalaOSCURI         = uri(s"https://github.com/Sciss/ScalaOSC.git#v${deps.osc}")
+val lScalaOSC           = ProjectRef(scalaOSCURI, "rootJVM")
+val xScalaOSC           = ProjectRef(scalaOSCURI, "rootJS")
+
+// val serialURI           = uri(s"https://github.com/Sciss/Serial.git#v${deps.serial}")
+val serialURI           = uri(s"https://github.com/Sciss/Serial.git#518d3512f851a688914edb8a7bdbe0cd53d00e5d")
+val lSerial             = ProjectRef(serialURI, "rootJVM")
+val xSerial             = ProjectRef(serialURI, "rootJS")
+
+val soundProcessesURI   = uri(s"https://github.com/Sciss/SoundProcesses.git#v${deps.soundProcesses}")
+val lSoundProcessesCore = ProjectRef(soundProcessesURI, "coreJVM")
+val xSoundProcessesCore = ProjectRef(soundProcessesURI, "coreJS")
+val lSoundProcessesSynth = ProjectRef(soundProcessesURI, "synthJVM")
+val xSoundProcessesSynth = ProjectRef(soundProcessesURI, "synthJS")
+val lSoundProcessesViews = ProjectRef(soundProcessesURI, "viewsJVM")
+val xSoundProcessesViews = ProjectRef(soundProcessesURI, "viewsJS")
+
+// val spanURI             = uri(s"https://github.com/Sciss/Span.git#v${deps.span}")
+val spanURI             = uri(s"https://github.com/Sciss/Span.git#7cd849885e855debfea963c1f52524207af406c5")
+val lSpan               = ProjectRef(spanURI, "rootJVM")
+val xSpan               = ProjectRef(spanURI, "rootJS")
 
 val nuagesURI           = uri(s"https://github.com/Sciss/Wolkenpumpe.git#v${deps.nuages}")
 val lNuagesCore         = ProjectRef(nuagesURI, "wolkenpumpe-core")
-val lNuagesBasic        = ProjectRef(nuagesURI, "wolkenpumpe-basic")
+val xNuagesBasic        = ProjectRef(nuagesURI, "wolkenpumpe-basic")
 
 val fscapeURI           = uri(s"https://github.com/Sciss/FScape-next.git#v${deps.fscape}")
-val lFScapeCore         = ProjectRef(fscapeURI, "fscape-core")
-val lFScapeLucre        = ProjectRef(fscapeURI, "fscape-lucre")
+val lFScapeCore         = ProjectRef(fscapeURI, "coreJVM")
+val xFScapeCore         = ProjectRef(fscapeURI, "coreJS")
+val lFScapeLucre        = ProjectRef(fscapeURI, "lucreJVM")
+val xFScapeLucre        = ProjectRef(fscapeURI, "lucreJS")
 val lFScapeViews        = ProjectRef(fscapeURI, "fscape-views")
 
 val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#v${deps.lucre}")
 // val lucreURI            = uri(s"https://github.com/Sciss/Lucre.git#993332e1bafb016e867b4736966c2170e5fefc23")  // unidoc problem fix
-val lLucreAdjunct       = ProjectRef(lucreURI, "lucre-adjunct")
-val lLucreBase          = ProjectRef(lucreURI, "lucre-base")
-val lLucreCore          = ProjectRef(lucreURI, "lucre-core")
-val lLucreExpr          = ProjectRef(lucreURI, "lucre-expr")
+val lLucreAdjunct       = ProjectRef(lucreURI, "adjunctJVM")
+val xLucreAdjunct       = ProjectRef(lucreURI, "adjunctJS")
+val lLucreBase          = ProjectRef(lucreURI, "baseJVM")
+val xLucreBase          = ProjectRef(lucreURI, "baseJS")
+val xLucreConfluent     = ProjectRef(lucreURI, "confluentJS")
+val lLucreCore          = ProjectRef(lucreURI, "coreJVM")
+val xLucreCore          = ProjectRef(lucreURI, "coreJS")
+val lLucreData          = ProjectRef(lucreURI, "dataJVM")
+val xLucreData          = ProjectRef(lucreURI, "dataJS")
+val lLucreExpr          = ProjectRef(lucreURI, "exprJVM")
+val xLucreExpr          = ProjectRef(lucreURI, "exprJS")
+val xLucreGeom          = ProjectRef(lucreURI, "geomJS")
 val lLucreBdb           = ProjectRef(lucreURI, "lucre-bdb")
 
 val melliteURI          = uri(s"https://github.com/Sciss/${baseName}.git#v${PROJECT_VERSION}")
@@ -70,33 +122,42 @@ val lMelliteApp         = ProjectRef(melliteURI, s"$baseNameL-app")
 lazy val lList = Seq(
   lAudioFile,
   lDesktop,
-  lFScapeCore,
-  lFScapeLucre,
-  lFScapeViews,
-  lLucreAdjunct,
-  lLucreBase,
-  lLucreCore,
-  lLucreExpr,
+  lFScapeCore, lFScapeLucre, lFScapeViews,
+  lLucreAdjunct, lLucreBase, lLucreCore, lLucreData, lLucreExpr,
   lLucrePi,
   lLucreSwing,
   lNuagesCore, //  XXX TODO --- this is currently broken, sbt still tries to compile wolkenpumpe-basic which has a macro problem
-  lPatterns,
-  lScalaColliderUGens,
+  lPatternsCore, lPatternsLucre,
+  lScalaColliderUGensAPI, lScalaColliderUGensCore, lScalaColliderUGensPlugins,
   lScalaCollider,
   lScalaOSC,
   lSerial,
-  lSoundProcesses,
+  lSoundProcessesCore, lSoundProcessesSynth, lSoundProcessesViews,
   lSpan,
-  lMelliteCore,
-  lMelliteApp,
+  lMelliteCore, lMelliteApp,
 )
 
 // git.gitCurrentBranch in ThisBuild := "main"
 
 lazy val unidocSettings = Seq(
   // site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
-  mappings in packageDoc in Compile := (mappings  in (ScalaUnidoc, packageDoc)).value,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lNuagesBasic), // -- inProjects(lLucreBdb),
+  mappings in packageDoc in Compile := (mappings in (ScalaUnidoc, packageDoc)).value,
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(
+    xAudioFile, 
+    xFScapeCore, xFScapeLucre, 
+    xLucreAdjunct, xLucreBase, xLucreConfluent, xLucreCore, xLucreData, xLucreExpr, xLucreGeom,
+    xLucreSwing,
+    xPatternsCore, xPatternsLucre,
+    xScalaColliderUGensAPI, xScalaColliderUGensCore, xScalaColliderUGensPlugins,
+    xScalaColliderUGensAPI3, xScalaColliderUGensCore3, xScalaColliderUGensPlugins3,
+    xScalaColliderUGensAPI12, xScalaColliderUGensCore12, xScalaColliderUGensPlugins12,
+    xScalaCollider,
+    xScalaOSC,
+    xSerial,
+    xSoundProcessesCore, xSoundProcessesSynth, xSoundProcessesViews,
+    xSpan,
+    xNuagesBasic
+  ),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value // % "provided" // this is needed for sbt-unidoc to work with macros used by Mellite!
   ),
@@ -117,7 +178,7 @@ lazy val unidocSettings = Seq(
       "de.sciss.lucre.event.impl",
       "de.sciss.lucre.expr.impl",
       "de.sciss.lucre.expr.graph.impl",
-      "de.sciss.lucre.stm.impl",
+      "de.sciss.lucre.impl",
       "de.sciss.lucre.swing.edit",
       "de.sciss.lucre.swing.graph.impl",
       "de.sciss.lucre.swing.impl",
@@ -134,8 +195,8 @@ lazy val unidocSettings = Seq(
       "de.sciss.serial.impl",
       "de.sciss.synth.impl",
       "de.sciss.synth.proc.graph.impl",
-      "de.sciss.synth.proc.gui.impl",
-      "de.sciss.synth.proc.impl",
+      "de.sciss.proc.gui.impl",
+      "de.sciss.proc.impl",
       "de.sciss.synth.ugen.impl",
       "de.sciss.nuages.impl",
       "snippets"

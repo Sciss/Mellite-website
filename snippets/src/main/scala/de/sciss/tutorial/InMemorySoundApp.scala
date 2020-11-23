@@ -2,17 +2,17 @@ package de.sciss.tutorial
 
 // #inmemorysoundapp
 import de.sciss.lucre.synth.InMemory
-import de.sciss.synth.proc.{Transport, Universe}
+import de.sciss.proc.{Transport, Universe}
 
 trait InMemorySoundApp {
-  type S = InMemory
-  implicit val cursor: S = InMemory()
+  type T = InMemory.Txn
+  implicit val cursor = InMemory()
 
   cursor.step { implicit tx =>
-    val u = Universe.dummy[S]
+    val u = Universe.dummy[T]
     u.auralSystem.whenStarted { _ =>
       cursor.step { implicit tx =>
-        val t = Transport[S](u)
+        val t = Transport[T](u)
         run(t)
       }
     }
@@ -21,6 +21,6 @@ trait InMemorySoundApp {
 
   def main(args: Array[String]): Unit = ()
 
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit
+  def run(t: Transport[T])(implicit tx: T): Unit
 }
 // #inmemorysoundapp

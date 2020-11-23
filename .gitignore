@@ -8,3 +8,4 @@ project/boot/
 dependency-graph.sbt
 Mellite.jar
 *.swp
+.bsp/

@@ -1,16 +1,15 @@
 package de.sciss.tutorial
 
-import de.sciss.lucre.expr.IntObj
-import de.sciss.lucre.stm.Folder
+import de.sciss.lucre.{Folder, IntObj}
+import de.sciss.proc._
 import de.sciss.span.Span
 import de.sciss.synth._
-import de.sciss.synth.proc._
 import de.sciss.synth.proc.graph.Ops._
 import de.sciss.synth.proc.graph._
 import de.sciss.synth.ugen._
 
 object Snippet9Var extends InMemorySoundApp {
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
+  def run(t: Transport[T])(implicit tx: T): Unit = {
     implicit class Seconds(d: Double) {
       def seconds: Long = (d * TimeRef.SampleRate).toLong
     }
@@ -28,10 +27,10 @@ object Snippet9Var extends InMemorySoundApp {
       ScanOut(sig)
     }
 
-    val tlProc  = Timeline[S]()
-    val fOut    = Folder[S]
+    val tlProc  = Timeline[T]()
+    val fOut    = Folder[T]()
     for (i <- 0 to 15) {
-      val pOsc  = Proc[S]
+      val pOsc  = Proc[T]()
       pOsc.graph() = gOsc
       val pitch = i.linLin(0, 15, 30, 110).toInt
       pOsc.attr.put("pitch", IntObj.newConst(pitch))
@@ -50,7 +49,7 @@ object Snippet9Var extends InMemorySoundApp {
       val sig = in + Mix.fill(2)(CombL.ar(y, 0.06, LFNoise1.kr(Rand(0, 0.3)).mulAdd(0.025, 0.035), 1))
       Out.ar(0, sig)
     }
-    val pVerb = Proc[S]()
+    val pVerb = Proc[T]()
     pVerb.attr.put("in", fOut)
     pVerb.graph() = gVerb
 

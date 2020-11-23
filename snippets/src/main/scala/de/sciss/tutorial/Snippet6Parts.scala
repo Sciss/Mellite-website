@@ -1,11 +1,11 @@
 package de.sciss.tutorial
 
-import de.sciss.lucre.expr.IntObj
+import de.sciss.lucre.IntObj
+import de.sciss.proc.{Grapheme, Proc, TimeRef, Transport}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{Grapheme, Proc, TimeRef, Transport}
 
 trait Snippet6Parts extends InMemorySoundApp {
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
+  def run(t: Transport[T])(implicit tx: T): Unit = {
     val piano = SynthGraph {
       import de.sciss.synth._
       import de.sciss.synth.proc.graph.Ops._
@@ -36,7 +36,7 @@ trait Snippet6Parts extends InMemorySoundApp {
       Out.ar(0, sig)
     }
 
-    val p = Proc[S]()
+    val p = Proc[T]()
     p.graph() = piano
     // #snippet6attr
     val pitches = Seq(
@@ -48,7 +48,7 @@ trait Snippet6Parts extends InMemorySoundApp {
       (64,74), (65,76), (66,77), (67,79), (68,81), (69,72), (70,74), (71,76), (72,74), (73,71), (74,74) // ...
     )
 
-    val g = Grapheme[S]()
+    val g = Grapheme[T]()
     pitches.foreach { case (beat, pch) =>
       val time = (beat * 0.5 * TimeRef.SampleRate).toLong
       g.add(time, IntObj.newConst(pch))

@@ -1,13 +1,13 @@
 package de.sciss.tutorial
 
 // #snippet8
+import de.sciss.proc.{Proc, Transport}
 import de.sciss.synth._
 import de.sciss.synth.proc.graph._
-import de.sciss.synth.proc.{Proc, Transport}
 import de.sciss.synth.ugen._
 
 object Snippet8 extends InMemorySoundApp {
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
+  def run(t: Transport[T])(implicit tx: T): Unit = {
     val gOsc = SynthGraph {
       val freq = SinOsc.kr(4).mulAdd(1, 80).max(
         Decay.ar(LFPulse.ar(0.1, 0, 0.05) * Impulse.ar(8) * 500, 2)
@@ -16,7 +16,7 @@ object Snippet8 extends InMemorySoundApp {
       val pulse = Pulse.ar(freq, width) * 0.04
       ScanOut(pulse)
     }
-    val pOsc = Proc[S]()
+    val pOsc = Proc[T]()
     pOsc.graph() = gOsc
     val outOsc = pOsc.outputs.add("out")
 
@@ -25,7 +25,7 @@ object Snippet8 extends InMemorySoundApp {
       val res = RLPF.ar(in, LFNoise1.kr(0.2).mulAdd(2000, 2400), 0.2)
       ScanOut(res)
     }
-    val pRes = Proc[S]()
+    val pRes = Proc[T]()
     pRes.graph() = gRes
     pRes.attr.put("in", outOsc)
     val outRes = pRes.outputs.add("out")
@@ -39,7 +39,7 @@ object Snippet8 extends InMemorySoundApp {
       )
       Out.ar(0, sig)
     }
-    val pVerb = Proc[S]()
+    val pVerb = Proc[T]()
     pVerb.graph() = gVerb
     pVerb.attr.put("in", outRes)
 

@@ -1,13 +1,13 @@
 package de.sciss.tutorial
 
 // #snippet7
-import de.sciss.lucre.expr.DoubleVector
+import de.sciss.lucre.DoubleVector
+import de.sciss.proc.{Proc, TimeRef, Timeline, Transport}
 import de.sciss.span.Span
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{Proc, TimeRef, Timeline, Transport}
 
 object Snippet7 extends InMemorySoundApp {
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
+  def run(t: Transport[T])(implicit tx: T): Unit = {
     val piano = SynthGraph {
       import de.sciss.synth._
       import de.sciss.synth.proc.graph.Ops._
@@ -28,9 +28,9 @@ object Snippet7 extends InMemorySoundApp {
       Out.ar(0, Mix(sig))
     }
 
-    val tl = Timeline[S]()
+    val tl = Timeline[T]()
     for (i <- 0 until 30) {
-      val p       = Proc[S]()
+      val p       = Proc[T]()
       p.graph()   = piano
       import de.sciss.numbers.Implicits._
       val pitches = Vector.fill(i/5 + 1)(math.random().linLin(0, 1, 49, 76) + i)

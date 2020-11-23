@@ -1,8 +1,8 @@
 package de.sciss.tutorial
 
-import de.sciss.lucre.synth.{InMemory, Server, Synth, Txn}
+import de.sciss.lucre.synth.{InMemory, RT, Server, Synth}
+import de.sciss.proc.AuralSystem
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.AuralSystem
 
 trait Snippet1Parts {
   // #snippet1systems
@@ -26,12 +26,12 @@ trait Snippet1Parts {
   // #snippet1txn
   cursor.step { implicit tx =>
     aural.addClient(new AuralSystem.Client {
-      def auralStarted(s: Server)(implicit tx: Txn): Unit = {
+      def auralStarted(s: Server)(implicit tx: RT): Unit = {
         val syn = Synth.play(bubbles)(s)
         syn.onEnd(sys.exit())
       }
 
-      def auralStopped()(implicit tx: Txn): Unit = ()
+      def auralStopped()(implicit tx: RT): Unit = ()
     })
 
     aural.start()
@@ -54,12 +54,12 @@ trait Snippet1Parts {
 
   new AuralSystem.Client {
     // #snippet1started
-    def auralStarted(s: Server)(implicit tx: Txn): Unit = {
+    def auralStarted(s: Server)(implicit tx: RT): Unit = {
       val syn = Synth.play(bubbles)(s)
       syn.onEnd(sys.exit())
     }
     // #snippet1started
 
-    def auralStopped()(implicit tx: Txn): Unit = ()
+    def auralStopped()(implicit tx: RT): Unit = ()
   }
 }

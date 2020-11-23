@@ -1,9 +1,9 @@
 package de.sciss.tutorial
 
 // #snippet1
-import de.sciss.lucre.synth.{InMemory, Server, Synth, Txn}
+import de.sciss.lucre.synth.{InMemory, RT, Server, Synth}
+import de.sciss.proc.AuralSystem
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.AuralSystem
 
 object Snippet1 extends App {
   val cursor  = InMemory()
@@ -22,12 +22,12 @@ object Snippet1 extends App {
 
   cursor.step { implicit tx =>
     aural.addClient(new AuralSystem.Client {
-      def auralStarted(s: Server)(implicit tx: Txn): Unit = {
+      def auralStarted(s: Server)(implicit tx: RT): Unit = {
         val syn = Synth.play(bubbles)(s)
         syn.onEnd(sys.exit())
       }
 
-      def auralStopped()(implicit tx: Txn): Unit = ()
+      def auralStopped()(implicit tx: RT): Unit = ()
     })
 
     aural.start()

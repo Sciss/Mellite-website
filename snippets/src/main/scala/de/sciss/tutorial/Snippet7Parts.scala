@@ -1,12 +1,12 @@
 package de.sciss.tutorial
 
-import de.sciss.lucre.expr.DoubleVector
+import de.sciss.lucre.DoubleVector
+import de.sciss.proc.{Proc, TimeRef, Timeline, Transport}
 import de.sciss.span.Span
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{Proc, TimeRef, Timeline, Transport}
 
 trait Snippet7Parts extends InMemorySoundApp {
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
+  def run(t: Transport[T])(implicit tx: T): Unit = {
     val piano = SynthGraph {
       import de.sciss.synth._
       import de.sciss.synth.proc.graph.Ops._
@@ -19,9 +19,9 @@ trait Snippet7Parts extends InMemorySoundApp {
       strike
     }
 
-    val tl = Timeline[S]()
+    val tl = Timeline[T]()
     for (i <- 0 until 30) {
-      val p       = Proc[S]()
+      val p       = Proc[T]()
       p.graph()   = piano
       // #snippet7vec
       import de.sciss.numbers.Implicits._

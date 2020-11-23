@@ -1,16 +1,15 @@
 package de.sciss.tutorial
 
 // #snippet3
-import de.sciss.lucre.expr.DoubleObj
-import de.sciss.lucre.stm
 import de.sciss.lucre.synth.InMemory
+import de.sciss.lucre.{Cursor, DoubleObj}
+import de.sciss.proc.{Proc, Transport, Universe}
 import de.sciss.synth._
-import de.sciss.synth.proc.{Proc, Transport, Universe}
 import de.sciss.synth.ugen._
 
 object Snippet3 extends App {
-  type S = InMemory
-  implicit val cursor: stm.Cursor[S] = InMemory()
+  type T = InMemory.Txn
+  implicit val cursor: Cursor[T] = InMemory()
 
   val bubbles = SynthGraph {
     import de.sciss.synth.proc.graph.Ops._
@@ -23,11 +22,11 @@ object Snippet3 extends App {
   }
 
   val pH = cursor.step { implicit tx =>
-    val p = Proc()
+    val p = Proc[T]()
     p.graph() = bubbles
     p.attr.put("freq", DoubleObj.newConst(8.0))
 
-    val u = Universe.dummy[S]
+    val u = Universe.dummy[T]
     val t = Transport(u)
     t.addObject(p)
     t.play()

@@ -1,15 +1,15 @@
 package de.sciss.tutorial
 
-import de.sciss.lucre.stm
+import de.sciss.lucre.Cursor
 import de.sciss.lucre.synth.InMemory
+import de.sciss.proc.{AuralSystem, Proc, Transport, Universe}
 import de.sciss.synth._
-import de.sciss.synth.proc.{AuralSystem, Proc, Transport, Universe}
 import de.sciss.synth.ugen._
 
 trait Snippet2Parts {
   // #snippet2implicits
-  type S = InMemory
-  implicit val cursor: stm.Cursor[S] = InMemory()
+  type T = InMemory.Txn
+  implicit val cursor: Cursor[T] = InMemory()
   // #snippet2implicits
 
   val aural = AuralSystem()
@@ -24,12 +24,12 @@ trait Snippet2Parts {
 
   cursor.step { implicit tx =>
     // #snippet2proc
-    val p = Proc()
+    val p = Proc[T]()
     p.graph() = bubbles
     // #snippet2proc
 
     // #snippet2transport
-    val u = Universe.dummy[S]
+    val u = Universe.dummy[T]
     val t = Transport(u)
     t.addObject(p)
     t.play()

@@ -1,14 +1,14 @@
 package de.sciss.tutorial
 
-import de.sciss.lucre.stm.Folder
+import de.sciss.lucre.Folder
+import de.sciss.proc._
 import de.sciss.span.Span
 import de.sciss.synth._
-import de.sciss.synth.proc._
 import de.sciss.synth.proc.graph._
 import de.sciss.synth.ugen._
 
 trait Snippet9Parts extends InMemorySoundApp {
-  def run(t: Transport[S])(implicit tx: S#Tx): Unit = {
+  def run(t: Transport[T])(implicit tx: T): Unit = {
     // #snippet9sec
     implicit class Seconds(d: Double) {
       def seconds: Long = (d * TimeRef.SampleRate).toLong
@@ -16,10 +16,10 @@ trait Snippet9Parts extends InMemorySoundApp {
     // #snippet9sec
 
     // #snippet9tl
-    val tlProc  = Timeline[S]()
-    val fOut    = Folder[S]
+    val tlProc  = Timeline[T]()
+    val fOut    = Folder[T]()
     for (i <- 0 to 15) {
-      val pOsc  = Proc[S]()
+      val pOsc  = Proc[T]()
       // ...
       // #snippet9tl
       val dur   = math.random().linLin(0, 1, 10, 20)
@@ -39,7 +39,7 @@ trait Snippet9Parts extends InMemorySoundApp {
       Out.ar(0, sig)
     }
     // #snippet9in
-    val pVerb = Proc[S]()
+    val pVerb = Proc[T]()
     pVerb.attr.put("in", fOut)
     // #snippet9in
     pVerb.graph() = gVerb

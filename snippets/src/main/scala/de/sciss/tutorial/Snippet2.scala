@@ -1,15 +1,15 @@
 package de.sciss.tutorial
 
 // #snippet2
-import de.sciss.lucre.stm
+import de.sciss.lucre.Cursor
 import de.sciss.lucre.synth.InMemory
+import de.sciss.proc.{Proc, Transport, Universe}
 import de.sciss.synth._
-import de.sciss.synth.proc.{Proc, Transport, Universe}
 import de.sciss.synth.ugen._
 
 object Snippet2 extends App {
-  type S = InMemory
-  implicit val cursor: stm.Cursor[S] = InMemory()
+  type T = InMemory.Txn
+  implicit val cursor: Cursor[T] = InMemory()
 
   val bubbles = SynthGraph {
     val o   = LFSaw.kr(Seq(8.0, 7.23)).mulAdd(3, 80)
@@ -20,10 +20,10 @@ object Snippet2 extends App {
   }
 
   cursor.step { implicit tx =>
-    val p = Proc()
+    val p = Proc[T]()
     p.graph() = bubbles
 
-    val u = Universe.dummy[S]
+    val u = Universe.dummy[T]
     val t = Transport(u)
     t.addObject(p)
     t.play()
