@@ -1,12 +1,5 @@
 # SP2 - Understanding Objects
 
-@@@ warning
-
-This tutorial was written for SoundProcesses version 3. The API has undergone significant changes in version 4,
-and consequently this text needs updates.
-
-@@@
-
 The introductory tutorial stopped short of going into the _customary_ way SoundProcesses is used, and instead showed the
 transactional variant of ScalaCollider to play a synth. Most of the time, instead of creating instances of `Synth` yourself, you
 will instead manipulate other objects that automatically spawn synths when the server is running and some other conditions are met.
@@ -14,12 +7,12 @@ In this second tutorial I will introduce this approach to creating sounding obje
 
 ## The Core Object: Proc
 
-The SoundProcesses way of referring to a synth is an object of type [`Proc`](latest/api/de/sciss/synth/proc/Proc.html).
+The SoundProcesses way of referring to a synth is an object of type [`Proc`](latest/api/de/sciss/proc/Proc.html).
 The function of `Proc` is threefold:
 
 - its method `graph` points to the `SynthGraph`, and it is variable that can be updated
 - its method `outputs` points to an interface for creating outlets that can be patched into other objects (not used in this tutorial)
-- it implements the [`Obj`](latest/api/de/sciss/lucre/stm/Obj.html) trait or "protocol", a uniform
+- it implements the [`Obj`](latest/api/de/sciss/lucre/Obj.html) trait or "protocol", a uniform
   way all sorts of objects are modelled in SoundProcesses
 
 Before I explain what this means, let us look at another example snippet `Snippet2` that shows the usage of `Proc`:
@@ -34,20 +27,23 @@ I will discuss the changes step by step, beginning with the initialisation:
 @@snip [Snippet2 Implicits]($sp_tut$/Snippet2Parts.scala) { #snippet2implicits }
 
 The first line contains a so-called _type-alias_. In Scala, a type-alias does not create a new type, but simply introduces a new name for
-an existing type. In SoundProcesses, many objects require as type parameter the type of system&mdash;in-memory, durable, confluent&mdash;and
-we can avoid having to insert the particular system type we choose, here `InMemory`, in many places. So in the following lines, whenever
-you see the application of `[S]`, this is just aliased to `[InMemory]`. However, should we eventually decide to change the system type, for example to
-`Durable`, the only change that needs to be made to the program is to rewrite the type-alias as `type S = Durable`.
-Don't confuse `S` as a type parameter in the _definition_ of a method and class, with `S` as an alias to a concrete
-type used in the _invocation_ of a method or instantiation of class. We just happen to use the same letter `S` which is short and 
+an existing type. In SoundProcesses, many objects require as type parameter the type of transaction—in-memory, durable, confluent—and
+we can avoid having to insert the particular transaction type we choose, here `InMemory.Txn`, in many places. So in the following lines, whenever
+you see the application of `[T]`, this is just aliased to `[InMemory.Txn]`. However, should we eventually decide to change the transaction type, for example to
+`Durable.Txn`, the only change that needs to be made to the program is to rewrite the type-alias as `type T = Durable.Txn`.
+Don't confuse `T` as a type parameter in the _definition_ of a method and class, with `T` as an alias to a concrete
+type used in the _invocation_ of a method or instantiation of class. We just happen to use the same letter `T` which is short and 
 easy to remember.
 
-The next line adds an `implicit` modifier to the cursor, and we also annotate the value type explicitly with `stm.Cursor[S]` (note that `stm`
-was imported in the very beginning through `import de.sciss.lucre.stm`; I just prefer to write `stm.Cursor` instead of `Cursor` which could be
-confused with other types of cursors). The reason for marking this value implicit is that when the
-`Transport` object is created further down, it requires an implicit parameter of type `Cursor[S]`, and we therefore make it visible here, so the
-compiler will find it.
-The type annotation `: stm.Cursor[S]` is not necessary, strictly speaking, because Scala will otherwise infer the type automatically. But 
+The next line adds an `implicit` modifier to the cursor, and we also annotate the value type explicitly with `Cursor[T]`.
+The reason for marking this value implicit is that when the
+`Universe` object is created further down, it requires an implicit parameter of type `Cursor[T]`, and we therefore make it visible here, so the
+compiler will find it. In IntelliJ, you can enable _View > Show Implicit Hints_ to see when Scala
+actually uses implicit parameters:
+
+![IC Show_Implicit_Hints](.../tut_sp_idea_show_implicit_hints.png)
+
+The type annotation `: Cursor[T]` is not necessary, strictly speaking, because Scala will otherwise infer the type automatically. But 
 it is good practice to always specify the types of implicit values, because it avoids surprises and ambiguities in the compiler's search for implicit
 values. We could also have chosen to use the more precise type `: InMemory` here, but we never need to refer to this value as this particular
 system, so the more general type is sufficient and therefore better indicates the use case.
@@ -62,18 +58,18 @@ It may not be obvious that `Proc[S]()` _instantiates_ a class, so let's look at 
 
 ```scala
 object Proc {
-  def apply[S <: Sys[S]]()(implicit tx: S#Tx): Proc[S] = ...
+  def apply[T <: Txn[T]]()(implicit tx: T): Proc[T] ...
 }
 ```
 
 This is the companion object of the trait (type) `Proc`. Often we create instances of classes and traits not through `new ClassName`
-but through a method on their companion object. This is the case here. But should that call then not have been `Proc.apply[S]()`?
+but through a method on their companion object. This is the case here. But should that call then not have been `Proc.apply[T]()`?
 
 @@@ note
 
 Scala offers a very convenient shortcut: When a method is called `apply`, we can remove that method selection in the invocation
 and jump right to the type parameters and arguments.
-So instead of `Proc.apply[S]()`, we can just write `Proc[S]()` and Scala will fill in the `.apply`.
+So instead of `Proc.apply[T]()`, we can just write `Proc[T]()` and Scala will fill in the `.apply`.
 
 @@@
 
@@ -84,11 +80,11 @@ here, because the argument is a function, although parameterless).
 Next is `p.graph() = bubbles`. The `graph` method is defined as follows:
 
 ```scala
-def graph: SynthGraphObj.Var[S] 
+def graph: Proc.GraphObj.Var[T]
 ```
 
 There is another, related shortcut here in Scala. The call we're making is actually `p.graph.update(bubbles)`, where `update` is a method
-on the `SynthGraphObj.Var` type, which I will talk about in a second. So when a method on some object `x` is `def update(v: A): Unit`, we can use the alternative
+on the `Proc.GraphObj.Var` type, which I will talk about in a second. So when a method on some object `x` is `def update(v: A): Unit`, we can use the alternative
 syntax `x() = v`. This is really cool, because we can define mutable cells or variables that way:
 
 @@snip [Apply and Update - Cell]($sp_tut$/ApplyUpdate.scala) { #cell }
@@ -102,41 +98,42 @@ Scala uses this principle in many cases. Take for example arrays:
 @@snip [Apply and Update - Array]($sp_tut$/ApplyUpdate.scala) { #array }
 
 This also works when we have an additional implicit argument list. This is the case for `SynthGraphObj.Var` which is an extension
-of [stm.Var](latest/api/de/sciss/lucre/stm/Var.html):
+of [Var](latest/api/de/sciss/lucre/Var.html):
 
 @@snip [Apply and Update - Var]($sp_tut$/ApplyUpdate.scala) { #var }
 
-What is the element type `A` in the case of `SynthGraphObj.Var`? It is `SynthGraphObj`. It is defined as [follows](latest/api/de/sciss/synth/proc/SynthGraphObj.html):
+What is the element type `A` in the case of `Proc.GraphObj.Var`? It is `Proc.GraphObj`. 
+It is defined as [follows](latest/api/de/sciss/proc/Proc$$GraphObj.html):
 
 ```scala
-trait SynthGraphObj[S <: Sys[S]] extends Expr[S, SynthGraph]
+trait GraphObj[T <: Txn[T]] extends Expr[T, SynthGraph]
 ```
 
-The type `Expr[S, A]` is ubiquitous in SoundProcesses.
+The type `Expr[T, A]` is ubiquitous in SoundProcesses.
 
 @@@ note
 
-An expression `Expr[S, A]` is an object that "evaluates" to a primitive or immutable
-value of type `A` when calling the `value` method inside a transaction of type `S#Tx`.
+An expression `Expr[T, A]` is an object that "evaluates" to a primitive or immutable
+value of type `A` when calling the `value` method inside a transaction of type `T`.
 
 @@@
 
-There are many types of expressions in SoundProcesses, for example `IntObj[S]` which is an
-`Expr[S, Int]`, `StringObj[S]` which is an `Expr[S, String]`, `BooleanObj[S]` which is an `Expr[S, Boolean]`, and so on. Expressions usually include
+There are many types of expressions in SoundProcesses, for example `IntObj[T]` which is an
+`Expr[T, Int]`, `StringObj[T]` which is an `Expr[T, String]`, `BooleanObj[T]` which is an `Expr[T, Boolean]`, and so on. Expressions usually include
 a _constant_ sub-type that simply wraps the primitive value, a _variable_ type that holds another expression of the same type that can be exchanged,
-and often also _unary_ and _binary_ operations&mdash;for example, in the case of `IntObj`, the unary negation or the binary addition of two integer
+and often also _unary_ and _binary_ operations—for example, in the case of `IntObj`, the unary negation or the binary addition of two integer
 expressions. Expressions are _reactive_ in that they participate in SoundProcesses' event dispatch system. If the value of an expression changes,
-that information propagates along all objects that observe the expression. So when we write `p.graph() = bubbles`&mdash;i.e. we call the `update` method
-of the expression variable `graph` of type `SynthGraphObj.Var`&mdash;the new value stored in that expression will be detected by any other object in the
+that information propagates along all objects that observe the expression. So when we write `p.graph() = bubbles`—i.e. we call the `update` method
+of the expression variable `graph` of type `GraphObj.Var`—the new value stored in that expression will be detected by any other object in the
 system watching that expression variable. If the process was playing on the sound synthesis server, the layer that is responsible for the playback would
 be notified that the graph changed and thus replace the old synth with a new synth.
 
 There is only one last bit to explain in the synth-graph assignment: An expression variable must be updated with an expression of the same type, so
-`SynthGraphObj` here. But it seems as if we can put a primitive value of type `SynthGraph` here directly, namely `bubbles`. In order to avoid ceremony,
+`GraphObj` here. But it seems as if we can put a primitive value of type `SynthGraph` here directly, namely `bubbles`. In order to avoid ceremony,
 SoundProcesses permits this by __automatically lifting primitive values to their respective expressions.__ So the call performed really is
 
 ```scala
-p.graph.update(SynthGraphObj.newConst[S](bubbles))
+p.graph.update(Proc.GraphObj.newConst[T](bubbles))
 ```
 
 Obviously, writing `p.graph() = bubbles` is much nicer. The next snippet will make this mechanism perhaps more obvious, as we update numeric
@@ -144,16 +141,16 @@ expressions controlling a synthesis parameter.
 
 ## Attribute Map of an Obj
 
-Both `Expr` and `Proc` are sub-types of [`Obj`](latest/api/de/sciss/lucre/stm/Obj.html), the basic unit of (possibly stateful) objects in SoundProcesses.
+Both `Expr` and `Proc` are sub-types of [`Obj`](latest/api/de/sciss/lucre/Obj.html), the basic unit of (possibly stateful) objects in SoundProcesses.
 `Obj` defines the following properties:
 
-- an `id` method that gives a unique value, the format of which depends on the system `S` chosen. This identifier is used for example in the
-  database persistence, when the system is durable.
+- an `id` method that gives a unique value, the format of which depends on the transaction type `T` chosen. 
+  This identifier is used for example in the database persistence, when the system is durable.
 - it can be persisted, i.e. written to and read from a workspace database
 - a `dispose` method allows us to remove an object from our system, freeing observers and resources associated with it.
 - the `changed` method gives access to an event bus system for monitoring changes to the object
 - most relevant to us, the `attr` method gives access to a dictionary associated with the object, the so-called
-  attribute map with type [`AttrMap`](latest/api/de/sciss/lucre/stm/Obj$.html#AttrMap[S<:de.sciss.lucre.stm.Sys[S]]=de.sciss.lucre.event.Map.Modifiable[S,String,de.sciss.lucre.stm.Obj]).
+  attribute map with type [`AttrMap`](latest/api/de/sciss/lucre/Obj$.html#AttrMap[T%3C:de.sciss.lucre.Txn[T]]=de.sciss.lucre.MapObj.Modifiable[T,String,de.sciss.lucre.Obj]).
 
 Using the attribute map, it is easy to annotate objects with additional information. It's SoundProcesses' way of contextualising objects
 and linking them together. The concept of a heterogeneous dictionary is well known from dynamically typed languages. It is a simple way to
@@ -183,7 +180,7 @@ we set the initial value that will be picked up by the synth:
 The attribute key `"freq"` is purely by convention, we could have used a different name, but we must ensure that we refer to the same key
 inside the synth-graph function, otherwise the value would not be found. Here, the automatic lifting from the primitive `8.0` to a `DoubleObj`
 does not kick in, because the Scala compiler has no idea what kind of `Obj` we want to create. That is the reason why we have to explicitly
-construct that object through `DoubleObj.newConst`. The type parameter `S` is inferred however, as it is required by a `Proc[S]`, so we do
+construct that object through `DoubleObj.newConst`. The type parameter `T` is inferred however, as it is required by a `Proc[T]`, so we do
 not have to repeat it.
 
 We use a "poor man's procedure" to update the attribute eight seconds (8000 milliseconds) later. We must be careful not to block the transaction,
@@ -193,23 +190,11 @@ very odd, and that's this at the periphery:
 
 @@snip [Snippet3 Tx Handle]($sp_tut$/Snippet3Parts.scala) { #snippet3txhandle }
 
-Note how the original assignment `val p = Proc[S]()` is inside the first `cursor.step` block, so that local variable would not be visible in
+Note how the original assignment `val p = Proc[T]()` is inside the first `cursor.step` block, so that local variable would not be visible in
 the next `cursor.step` block. We therefore return something from the first block to the _outer scope_, so we can use it again in the next
 nested scope. Why did we not just write:
 
-```scala
-val p = cursor.step { implicit tx =>
-  val p0 = Proc[S]()
-  // ...
-  p0 // this is the functions return value and thus becomes the outer `p`
-}
-
-// ...
-
-cursor.step { implicit tx =>
-  p.attr.put("freq", DoubleObj.newConst(0.1))
-}
-```
+@@snip [Snippet3 No Proc Handle]($sp_tut$/Snippet3Alt.scala) { #snippet3noprochandle }
 
 ? To be clear, this would indeed have worked in this case! There is however one system, `Confluent`, where we have to "refresh" transactional
 objects if we use them across different transactions. The mechanism by which that is done is to return from the transaction where an object
@@ -241,7 +226,7 @@ representations of the same model at the same time.
 A transport is created with a "universe" as parameter. A `Universe` is a context that holds together various useful
 things, such as a handle to workspace, a scheduler, an aural-system, etc. We do not use an actual workspace
 here, so we can shortcut its creation by using `Universe.dummy`. Normally,
-a [`Workspace`](latest/api/de/sciss/lucre/stm/Workspace.html) allows
+a [`Workspace`](latest/api/de/sciss/lucre/Workspace.html) allows
 objects to register callbacks for when the workspace closes. For example, the transport registers itself with a
 workspace in order to ensure that it stops and frees resources if the corresponding workspace closes.
 
@@ -274,7 +259,7 @@ overwriting the attribute map entry again:
 @@snip [Snippet4 Double Var]($sp_tut$/Snippet4Parts.scala) { #snippet4pitchvar }
 
 Remember that `DoubleObj.newVar(0.0)` is
-shorthand for `DoubleObj.newVar[S](DoubleObj.newConst[S](0.0))` (in some cases, the system type parameter `S` is also
+shorthand for `DoubleObj.newVar[T](DoubleObj.newConst[T](0.0))` (in some cases, the transaction type parameter `T` is also
 automatically inferred by Scala).
 The initial value of `0.0` does not matter, as we're going to change it few lines further down: We are creating an instance of an auxiliary class
 `PitchMod` with its parameters being the _scheduler_ of the transport, available through `t.scheduler` and a transactional handle of the double
@@ -287,7 +272,7 @@ before, this is not strictly necessary if the system is in-memory. Now let's see
 
 @@snip [Snippet4 Mod Class]($sp_tut$/Snippet4Parts.scala) { #snippet4modclass }
 
-First, you can see what the type of the transactional handle is: `stm.Source[S#Tx, DoubleObj.Var[S]]`. An `stm.Source` (the handle)
+First, you can see what the type of the transactional handle is: `Source[T, DoubleObj.Var[T]]`. An `Source` (the handle)
 has a single method `apply()` that
 returns a fresh version of the encapsulated object. The transactional `iterate` method does exactly that in its first line, it creates a
 fresh version of the pitch variable `val pch = pchH()`, then updates it with a random value. `math` is an object that belongs to the Scala
@@ -296,10 +281,10 @@ standard library and lives in the `scala.` package, so we can use it directly wi
 and addition, we bring it into the range of 60 to 100; as a midi pitch, that means we produce a frequency between 261.6 Hz and 2637.0 Hz.
 The system that maintains the synth for the proc sees this update and automatically adjusts the control value inside the UGen graph.
 
-The `schedule` method of the [`Scheduler`](latest/api/de/sciss/synth/proc/Scheduler.html) is straight forward:
+The `schedule` method of the [`Scheduler`](latest/api/de/sciss/proc/Scheduler.html) is straight forward:
 
 ```scala
-def schedule(time: Long)(fun: S#Tx => Unit)(implicit tx: S#Tx): Int
+def schedule(time: Long)(fun: T => Unit)(implicit tx: T): Int
 ```
 
 The first argument list consists of one argument for the time of the scheduled event, in the second list, there is an argument for a function that takes
@@ -319,7 +304,7 @@ we can simply add the current time to the desired delay.
 
 In SoundProcesses, we avoid floating point numbers for time values, as they are prone to rounding errors. We also avoid having to remember
 particular sampling rates. Therefore, time values in most cases are __sample frames with respect to an artificial sampling rate given by
-TimeRef.SampleRate__. That sampling rate, if you [look it up](latest/api/de/sciss/synth/proc/TimeRef$.html), has the value 1.4112e7 or
+TimeRef.SampleRate__. That sampling rate, if you [look it up](latest/api/de/sciss/proc/TimeRef$.html), has the value 1.4112e7 or
 14112000.0. That weird number is the least common multiple of 88,200 and 96,000. It was chosen to be able to represent without
 loss basically all sample rates in use for audio applications. It has an integer division with 44,100 up to 96,000. Since time values
 are represented by 64-bit long integer values, there is no problem using this very fine resolution, we still have enough bits to
@@ -336,6 +321,5 @@ scheduling the next period.
 It may have been surprising that we can define a custom class `PitchMod` anywhere in the source code. This is part of Scala's philosophy
 of regularity&mdash;it allows you to introduce any of its abstractions within the context where you need them, and it does not introduce artificial
 restrictions on where those abstractions can be defined. `PitchMod` really is just a helper created for this particular case here,
-grouping together _data_&mdash;the
-scheduler instance and the expression variable&mdash;with _behaviour_&mdash;the `iterate` method.
+grouping together _data_—the scheduler instance and the expression variable—with _behaviour_&mdash;the `iterate` method.
 

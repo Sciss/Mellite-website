@@ -1,21 +1,15 @@
 # SP3 - Arranging and Linking
 
-@@@ warning
-
-This tutorial was written for SoundProcesses version 3. The API has undergone significant changes in version 4,
-and consequently this text needs updates.
-
-@@@
-
 So far we have only looked at a singular sound producing `Proc`. This tutorial will address the question of how multiple processes
 can be connected together, and how temporal developments may happen beyond the rather low-level scheduler shown
 in the previous tutorial. We start off with temporal arrangements, and then proceed to the exchange between processes.
 
 ## Graphemes
 
-There are two objects in SoundProcesses that associate other objects with temporal positions: [`Grapheme`](latest/api/de/sciss/synth/proc/Grapheme.html)
-and [`Timeline`](latest/api/de/sciss/synth/proc/Timeline.html). If you look up the API docs, you'll see that `Grapheme` derives from a type
-`BiPin[S, A]` where the element type `A` is fixed to `Obj`, and likewise `Timeline` derives from `BiGroup[S, A]` with a fixed element type `A` of `Obj`.
+There are two objects in SoundProcesses that associate other objects with temporal positions: [`Grapheme`](latest/api/de/sciss/proc/Grapheme.html)
+and [`Timeline`](latest/api/de/sciss/proc/Timeline.html). If you look up the API docs, you'll see that `Grapheme` derives from a type
+`BiPin[T, A]` where the element type `A` is fixed to `Obj[T]`, and likewise `Timeline` derives from `BiGroup[T, A]` 
+with a fixed element type `A` of `Obj[T]`.
 A current limitation of the `Obj`  type system is that type parameters can not be represented, and therefore we need particular sub-types to
 fix type parameters, in this case the most generic type `Obj`. The difference between the two is as follows:
 
@@ -25,14 +19,14 @@ fix type parameters, in this case the most generic type `Obj`. The difference be
   as a sorted list, so it allows efficient queries by time.
 - a `Timeline` is similar to a timeline in a multi-track editor, such that its elements are associated with _time spans_, and at any
   time there may be zero, one, or multiple overlapping elements. The time spans are specified as `SpanLikeObj`, which is an
-  `Expr[S, SpanLike]`, and the primitive type [`SpanLike`](latest/api/de/sciss/span/SpanLike.html) can be either a bounded `Span(start, stop)`, or an open
+  `Expr[T, SpanLike]`, and the primitive type [`SpanLike`](latest/api/de/sciss/span/SpanLike.html) can be either a bounded `Span(start, stop)`, or an open
   interval such as `Span.From(start)` or `Span.Until(stop)`. There are also special cases `Span.Void` (empty) and `Span.All` (infinite duration).
   A timeline allows efficient queries by points in time or time intervals.
 
 @@@ note
 
 If you have used the timeline editor in Mellite, you have basically edited a `Timeline` object. On the other hand, editors for
-`Grapheme` breakpoint functions are, as of this writing, not yet fully implemented in the Mellite GUI.
+`Grapheme` breakpoint functions are, as of this writing, only rudimentarily implemented in the Mellite GUI.
 
 @@@
 
@@ -46,7 +40,7 @@ Before we kick off, here is an example trait we can "mix in" to our next snippet
 
 @@snip [In-memory sound app]($sp_tut$/InMemorySoundApp.scala) { #inmemorysoundapp }
 
-This starts up the system like we did before, with a small change&mdash;we wait until the server is booted before doing anything else, so
+This starts up the system like we did before, with a small change—we wait until the server is booted before doing anything else, so
 we can be sure that when we create a transport and play it, it will sound immediately. The `def main` line ensures that the program can
 be executed, it does not do anything special, but it so happens that the body of the object containing this trait will also be initialised,
 so all the other statements will be automatically executed when the program is started. The last line `def run` is __abstract__; it does
@@ -59,8 +53,8 @@ But otherwise, the following example should make clear how this works:
 If we hadn't defined `def run`, the compiler would refuse to compile this. You see that implementing or "mixing in" a trait is done by
 writing `extends TraitName`. Before, we had always implemented the `App` trait, now we are implementing our batteries-included trait. Scala
 allows multiple trait mixin which is very powerful. It's syntax would be `object MyObject extends Trait1 with Trait2` or 
-`class MyClass extends Trait1 with Trait2`. The object or class can then use any members defined in those traits&mdash;here for example
-type `S` and value `cursor`&mdash;unless they are marked `private`.
+`class MyClass extends Trait1 with Trait2`. The object or class can then use any members defined in those traits—here for example
+type `T` and value `cursor`—unless they are marked `private`.
 
 ### A Grapheme for Pitch Values
 
@@ -94,8 +88,8 @@ The other important bit is how the grapheme is created and registered:
 
 @@snip [Snippet6 Grapheme]($sp_tut$/Snippet6Parts.scala) { #snippet6attr }
 
-Similar to creating a new "blank" proc with `Proc[S]()` (aka `Proc.apply[S]()`), a new empty grapheme is created with
-`Grapheme[S]()` (aka `Grapheme.apply[S]()`). We stored a combination of time values and pitches in the `pitches` sequence.
+Similar to creating a new "blank" proc with `Proc[T]()` (aka `Proc.apply[T]()`), a new empty grapheme is created with
+`Grapheme[T]()` (aka `Grapheme.apply[T]()`). We stored a combination of time values and pitches in the `pitches` sequence.
 In Scala, you can create ad-hoc records or _tuples_ by putting together comma separated values in parentheses. So `(a, b)`
 is a tuple of arity two, its class is actually `Tuple2` with the type parameters corresponding to the types of the first
 and second tuple element, respectively. So `(0, 78)`, containing two integer numbers, is of type `Tuple2[Int, Int]`.
@@ -149,7 +143,7 @@ individual procs on a timeline:
 @@snip [Snippet7]($sp_tut$/Snippet7.scala) { #snippet7 }
 
 If you play that, you will hear a ritardando, and the piano starts from single pitches and goes into chords, the pitches
-being random but with a slight upward tendency. So the timeline is created using `Timeline[S]()`, and we add elements to
+being random but with a slight upward tendency. So the timeline is created using `Timeline[T]()`, and we add elements to
 it using the `add` method that takes a `SpanLikeObj` for time region and the object to place. How are the pitches
 generated and how does the number of voices increase over time? Here is the relevant code:
 
@@ -170,9 +164,9 @@ and so on. Note that Scala does not share SuperCollider's brilliant concept of a
 `isPrime(x)` and `x.isPrime`. The former would be an ordinary method defined on some utility object and is not looked for
 in the type of `x`.
 
-So what does `Vector.fill` do? `Vector`, like `List` is an immutable collection type in Scala, one that has efficient
+So what does `Vector.fill` do? `Vector`, like `List`, is an immutable collection type in Scala, one that has efficient
 random access and a fast `size` method, among other things. We use it here, because there is an `Obj` type in SoundProcesses
-that we can use, `DoubleVector` which is roughly an `Expr[S, Vector[Double]]`. We can create a `Vector` passing directly
+that we can use, `DoubleVector` which is roughly an `Expr[T, Vector[Double]]`. We can create a `Vector` passing directly
 all its elements, like `Vector(2, 3, 5, 8)`, but we can also use a generator function with `Vector.fill(n)(f)` or
 `Vector.tabulate(n)(f)`. The `fill` constructor takes the number of elements in the first argument list, and a parameterless
 function in the second argument list, which is invoked for each of the elements.
@@ -204,9 +198,9 @@ Next, let's see the temporal positions of the thirty procs:
 
 @@snip [Snippet7 Spans]($sp_tut$/Snippet7Parts.scala) { #snippet7span }
 
-We create an exponential series from 7 to 21 seconds, and convert it to sample frames. `linexp` was also imported through
+We create an exponential series from 7 to 21 seconds, and convert it to sample frames. `linExp` was also imported through
 `numbers.Implicits` and does exactly what its SuperCollider counterpart does. We give a liberal span length or duration
-of eight seconds; by that time, the `Decay` of the sound envelope should have faded to an extremely small number.
+of eight seconds; by that time, the `Decay` of the sound envelope should have faded to a tiny number.
 Because the first proc does not start at the beginning of the timeline, but after seven seconds, we use a `seek` command
 on the transport before we invoke `play`:
 
@@ -233,7 +227,7 @@ A common case would be the filtering of one process by another, or the routing o
 ["what was I thinking?"](https://github.com/Sciss/ScalaCollider/blob/main/ExampleCmd.sc). In that example, a pulse
 oscillator is fed through a resonant low-pass filter, and finally augmented by reverberation. If want to take these
 three things apart, we can create three individual `Proc`s, and in order to link them, we use the special graph
-elements `scan.In` and `scan.Out`. Additionally, we need to create output objects for the first two procs and place
+elements `ScanIn` and `ScanOut`. Additionally, we need to create output objects for the first two procs and place
 these in the attribute map of the subsequent procs:
 
 @@snip [Snippet8]($sp_tut$/Snippet8.scala) { #snippet8 }
@@ -245,7 +239,7 @@ This is what we need to do:
 - outputs are in a dictionary `outputs` of a proc. The are organised by string keys, with the default key being `"out"`.
   If we wanted a different key or several outputs, we could specify the key as `ScanOut("key", x)`.
 - we have to create a corresponding entry in the `outputs` dictionary using, `p.outputs.add("key")`. This method
-  returns an object of type [`Output`](latest/api/de/sciss/synth/proc/Output.html).
+  returns an object of type [`Proc.Output`](latest/api/de/sciss/proc/Proc$$Output.html).
 - to use this output object as the input to another (sink) proc, it must be placed in the sink's attribute map.
   the sink proc's graph function may grab the signal through a `ScanIn()` graph element. The default key in the
   attribute map is `"in"`. If we want to use another key, we would write `ScanIn("key")`.
@@ -272,7 +266,7 @@ avoid the annoying multiplications with the sampling rate, we add an extension m
 
 So `2.seconds` produces the corresponding sample frame `28224000L`. There are two ways in which we can connect
 the different oscillator procs to the reverberation: Either we add their outputs to a single collection,
-`Folder[S]`, or we add them indeed to another `Timeline[S]`. Here we go for the former, which is slightly
+`Folder[T]`, or we add them indeed to another `Timeline[T]`. Here we go for the former, which is slightly
 less efficient but otherwise simpler to understand. So, we add the procs themselves with the desired spans
 to the timeline, and we add the outputs to a separate object of type `Folder` which is then placed at the
 `"in"` key of the attribute map of the reverberation process:

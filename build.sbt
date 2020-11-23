@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "3.2.1"
+lazy val melliteVersion        = "3.2.2"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
@@ -18,7 +18,7 @@ lazy val deps = new {
   val serial         = "2.0.0"
   val soundProcesses = "4.4.0"
   val span           = "2.0.0"
-  val ugens          = "1.20.0"
+  val ugens          = "1.20.1"
 }
 
 scalaVersion in ThisBuild := "2.13.4"
@@ -51,7 +51,8 @@ val scalaColliderURI    = uri(s"https://github.com/Sciss/ScalaCollider.git#v${de
 val lScalaCollider      = ProjectRef(scalaColliderURI, "rootJVM")
 val xScalaCollider      = ProjectRef(scalaColliderURI, "rootJS")
 
-val scalaColliderUGensURI = uri(s"https://github.com/Sciss/ScalaColliderUGens.git#1942b8ec6508ac3d9097ee16362dbd3fc768c188")
+//val scalaColliderUGensURI = uri(s"https://github.com/Sciss/ScalaColliderUGens.git#1942b8ec6508ac3d9097ee16362dbd3fc768c188")
+val scalaColliderUGensURI = uri(s"https://github.com/Sciss/ScalaColliderUGens.git#v${deps.ugens}")
 val lScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "apiJVM")
 val xScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "apiJS")
 val lScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "coreJVM")
