@@ -51,19 +51,13 @@ val scalaColliderURI    = uri(s"https://github.com/Sciss/ScalaCollider.git#v${de
 val lScalaCollider      = ProjectRef(scalaColliderURI, "rootJVM")
 val xScalaCollider      = ProjectRef(scalaColliderURI, "rootJS")
 
-val scalaColliderUGensURI = uri(s"https://github.com/Sciss/ScalaColliderUGens.git#1ec91cd64f621634f261e035500d9b8e27637d47") // sbt-buildinfo issue
-val lScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-api")
-val xScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-apiJS")
-val xScalaColliderUGensAPI3 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-api3_0")
-val xScalaColliderUGensAPI12 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-api2_12")
-val lScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-core")
-val xScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-coreJS")
-val xScalaColliderUGensCore3 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-core3_0")
-val xScalaColliderUGensCore12 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-core2_12")
-val lScalaColliderUGensPlugins = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-plugins")
-val xScalaColliderUGensPlugins = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-pluginsJS")
-val xScalaColliderUGensPlugins3 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-plugins3_0")
-val xScalaColliderUGensPlugins12 = ProjectRef(scalaColliderUGensURI, "scalacolliderugens-plugins2_12")
+val scalaColliderUGensURI = uri(s"https://github.com/Sciss/ScalaColliderUGens.git#1942b8ec6508ac3d9097ee16362dbd3fc768c188")
+val lScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "apiJVM")
+val xScalaColliderUGensAPI = ProjectRef(scalaColliderUGensURI, "apiJS")
+val lScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "coreJVM")
+val xScalaColliderUGensCore = ProjectRef(scalaColliderUGensURI, "coreJS")
+val lScalaColliderUGensPlugins = ProjectRef(scalaColliderUGensURI, "pluginsJVM")
+val xScalaColliderUGensPlugins = ProjectRef(scalaColliderUGensURI, "pluginsJS")
 
 val scalaOSCURI         = uri(s"https://github.com/Sciss/ScalaOSC.git#v${deps.osc}")
 val lScalaOSC           = ProjectRef(scalaOSCURI, "rootJVM")
@@ -149,8 +143,6 @@ lazy val unidocSettings = Seq(
     xLucreSwing,
     xPatternsCore, xPatternsLucre,
     xScalaColliderUGensAPI, xScalaColliderUGensCore, xScalaColliderUGensPlugins,
-    xScalaColliderUGensAPI3, xScalaColliderUGensCore3, xScalaColliderUGensPlugins3,
-    xScalaColliderUGensAPI12, xScalaColliderUGensCore12, xScalaColliderUGensPlugins12,
     xScalaCollider,
     xScalaOSC,
     xSerial,
