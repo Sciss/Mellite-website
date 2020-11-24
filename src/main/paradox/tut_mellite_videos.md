@@ -249,6 +249,20 @@ This tutorial shows the basic GPIO support - accessing the digital input and out
 - Running shell commands with `Sys.Process`
 - Obtaining properties passed to Mellite with `Sys.Property`
 
+## Tutorial 15 -- What's new in version 3.2? Timeline editing
+
+[Video Link](https://diode.zone/videos/watch/f454af17-40f2-4763-843c-e52818c3bf47) (16 min)
+
+- Timeline: resize tool allows track height adjustment
+- Keyboard shortcuts: timeline tools, cue transport
+- Timeline catch (scroll with transport)
+- Headphones monitor
+- Timeline cue and selection
+- Edit soundfile processes to include filters
+- Copying attributes such as color
+- Exporting selections from audio cues
+
+
 ---
 
 If you are interested in the confluent versioning workspace, there is [a quite old video](https://vimeo.com/86202332) (see 17'15" into the video).
