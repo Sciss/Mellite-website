@@ -38,7 +38,7 @@ We now provide downloads bundled with a
 so-called Java Development Kit (JDK) required to run the application:
 
 - `mellite-full_{version}_win_x64.zip` (for Windows)
-- `mellite-full_{version}_mac_x64.zip` (for Mac)
+- `mellite-full_{version}_mac_x64.zip` (for macOS 10.10 or newer)
 - `mellite-full_{version}_linux_x64.zip` (for Linux 64-bit Intel/AMD)
 - `mellite-full_{version}_x64.deb` (alternative for Linux if you use Debian or Ubuntu)
 
@@ -57,7 +57,8 @@ come from the look-and-feel library and will be mitigated in future versions.
 
 ### Plain Platform Neutral Download
 
-If you do not wish to use the bundled JDK , or if you are using a different platform such as Raspberry Pi, you can download the "universal" package:
+If you do not wish to use the bundled JDK, or if you are using a different platform such as Raspberry Pi or an older
+macOS, you can download the "universal" package:
 
 - `mellite_{version}_all.zip`
 
@@ -68,15 +69,19 @@ than 1.8 or 8, then you need to upgrade your Java. The easiest way to do so is v
 and download the OpenJDK 11 HotSpot JVM for your system. Please note that the universal zip may have issues finding JavaFX, which means
 that the application's built-in API browser may not work.
 
+Legacy macOS systems [may need to look](https://github.com/AdoptOpenJDK/openjdk-support/issues/212) for an archived
+AdoptJDK version 8u242 or older.
+
 ### Building from Source
 
-If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite) or [github.com/Sciss/Mellite](https://github.com/Sciss/Mellite/).
+If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite) or
+[github.com/Sciss/Mellite](https://github.com/Sciss/Mellite/).
 The file `README.md` should give you details on the build process.
 
 ## SuperCollider
 
 Mellite uses [SuperCollider](http://supercollider.github.io/) for real-time sound synthesis. If you haven't already done so,
-you must separately install SuperCollider from its website. Versions 3.10.x and 3.9.x are recommended, although older versions
+you must separately install SuperCollider from its website. Versions 3.11.x and 3.10.x are recommended, although older versions
 should work, too.
 
 ## Help and Getting Started
@@ -110,8 +115,8 @@ will any copyright holder, or any other party who modifies and/or conveys
 the program (Mellite) as permitted above, be liable to you for damages, including any
 general, special, incidental or consequential damages arising out of the
 use or inability to use the program (including but not limited to loss of
-data or data being rendered inaccurate or losses sustained by you or third
-parties or a failure of the program to operate with any other programs),
+data, data being rendered inaccurate, losses sustained by you or third
+parties, or a failure of the program to operate with any other programs),
 even if such holder or other party has been advised of the possibility of
 such damages.
 
@@ -124,4 +129,3 @@ which takes you to a website hosting the library source code. When using the ful
 by the GNU GPL with Classpath Exception. See [adoptopenjdk.net/about.html](https://adoptopenjdk.net/about.html) for details.
 
 If you have trouble obtaining the source code of Mellite or its incorporated libraries, contact me via e-mail at _contact @ sciss.de_.
-
