@@ -44,5 +44,5 @@ To preview docs
 
 To publish a unidoc only artifact:
 
-    sbt -J-Xmx2G ++2.13.6! mellite-unidoc/publishSigned
+    sbt -J-Xmx2G "; ++2.13.6! mellite-unidoc/publishSigned ; sonatypeBundleRelease"
 
