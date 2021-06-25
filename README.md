@@ -6,7 +6,7 @@ Its root folder contains an sbt build file for creating the static site, includi
 __To build the API docs locally, run `sbt unidoc`. You can view the results via `xdg-open target/scala-2.13/unidoc/index.html`.__
 
 You can run the site via a local web server as `sbt previewSite` which is a functionality of the [sbt-site](https://github.com/sbt/sbt-site) plugin.
-E.g. `sbt -J-Xmx2G ++2.13.5! previewSite` (`previewAuto` is broken).
+E.g. `sbt -J-Xmx2G ++2.13.6! previewSite` (`previewAuto` is broken).
 
 ## updating the tutorials
 
@@ -19,7 +19,7 @@ This assumes the [tutorials repository](https://git.iem.at/sciss/Mellite-tutoria
 
 ## sciss.de
 
-To publish here, prepare the files using `sbt -J-Xmx2G ++2.13.5! clean packageSite`. The directory `target/site/` contains the stuff
+To publish here, prepare the files using `sbt -J-Xmx2G ++2.13.6! clean packageSite`. The directory `target/site/` contains the stuff
 that must be uploaded, i.e. `scp -r target/site/* <credentials>@ssh.strato.de:mellite/`
 
 __Note:__ `rsync` is the best way now. Use it like the following:
@@ -40,9 +40,9 @@ for the website instead, not the tutorial snippets).
 
 To preview docs
 
-    sbt -J-Xmx2G ++2.13.5! mellite-aggr/unidoc
+    sbt -J-Xmx2G ++2.13.6! mellite-aggr/unidoc
 
 To publish a unidoc only artifact:
 
-    sbt -J-Xmx2G ++2.13.5! mellite-unidoc/publishSigned
+    sbt -J-Xmx2G ++2.13.6! mellite-unidoc/publishSigned
 

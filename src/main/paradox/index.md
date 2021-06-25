@@ -23,7 +23,11 @@ to encourage its continued development and documentation, please support me via 
 
 ## Download and Run
 
-A binary version, ready to run, can be downloaded from [archive.org](https://archive.org/details/Mellite) or
+Since Mellite 3.5, the preferred installation is the _Mellite-launcher_ which is available as a standalone binary
+for multiple platforms. The launcher then downloads the Mellite application, and allows to update it without having
+to reinstall anything.
+
+A binary version of launcher or self-contained app, ready to run, can be downloaded from [archive.org](https://archive.org/details/Mellite) or
 [GitHub releases](https://github.com/Sciss/Mellite/releases/latest).
 
 @@@ note
@@ -34,20 +38,36 @@ I cannot guarantee this program to be error-free, thus you use it fully at your 
 
 @@@
 
-We now provide downloads bundled with a
-so-called Java Development Kit (JDK) required to run the application:
+There are three types of artefacts: __launcher__, __fully-bundled app__, and __"universal" app__. The universal app can run on any
+platform, even those not directly provided by the launcher or fully-bundled app, but it requires that you have 
+a so-called Java Development Kit (JDK) installed separately. The launcher will always give you the most recent version, while
+the other containers may be released more infrequently.
+
+The launcher downloads will look like this:
+
+- `mellite-launcher_{version}_win_x64.zip` (for Windows)
+- `mellite-launcher_{version}_mac_x64.zip` (for macOS 10.10 or newer)
+- `mellite-launcher_{version}_linux_x64.zip` (for Linux 64-bit Intel/AMD)
+- `mellite-launcher_{version}_amd64.deb` (alternative for Linux if you use Debian or Ubuntu)
+
+Note that the launcher versions are independent of the Mellite application version. The launcher can download the most recent
+Mellite version. You can check for updates manually from Mellite's _About_ dialog, or enable a periodic automatic check by setting
+up _Automatic Update Checks_ in _Preferences_ > _System_.
+
+The fully-bundled apps will look like this:
 
 - `mellite-full_{version}_win_x64.zip` (for Windows)
 - `mellite-full_{version}_mac_x64.zip` (for macOS 10.10 or newer)
 - `mellite-full_{version}_linux_x64.zip` (for Linux 64-bit Intel/AMD)
-- `mellite-full_{version}_x64.deb` (alternative for Linux if you use Debian or Ubuntu)
+- `mellite-full_{version}_amd64.deb` (alternative for Linux if you use Debian or Ubuntu)
 
-Just download and unpack the zip archive and run (open) the file `bin/mellite.bat` (Windows) or `bin/mellite` (Linux and macOS).
-If you use the deb package (Debian, Ubuntu), you install it via `sudo dpkg -i mellite-full_{version}_x64.deb`, then you should
-be able to find `mellite` on the system and add it to your desktop manager or execute it right away.
+Just download and unpack the zip archive and run (open) the file `bin/mellite(-launcher).bat` (Windows) or `bin/mellite(-launcher)` (Linux and macOS).
+If you use the deb package (Debian, Ubuntu), you install it via `sudo dpkg -i mellite-{...}.deb`, then you should
+be able to find `mellite-launcher` or `mellite` on the system and add it to your desktop manager or execute it right away.
+Run with the `--help` switch from a terminal to see the available command line options.
 
 On __Mac__, you need to allow the system to launch Mellite the first time you download it. Extract the zip
-archive, and go into the `bin` directory. Right-click (or Ctrl-click) on the `mellite` program, then choose `Open`.
+archive, and go into the `bin` directory. Right-click (or Ctrl-click) on the `mellite-launcher` or `mellite` program, then choose `Open`.
 The computer will now warn you that the program is not verified, you have to confirm that you really want to open
 it. A terminal window should then pop up and soon after the Mellite main window should be opened.
 
@@ -74,8 +94,7 @@ AdoptJDK version 8u242 or older.
 
 ### Building from Source
 
-If you want to build from the source code, go to [git.iem.at/sciss/Mellite](https://git.iem.at/sciss/Mellite) or
-[github.com/Sciss/Mellite](https://github.com/Sciss/Mellite/).
+If you want to build from the source code, go to [github.com/Sciss/Mellite](https://github.com/Sciss/Mellite).
 The file `README.md` should give you details on the build process.
 
 ## SuperCollider

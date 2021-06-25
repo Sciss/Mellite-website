@@ -1,4 +1,4 @@
-lazy val melliteVersion        = "3.4.0"
+lazy val melliteVersion        = "3.5.4"
 lazy val PROJECT_VERSION       = melliteVersion
 lazy val baseName              = "Mellite"
 lazy val baseNameL             = baseName.toLowerCase
@@ -8,22 +8,22 @@ lazy val deps = new {
   val audioFile      = "2.3.3"
   val desktop        = "0.11.3"
   val fscape         = "3.6.0"
-  val lucre          = "4.4.3"
+  val lucre          = "4.4.4"
   val lucrePi        = "1.4.0"
-  val lucreSwing     = "2.6.2"
+  val lucreSwing     = "2.6.3"
   val nuages         = "3.4.0"
-  val osc            = "1.3.0"
+  val osc            = "1.3.1"
   val patterns       = "1.4.1"
-  val scalaCollider  = "2.6.2"
+  val scalaCollider  = "2.6.4"
   val serial         = "2.0.1"
-  val soundProcesses = "4.7.2"
+  val soundProcesses = "4.7.6"
   val span           = "2.0.2"
   val ugens          = "1.21.1"
 }
 
-scalaVersion in ThisBuild := "2.13.5"
+ThisBuild / scalaVersion := "2.13.6"
 
-mimaFailOnNoPrevious in ThisBuild := false
+ThisBuild / mimaFailOnNoPrevious := false
 
 val commonSettings = Seq(
   organization := "de.sciss",
@@ -138,8 +138,8 @@ lazy val lList = Seq(
 
 lazy val unidocSettings = Seq(
   // site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
-  mappings in packageDoc in Compile := (mappings in (ScalaUnidoc, packageDoc)).value,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(
+  Compile / packageDoc / mappings := (ScalaUnidoc / packageDoc / mappings).value,
+  ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject -- inProjects(
     xAudioFile, 
     xFScapeCore, xFScapeLucre, 
     xLucreAdjunct, xLucreBase, xLucreConfluent, xLucreCore, xLucreData, xLucreExpr0, xLucreExpr1, xLucreGeom,
@@ -156,7 +156,7 @@ lazy val unidocSettings = Seq(
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value // % "provided" // this is needed for sbt-unidoc to work with macros used by Mellite!
   ),
-  scalacOptions in (Compile, doc) ++= Seq(
+  Compile / doc / scalacOptions ++= Seq(
     "-skip-packages", Seq(
       "akka.stream.sciss",
       "scala.tools",
@@ -210,7 +210,7 @@ val site = project.withId(s"$baseNameL-site").in(file("."))
   .enablePlugins(ParadoxSitePlugin, SiteScaladocPlugin)
   .settings(
     name                           := baseName,  // used by GhpagesPlugin, must be base base!
-    siteSubdirName in SiteScaladoc := "latest/api",
+    SiteScaladoc / siteSubdirName  := "latest/api",
     // git.remoteRepo                 := s"git@github.com:Sciss/${baseName}.git",
     // git.gitCurrentBranch           := "main",
     paradoxTheme                   := Some(builtinParadoxTheme("generic")),
@@ -254,9 +254,9 @@ lazy val pub = project.withId(s"$baseNameL-unidoc").in(file("pub"))
     autoScalaLibrary      := false,
     licenses              := Seq("CC BY-SA 4.0" -> url("https://creativecommons.org/licenses/by-sa/4.0/")), // required for Maven Central
     homepage              := Some(url(s"https://git.iem.at/sciss/$baseName")),
-    packageDoc in Compile := (packageDoc in Compile in aggr).value,
-    publishArtifact in (Compile, packageBin) := false, // there are no binaries
-    publishArtifact in (Compile, packageSrc) := false, // there are no sources
+    Compile / packageDoc  := (aggr / Compile / packageDoc).value,
+    Compile / packageBin / publishArtifact := false, // there are no binaries
+    Compile / packageSrc / publishArtifact := false, // there are no sources
   )
  
 lazy val publishSettings = Seq(
@@ -267,7 +267,7 @@ lazy val publishSettings = Seq(
     else
       "Sonatype Releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
     ),
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
   pomExtra := {
     <scm>
